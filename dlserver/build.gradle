@@ -1,0 +1,24 @@
+dependencies {
+  // ÒÀÀµµÄÄ£¿é
+  compile project(":dlserver-api")  
+  compile project(":dlserver-app")  
+  compile project(":dlbase")  
+  compile(  
+//    "org.springframework:spring-orm:$springVersion",
+//    "org.springframework:spring-tx:$springVersion",
+    "org.springframework:spring-context-support:$springVersion",
+    "org.springframework.data:spring-data-redis:1.8.3.RELEASE",
+    "redis.clients:jedis:2.9.0",
+	"com.corundumstudio.socketio:netty-socketio:$nettySocketioVersion",
+    "com.alibaba:fastjson:1.2.32",
+    "commons-codec:commons-codec:1.4",
+//    "org.mybatis:mybatis:$mybatisVersion",
+//    "org.mybatis:mybatis-spring:1.3.0",
+    "ch.qos.logback:logback-classic:1.1.3",
+    "joda-time:joda-time:2.8.1"
+  )
+  
+}
+
+apply plugin: 'application'
+mainClassName = "com.dl.server.DLServer"

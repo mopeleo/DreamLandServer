@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<jmxConfigurator />
+
+	<!-- 控制台输出日志 -->
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder charset="UTF-8"> <!-- encoder 可以指定字符集，对于中文输出有意义 -->
+			<pattern>%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- 可让每天产生一个日志文件，最多 30 个，自动回滚 -->
+	<appender name="rollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+	    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+	        <fileNamePattern>logs/dlserver.%d{yyyy-MM-dd}.log</fileNamePattern>
+	        <maxHistory>30</maxHistory>
+	    </rollingPolicy>
+	    <encoder charset="UTF-8">
+			<pattern>%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- root -->
+	<root level="INFO">
+		<appender-ref ref="console" />
+		<appender-ref ref="rollingFile" />
+	</root>
+	
+	<!-- 该规则是 logback 的核心。级别排序为： TRACE < DEBUG < INFO < WARN < ERROR -->
+	<!-- 下面配置一些第三方包的日志过滤级别，用于避免刷屏 --> 
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.quartz" level="WARN"/>
+    <logger name="org.apache" level="WARN"/>
+    <logger name="net.sf" level="WARN"/>
+    <!-- druid配置,是否显示sql语句和结果 -->
+    <logger name="druid.sql.Statement" level="DEBUG" additivity="false">
+        <appender-ref ref="rollingFile" />
+    </logger>
+    <logger name="druid.sql.ResultSet" level="DEBUG" additivity="false">
+        <appender-ref ref="rollingFile" />
+    </logger>
+    
+</configuration>

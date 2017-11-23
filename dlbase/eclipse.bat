@@ -1,0 +1,3 @@
+call gradle eclipse
+
+pause

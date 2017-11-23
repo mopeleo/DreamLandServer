@@ -1,0 +1,100 @@
+// 在gradle脚本build之前起作用
+buildscript {
+  repositories {
+  	mavenLocal()
+    mavenCentral()
+  }
+}
+
+allprojects {
+  task hello << {task -> println "I'm $task.project.name"}
+}
+
+// 所有子项目的通用配置
+subprojects { 
+  apply plugin: 'java'
+  apply plugin: 'eclipse'
+  version = '1.0'  
+  // JVM 版本号要求
+  sourceCompatibility = 1.8
+  targetCompatibility = 1.8  
+  // java编译的时候缺省状态下会因为中文字符而失败
+  [compileJava,compileTestJava,javadoc]*.options*.encoding = 'UTF-8'
+  
+  ext {
+  	//定义额外的jar包路径
+    extLibs = new File(rootProject.rootDir, 'lib').getAbsolutePath()
+    //常更新的jar包版本号
+    springVersion = '4.3.8.RELEASE'  
+    mybatisVersion='3.4.4'  
+    slf4jVersion='1.7.25'
+	nettySocketioVersion='1.7.7'
+  }
+  
+  repositories {
+  	mavenLocal()
+    mavenCentral()
+  }
+
+  jar {
+    manifest {
+      attributes("Implementation-Title": "Gradle")
+    }
+  }
+  
+  //  所有需要忽略的包定义在此
+  configurations {
+    all*.exclude group: 'log4j'
+    all*.exclude group: 'commons-logging'
+//    all*.exclude group: 'commons-beanutils', module: 'commons-beanutils'
+  }
+  
+  // 通用依赖
+  dependencies {
+    compile(  
+//        "ch.qos.logback:logback-classic:1.1.3",
+//        "org.slf4j:jcl-over-slf4j:$slf4jVersion",  
+//        "org.slf4j:log4j-over-slf4j:$slf4jVersion",  
+//        "org.slf4j:jul-to-slf4j:$slf4jVersion", 
+        "org.slf4j:slf4j-api:$slf4jVersion"  
+    )
+    
+//    依赖所有mave中不存在的jar
+//    ext.jarTree = fileTree(dir: 'lib', include: '**/*.jar')
+//    ext.rootProjectLibs = new File(rootProject.rootDir, 'lib').getAbsolutePath()
+//    ext.jarTree += fileTree(dir: rootProjectLibs, include: '**/*.jar')
+//    compile jarTree
+    
+//     测试依赖
+//    testCompile(  
+//        "junit:junit:4.12"  
+//    ) 
+  }
+  
+  // 显示当前项目下所有用于 compile 的 jar.
+  task listJars(description: 'Display all compile jars.') << {
+    configurations.compile.each { File file -> println file.name }
+  }
+
+  task createJavaProject << {
+    sourceSets*.java.srcDirs*.each { it.mkdirs() }
+    sourceSets*.resources.srcDirs*.each { it.mkdirs()}
+  }
+	
+  task createWebProject(dependsOn: 'createJavaProject') << {
+    def webAppDir = file("$webAppDirName")
+    webAppDir.mkdirs()
+  }
+
+  task jarWithoutResources(type: Jar) {  
+    baseName project.name  
+    from("$buildDir/classes/main")  
+  }
+
+  task('jarPath')<<{  
+    configurations.runtime.resolve().each {  
+      print it.toString()+";"  
+    }  
+    println();  
+  }	
+}

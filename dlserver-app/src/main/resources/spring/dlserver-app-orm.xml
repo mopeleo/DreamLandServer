@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans.xsd 
+			http://www.springframework.org/schema/tx 
+			http://www.springframework.org/schema/tx/spring-tx.xsd 
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context.xsd"
+	default-lazy-init="true">
+
+	<!-- 数据源配置 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<!-- Connection Info -->
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+
+		<!-- Connection Pooling -->
+		<!-- 初始化连接数量 -->
+		<property name="initialSize" value="${jdbc.pool.initialSize}" />
+		<!-- 最大活动连接数量 -->
+		<property name="maxActive" value="${jdbc.pool.maxActive}" />
+		<!-- 最大空闲连接数量  -->
+		<property name="minIdle" value="${jdbc.pool.minIdle}" />
+		<!-- 如果池里已没有连接，最大等待时间，超过报错 -->
+		<property name="maxWait" value="10000" />
+		<!-- 每5分钟扫描一次空闲连接  -->
+		<property name="timeBetweenEvictionRunsMillis" value="300000" />
+		<!-- 空间超过10分钟的连接超时回收  -->
+		<property name="minEvictableIdleTimeMillis" value="600000" />
+		<property name="defaultAutoCommit" value="true" />
+		<!-- 打开PSCache，并且指定每个连接上PSCache的大小 --> 
+		<!--是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。
+			在mysql5.5以下的版本中没有PSCache功能，建议关闭掉。5.5及以上版本有PSCache，建议开启。-->
+	    <property name="poolPreparedStatements" value="true" /> 
+	    <property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+	    <!-- 日志 -->
+	    <property name="filters" value="stat,wall" /> 
+		<property name="proxyFilters"> 
+		    <list> 
+		        <ref bean="logFilter" /> 
+		    </list> 
+		</property>
+	</bean>
+
+    <!-- druid的SQL日志输出配置 -->
+    <bean id="logFilter" class="com.alibaba.druid.filter.logging.Slf4jLogFilter">
+        <property name="connectionLogEnabled" value="false"/>
+        <property name="statementLogEnabled" value="false"/>
+        <!-- 是否显示结果集 -->
+        <property name="resultSetLogEnabled" value="true"/>
+        <!-- 是否显示SQL语句  -->
+        <property name="statementExecutableSqlLogEnable" value="true"/>
+    </bean>
+    
+    <!-- mybatis配置 -->
+	<bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- <property name="configLocation" value="classpath:config/mybatis.xml" />  -->
+		<property name="mapperLocations" value="classpath*:mybatis_mapper/**/*Mapper.xml" />
+		<!-- 开启缓存支持 -->
+        <property name="configurationProperties">
+            <props>
+                <prop key="cacheEnabled">true</prop>
+                <!-- 查询时，关闭关联对象即时加载以提高性能 -->
+                <prop key="lazyLoadingEnabled">false</prop>
+                <!-- 设置关联对象加载的形态，此处为按需加载字段(加载字段由SQL指定)，不会加载关联表的所有字段，以提高性能 -->
+                <prop key="aggressiveLazyLoading">true</prop>
+                <!-- 对于未知的SQL查询，允许返回不同的结果集以达到通用的效果 -->
+                <prop key="multipleResultSetsEnabled">true</prop>
+                <!-- 允许使用列标签代替列名 -->
+                <prop key="useColumnLabel">true</prop>
+                <!-- 允许使用自定义的主键值(比如由程序生成的UUID 32位编码作为键值)，数据表的PK生成策略将被覆盖 -->
+                <prop key="useGeneratedKeys">true</prop>
+                <!-- 给予被嵌套的resultMap以字段-属性的映射支持 -->
+                <prop key="autoMappingBehavior">FULL</prop>
+                <!-- 对于批量更新操作缓存SQL以提高性能 -->
+                <prop key="defaultExecutorType">BATCH</prop>
+                <!-- 数据库超过3600秒仍未响应则超时 -->
+                <prop key="defaultStatementTimeout">3600</prop>
+            </props>
+        </property>
+	</bean>
+	
+	<!-- 处理clob,blob大字段数据，非 Oracle 的其它数据库只要简单配置一个 DefaultLobHandler,oracle数据库需另外配置  -->
+	<bean id="defaultLobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" lazy-init="true"/>
+	
+    <!-- 查找类路径下的映射器并自动将它们创建成MapperFactoryBean -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.dl.server.dao" />
+    </bean>
+	
+	<!-- spring 事务管理 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+	<!-- 使用annotation定义事务     -->
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+
+	<!-- 集中式声明事物     
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true"/>
+			<tx:method name="find*" read-only="true"/>
+			<tx:method name="load*" read-only="true"/>
+			<tx:method name="list*" read-only="true"/>
+			<tx:method name="query*" read-only="true"/>
+			<tx:method name="*" propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
+	
+	<aop:config>
+		<aop:pointcut id="serviceMethods" expression="execution(* com.service..*.*(..))"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods" />
+	</aop:config>
+	-->
+	
+   
+	<!-- 直接在这里改 --> 
+	<context:property-placeholder location="classpath*:/jdbc-pub.properties, classpath*:/jdbc-prod.properties" />	
+
+	<!-- production环境 ,多个配置文件用逗号分隔
+ 	<beans profile="production">
+		<context:property-placeholder ignore-resource-not-found="true"
+			location="classpath*:/jdbc-pub.properties, classpath*:/jdbc-prod.properties" />	
+	</beans>
+	
+	<beans profile="development">
+ 		<context:property-placeholder ignore-unresolvable="true"
+			location="classpath*:/jdbc-pub.properties, classpath*:/jdbc-dev.properties" />	
+	</beans>
+ 	-->	
+</beans>
