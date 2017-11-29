@@ -5,6 +5,7 @@ import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.dl.base.exception.DLServiceException;
 import com.dl.server.common.SpringContext;
+import com.dl.server.dto.ResultDTO;
 import com.dl.server.dto.system.SysUserDTO;
 import com.dl.server.service.system.SysUserService;
 
@@ -15,7 +16,8 @@ public class UserServiceListener implements DataListener<SysUserDTO>{
         String action = user.getAction();
         if(action.equalsIgnoreCase("login")){
             SysUserService userService = SpringContext.getBean("sysUserServiceImpl");
-            userService.getById(user.getUserid());
+            ResultDTO<SysUserDTO> result = userService.getById(user.getUserid());
+            client.sendEvent("userservice", result);
         }else if(action.equalsIgnoreCase("query")){
 
         }else{

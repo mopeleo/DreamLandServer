@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.dl.base.utils.BeanPropertyCopy;
 import com.dl.server.dao.system.SysUserMapper;
+import com.dl.server.dto.ResultDTO;
 import com.dl.server.dto.system.SysUserDTO;
 import com.dl.server.entity.system.SysUser;
 import com.dl.server.service.system.SysUserService;
@@ -24,12 +25,14 @@ public class SysUserServiceImpl implements SysUserService {
     private SysUserMapper sysUserDao;
     
     @Override
-    public SysUserDTO getById(String userId) {
+    public ResultDTO<SysUserDTO> getById(String userId) {
         SysUser user = sysUserDao.selectByPrimaryKey(userId);
         SysUserDTO dto = BeanPropertyCopy.convert(user, SysUserDTO.class);
-        dto.setRetmsg("success");
-        log.debug("++++++++++++ : " + dto.getUsername());
-        return dto;
+        ResultDTO<SysUserDTO> result = new ResultDTO<SysUserDTO>();
+        result.addResult(dto);
+        result.setRetmsg("success");
+        log.debug("++++++++++++ : " + result.getResult().getUsername());
+        return result;
     }
 
     @Override

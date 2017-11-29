@@ -3,7 +3,10 @@ dependencies {
   	//双引号可以引用变量，单引号不可以
     'com.google.guava:guava:16.0',
     'cglib:cglib:3.2.5',
-    'commons-lang:commons-lang:2.6'
+    'commons-lang:commons-lang:2.6',
+	"dom4j:dom4j:1.6.1",
+	"jaxen:jaxen:1.1.6",
+	"org.freemarker:freemarker:2.3.22"
   )
   // compile fileTree(dir: extLibs, include:['pinyin4j.jar','ojdbc6.jar'])  
 

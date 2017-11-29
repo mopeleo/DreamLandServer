@@ -1,20 +1,12 @@
 package com.dl.server.dto.system;
 
-import com.dl.server.dto.TransObject;
+import com.dl.server.dto.BaseDTO;
 
-public class SysUserDTO extends TransObject{
+public class SysUserDTO extends BaseDTO{
 
+    private String username;
     private String userid;
     private String pwd;
-    private String username;
-
-    public String getUserid() {
-        return userid;
-    }
-
-    public void setUserid(String userid) {
-        this.userid = userid;
-    }
 
     public String getPwd() {
         return pwd;
@@ -24,6 +16,14 @@ public class SysUserDTO extends TransObject{
         this.pwd = pwd;
     }
 
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -31,5 +31,4 @@ public class SysUserDTO extends TransObject{
     public void setUsername(String username) {
         this.username = username;
     }
-
 }
