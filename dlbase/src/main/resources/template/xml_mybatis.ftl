@@ -13,6 +13,18 @@
 </#list>
     </resultMap>
   
+    <select id="findUnique" parameterType="${entity_package}.${entity}" resultMap="BaseResultMap">
+        select <#list table.columns as column>${column.code}<#if column_has_next>, </#if></#list>
+          from ${table.code?lower_case}
+		<where>
+<#list table.columns as column>
+			<if test="${column.code} != null and ${column.code} != ''">
+				and ${column.code} = #${r'{'}${column.code}, jdbcType=<@type datatype=column.datatype precision=column.precision />}
+			</if>
+</#list>
+		</where>
+    </select>
+  
     <insert id="insert" parameterType="${entity_package}.${entity}">
         insert into ${table.code?lower_case} (<#list table.columns as column>${column.code}<#if column_has_next>, </#if></#list>)
         values (<#list table.columns as column>#${r'{'}${column.code}, jdbcType=<@type datatype=column.datatype precision=column.precision />}<#if column_has_next>, </#if></#list>)
@@ -22,7 +34,7 @@
         select <#list table.columns as column>${column.code}<#if column_has_next>, </#if></#list>
           from ${table.code?lower_case}
     </select>
-  
+
 <#if (table.keys?size > 0)>
     <select id="selectById" parameterType="map" resultMap="BaseResultMap">
         select <#list table.columns as column>${column.code}<#if column_has_next>, </#if></#list>

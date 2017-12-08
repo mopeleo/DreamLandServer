@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface ${entity}Dao{
 
+    ${entity} findUnique(${entity} entity);
+    
     int insert(${entity} entity);
 
     List<${entity}> selectAll();
