@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.sys.SysMessageDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.sys.SysMessage">
+        <id column="msgid" jdbcType="INTEGER" property="msgid" />
+        <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="author" jdbcType="INTEGER" property="author" />
+        <result column="senddate" jdbcType="VARCHAR" property="senddate" />
+        <result column="sendtime" jdbcType="VARCHAR" property="sendtime" />
+    </resultMap>
+  
+    <select id="findUnique" parameterType="com.dl.server.entity.sys.SysMessage" resultMap="BaseResultMap">
+        select msgid, content, author, senddate, sendtime
+          from sys_message
+		<where>
+			<if test="msgid != null and msgid != ''">
+				and msgid = #{msgid, jdbcType=INTEGER}
+			</if>
+			<if test="content != null and content != ''">
+				and content = #{content, jdbcType=VARCHAR}
+			</if>
+			<if test="author != null and author != ''">
+				and author = #{author, jdbcType=INTEGER}
+			</if>
+			<if test="senddate != null and senddate != ''">
+				and senddate = #{senddate, jdbcType=VARCHAR}
+			</if>
+			<if test="sendtime != null and sendtime != ''">
+				and sendtime = #{sendtime, jdbcType=VARCHAR}
+			</if>
+		</where>
+    </select>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.sys.SysMessage">
+        insert into sys_message (msgid, content, author, senddate, sendtime)
+        values (#{msgid, jdbcType=INTEGER}, #{content, jdbcType=VARCHAR}, #{author, jdbcType=INTEGER}, #{senddate, jdbcType=VARCHAR}, #{sendtime, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" resultMap="BaseResultMap">
+        select msgid, content, author, senddate, sendtime
+          from sys_message
+    </select>
+
+    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
+        select msgid, content, author, senddate, sendtime
+          from sys_message
+         where 1=1 and msgid = #{arg0}
+    </select>
+
+    <delete id="deleteById" parameterType="map">
+        delete from sys_message
+         where 1=1 and msgid = #{arg0}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.sys.SysMessage">
+        update sys_message set 
+               content = #{content, jdbcType=VARCHAR}, 
+               author = #{author, jdbcType=INTEGER}, 
+               senddate = #{senddate, jdbcType=VARCHAR}, 
+               sendtime = #{sendtime, jdbcType=VARCHAR}
+         where 1=1 and msgid = #{msgid, jdbcType=INTEGER}
+    </update>
+</mapper>

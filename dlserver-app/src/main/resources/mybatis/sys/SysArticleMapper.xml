@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.sys.SysArticleDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.sys.SysArticle">
+        <id column="artid" jdbcType="INTEGER" property="artid" />
+        <result column="title" jdbcType="VARCHAR" property="title" />
+        <result column="author" jdbcType="INTEGER" property="author" />
+        <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="pubflag" jdbcType="VARCHAR" property="pubflag" />
+        <result column="pubdate" jdbcType="VARCHAR" property="pubdate" />
+        <result column="pubtime" jdbcType="VARCHAR" property="pubtime" />
+        <result column="lastreplydate" jdbcType="VARCHAR" property="lastreplydate" />
+        <result column="lastreplytime" jdbcType="VARCHAR" property="lastreplytime" />
+        <result column="readtimes" jdbcType="INTEGER" property="readtimes" />
+        <result column="replytimes" jdbcType="INTEGER" property="replytimes" />
+        <result column="topflag" jdbcType="VARCHAR" property="topflag" />
+        <result column="checkflag" jdbcType="VARCHAR" property="checkflag" />
+        <result column="checker" jdbcType="INTEGER" property="checker" />
+        <result column="closeflag" jdbcType="VARCHAR" property="closeflag" />
+        <result column="closer" jdbcType="INTEGER" property="closer" />
+    </resultMap>
+  
+    <select id="findUnique" parameterType="com.dl.server.entity.sys.SysArticle" resultMap="BaseResultMap">
+        select artid, title, author, content, pubflag, pubdate, pubtime, lastreplydate, lastreplytime, readtimes, replytimes, topflag, checkflag, checker, closeflag, closer
+          from sys_article
+		<where>
+			<if test="artid != null and artid != ''">
+				and artid = #{artid, jdbcType=INTEGER}
+			</if>
+			<if test="title != null and title != ''">
+				and title = #{title, jdbcType=VARCHAR}
+			</if>
+			<if test="author != null and author != ''">
+				and author = #{author, jdbcType=INTEGER}
+			</if>
+			<if test="content != null and content != ''">
+				and content = #{content, jdbcType=VARCHAR}
+			</if>
+			<if test="pubflag != null and pubflag != ''">
+				and pubflag = #{pubflag, jdbcType=VARCHAR}
+			</if>
+			<if test="pubdate != null and pubdate != ''">
+				and pubdate = #{pubdate, jdbcType=VARCHAR}
+			</if>
+			<if test="pubtime != null and pubtime != ''">
+				and pubtime = #{pubtime, jdbcType=VARCHAR}
+			</if>
+			<if test="lastreplydate != null and lastreplydate != ''">
+				and lastreplydate = #{lastreplydate, jdbcType=VARCHAR}
+			</if>
+			<if test="lastreplytime != null and lastreplytime != ''">
+				and lastreplytime = #{lastreplytime, jdbcType=VARCHAR}
+			</if>
+			<if test="readtimes != null and readtimes != ''">
+				and readtimes = #{readtimes, jdbcType=INTEGER}
+			</if>
+			<if test="replytimes != null and replytimes != ''">
+				and replytimes = #{replytimes, jdbcType=INTEGER}
+			</if>
+			<if test="topflag != null and topflag != ''">
+				and topflag = #{topflag, jdbcType=VARCHAR}
+			</if>
+			<if test="checkflag != null and checkflag != ''">
+				and checkflag = #{checkflag, jdbcType=VARCHAR}
+			</if>
+			<if test="checker != null and checker != ''">
+				and checker = #{checker, jdbcType=INTEGER}
+			</if>
+			<if test="closeflag != null and closeflag != ''">
+				and closeflag = #{closeflag, jdbcType=VARCHAR}
+			</if>
+			<if test="closer != null and closer != ''">
+				and closer = #{closer, jdbcType=INTEGER}
+			</if>
+		</where>
+    </select>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.sys.SysArticle">
+        insert into sys_article (artid, title, author, content, pubflag, pubdate, pubtime, lastreplydate, lastreplytime, readtimes, replytimes, topflag, checkflag, checker, closeflag, closer)
+        values (#{artid, jdbcType=INTEGER}, #{title, jdbcType=VARCHAR}, #{author, jdbcType=INTEGER}, #{content, jdbcType=VARCHAR}, #{pubflag, jdbcType=VARCHAR}, #{pubdate, jdbcType=VARCHAR}, #{pubtime, jdbcType=VARCHAR}, #{lastreplydate, jdbcType=VARCHAR}, #{lastreplytime, jdbcType=VARCHAR}, #{readtimes, jdbcType=INTEGER}, #{replytimes, jdbcType=INTEGER}, #{topflag, jdbcType=VARCHAR}, #{checkflag, jdbcType=VARCHAR}, #{checker, jdbcType=INTEGER}, #{closeflag, jdbcType=VARCHAR}, #{closer, jdbcType=INTEGER})
+    </insert>
+  
+    <select id="selectAll" resultMap="BaseResultMap">
+        select artid, title, author, content, pubflag, pubdate, pubtime, lastreplydate, lastreplytime, readtimes, replytimes, topflag, checkflag, checker, closeflag, closer
+          from sys_article
+    </select>
+
+    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
+        select artid, title, author, content, pubflag, pubdate, pubtime, lastreplydate, lastreplytime, readtimes, replytimes, topflag, checkflag, checker, closeflag, closer
+          from sys_article
+         where 1=1 and artid = #{arg0}
+    </select>
+
+    <delete id="deleteById" parameterType="map">
+        delete from sys_article
+         where 1=1 and artid = #{arg0}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.sys.SysArticle">
+        update sys_article set 
+               title = #{title, jdbcType=VARCHAR}, 
+               author = #{author, jdbcType=INTEGER}, 
+               content = #{content, jdbcType=VARCHAR}, 
+               pubflag = #{pubflag, jdbcType=VARCHAR}, 
+               pubdate = #{pubdate, jdbcType=VARCHAR}, 
+               pubtime = #{pubtime, jdbcType=VARCHAR}, 
+               lastreplydate = #{lastreplydate, jdbcType=VARCHAR}, 
+               lastreplytime = #{lastreplytime, jdbcType=VARCHAR}, 
+               readtimes = #{readtimes, jdbcType=INTEGER}, 
+               replytimes = #{replytimes, jdbcType=INTEGER}, 
+               topflag = #{topflag, jdbcType=VARCHAR}, 
+               checkflag = #{checkflag, jdbcType=VARCHAR}, 
+               checker = #{checker, jdbcType=INTEGER}, 
+               closeflag = #{closeflag, jdbcType=VARCHAR}, 
+               closer = #{closer, jdbcType=INTEGER}
+         where 1=1 and artid = #{artid, jdbcType=INTEGER}
+    </update>
+</mapper>

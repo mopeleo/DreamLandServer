@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.server.ServerPromotionDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.server.ServerPromotion">
+        <id column="serverid" jdbcType="VARCHAR" property="serverid" />
+        <id column="promid" jdbcType="INTEGER" property="promid" />
+        <result column="startdate" jdbcType="VARCHAR" property="startdate" />
+        <result column="starttime" jdbcType="VARCHAR" property="starttime" />
+        <result column="enddate" jdbcType="VARCHAR" property="enddate" />
+        <result column="endtime" jdbcType="VARCHAR" property="endtime" />
+    </resultMap>
+  
+    <select id="findUnique" parameterType="com.dl.server.entity.server.ServerPromotion" resultMap="BaseResultMap">
+        select serverid, promid, startdate, starttime, enddate, endtime
+          from server_promotion
+		<where>
+			<if test="serverid != null and serverid != ''">
+				and serverid = #{serverid, jdbcType=VARCHAR}
+			</if>
+			<if test="promid != null and promid != ''">
+				and promid = #{promid, jdbcType=INTEGER}
+			</if>
+			<if test="startdate != null and startdate != ''">
+				and startdate = #{startdate, jdbcType=VARCHAR}
+			</if>
+			<if test="starttime != null and starttime != ''">
+				and starttime = #{starttime, jdbcType=VARCHAR}
+			</if>
+			<if test="enddate != null and enddate != ''">
+				and enddate = #{enddate, jdbcType=VARCHAR}
+			</if>
+			<if test="endtime != null and endtime != ''">
+				and endtime = #{endtime, jdbcType=VARCHAR}
+			</if>
+		</where>
+    </select>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.server.ServerPromotion">
+        insert into server_promotion (serverid, promid, startdate, starttime, enddate, endtime)
+        values (#{serverid, jdbcType=VARCHAR}, #{promid, jdbcType=INTEGER}, #{startdate, jdbcType=VARCHAR}, #{starttime, jdbcType=VARCHAR}, #{enddate, jdbcType=VARCHAR}, #{endtime, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" resultMap="BaseResultMap">
+        select serverid, promid, startdate, starttime, enddate, endtime
+          from server_promotion
+    </select>
+
+    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
+        select serverid, promid, startdate, starttime, enddate, endtime
+          from server_promotion
+         where 1=1 and serverid = #{arg0} and promid = #{arg1}
+    </select>
+
+    <delete id="deleteById" parameterType="map">
+        delete from server_promotion
+         where 1=1 and serverid = #{arg0} and promid = #{arg1}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.server.ServerPromotion">
+        update server_promotion set 
+               startdate = #{startdate, jdbcType=VARCHAR}, 
+               starttime = #{starttime, jdbcType=VARCHAR}, 
+               enddate = #{enddate, jdbcType=VARCHAR}, 
+               endtime = #{endtime, jdbcType=VARCHAR}
+         where 1=1 and serverid = #{serverid, jdbcType=VARCHAR} and promid = #{promid, jdbcType=INTEGER}
+    </update>
+</mapper>

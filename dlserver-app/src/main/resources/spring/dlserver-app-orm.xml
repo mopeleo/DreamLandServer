@@ -61,7 +61,7 @@
 	<bean id="sessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<!-- <property name="configLocation" value="classpath:config/mybatis.xml" />  -->
-		<property name="mapperLocations" value="classpath*:mybatis_mapper/**/*Mapper.xml" />
+		<property name="mapperLocations" value="classpath*:mybatis/**/*Mapper.xml" />
 		<!-- 开启缓存支持 -->
         <property name="configurationProperties">
             <props>
@@ -84,6 +84,15 @@
                 <prop key="defaultStatementTimeout">3600</prop>
             </props>
         </property>
+        <!-- 自定义Mybatis分页拦截器 -->
+        <!-- 
+        <property name="plugins">    
+            <bean class="com.dl.server.dao.mybatis.PaginationInterceptor">
+                <property name="dialect" value="mysql"/>
+                <property name="sqlId" value="*Page"/>
+            </bean>  
+        </property>
+         -->
 	</bean>
 	
 	<!-- 处理clob,blob大字段数据，非 Oracle 的其它数据库只要简单配置一个 DefaultLobHandler,oracle数据库需另外配置  -->
@@ -122,7 +131,7 @@
 	
    
 	<!-- 直接在这里改 --> 
-	<context:property-placeholder location="classpath*:/jdbc-pub.properties, classpath*:/jdbc-prod.properties" />	
+	<context:property-placeholder location="classpath*:/jdbc-pub.properties, classpath*:/jdbc-prod.properties" ignore-unresolvable="true"/>	
 
 	<!-- production环境 ,多个配置文件用逗号分隔
  	<beans profile="production">

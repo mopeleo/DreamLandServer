@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.game.GameDictIndexDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.game.GameDictIndex">
+        <id column="dictcode" jdbcType="INTEGER" property="dictcode" />
+        <result column="dictname" jdbcType="VARCHAR" property="dictname" />
+        <result column="dftitem" jdbcType="VARCHAR" property="dftitem" />
+    </resultMap>
+  
+    <select id="findUnique" parameterType="com.dl.server.entity.game.GameDictIndex" resultMap="BaseResultMap">
+        select dictcode, dictname, dftitem
+          from game_dict_index
+		<where>
+			<if test="dictcode != null and dictcode != ''">
+				and dictcode = #{dictcode, jdbcType=INTEGER}
+			</if>
+			<if test="dictname != null and dictname != ''">
+				and dictname = #{dictname, jdbcType=VARCHAR}
+			</if>
+			<if test="dftitem != null and dftitem != ''">
+				and dftitem = #{dftitem, jdbcType=VARCHAR}
+			</if>
+		</where>
+    </select>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.game.GameDictIndex">
+        insert into game_dict_index (dictcode, dictname, dftitem)
+        values (#{dictcode, jdbcType=INTEGER}, #{dictname, jdbcType=VARCHAR}, #{dftitem, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" resultMap="BaseResultMap">
+        select dictcode, dictname, dftitem
+          from game_dict_index
+    </select>
+
+    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
+        select dictcode, dictname, dftitem
+          from game_dict_index
+         where 1=1 and dictcode = #{arg0}
+    </select>
+
+    <delete id="deleteById" parameterType="map">
+        delete from game_dict_index
+         where 1=1 and dictcode = #{arg0}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.game.GameDictIndex">
+        update game_dict_index set 
+               dictname = #{dictname, jdbcType=VARCHAR}, 
+               dftitem = #{dftitem, jdbcType=VARCHAR}
+         where 1=1 and dictcode = #{dictcode, jdbcType=INTEGER}
+    </update>
+</mapper>

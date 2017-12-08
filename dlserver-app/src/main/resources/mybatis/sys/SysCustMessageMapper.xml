@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.sys.SysCustMessageDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.sys.SysCustMessage">
+        <id column="custno" jdbcType="INTEGER" property="custno" />
+        <id column="msgid" jdbcType="INTEGER" property="msgid" />
+        <result column="isread" jdbcType="VARCHAR" property="isread" />
+    </resultMap>
+  
+    <select id="findUnique" parameterType="com.dl.server.entity.sys.SysCustMessage" resultMap="BaseResultMap">
+        select custno, msgid, isread
+          from sys_cust_message
+		<where>
+			<if test="custno != null and custno != ''">
+				and custno = #{custno, jdbcType=INTEGER}
+			</if>
+			<if test="msgid != null and msgid != ''">
+				and msgid = #{msgid, jdbcType=INTEGER}
+			</if>
+			<if test="isread != null and isread != ''">
+				and isread = #{isread, jdbcType=VARCHAR}
+			</if>
+		</where>
+    </select>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.sys.SysCustMessage">
+        insert into sys_cust_message (custno, msgid, isread)
+        values (#{custno, jdbcType=INTEGER}, #{msgid, jdbcType=INTEGER}, #{isread, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" resultMap="BaseResultMap">
+        select custno, msgid, isread
+          from sys_cust_message
+    </select>
+
+    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
+        select custno, msgid, isread
+          from sys_cust_message
+         where 1=1 and custno = #{arg0} and msgid = #{arg1}
+    </select>
+
+    <delete id="deleteById" parameterType="map">
+        delete from sys_cust_message
+         where 1=1 and custno = #{arg0} and msgid = #{arg1}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.sys.SysCustMessage">
+        update sys_cust_message set 
+               isread = #{isread, jdbcType=VARCHAR}
+         where 1=1 and custno = #{custno, jdbcType=INTEGER} and msgid = #{msgid, jdbcType=INTEGER}
+    </update>
+</mapper>

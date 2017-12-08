@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.game.GameSkillInfoDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.game.GameSkillInfo">
+        <id column="skillid" jdbcType="VARCHAR" property="skillid" />
+        <result column="skillname" jdbcType="VARCHAR" property="skillname" />
+        <result column="icon" jdbcType="VARCHAR" property="icon" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+    </resultMap>
+  
+    <select id="findUnique" parameterType="com.dl.server.entity.game.GameSkillInfo" resultMap="BaseResultMap">
+        select skillid, skillname, icon, remark, type
+          from game_skill_info
+		<where>
+			<if test="skillid != null and skillid != ''">
+				and skillid = #{skillid, jdbcType=VARCHAR}
+			</if>
+			<if test="skillname != null and skillname != ''">
+				and skillname = #{skillname, jdbcType=VARCHAR}
+			</if>
+			<if test="icon != null and icon != ''">
+				and icon = #{icon, jdbcType=VARCHAR}
+			</if>
+			<if test="remark != null and remark != ''">
+				and remark = #{remark, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null and type != ''">
+				and type = #{type, jdbcType=VARCHAR}
+			</if>
+		</where>
+    </select>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.game.GameSkillInfo">
+        insert into game_skill_info (skillid, skillname, icon, remark, type)
+        values (#{skillid, jdbcType=VARCHAR}, #{skillname, jdbcType=VARCHAR}, #{icon, jdbcType=VARCHAR}, #{remark, jdbcType=VARCHAR}, #{type, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" resultMap="BaseResultMap">
+        select skillid, skillname, icon, remark, type
+          from game_skill_info
+    </select>
+
+    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
+        select skillid, skillname, icon, remark, type
+          from game_skill_info
+         where 1=1 and skillid = #{arg0}
+    </select>
+
+    <delete id="deleteById" parameterType="map">
+        delete from game_skill_info
+         where 1=1 and skillid = #{arg0}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.game.GameSkillInfo">
+        update game_skill_info set 
+               skillname = #{skillname, jdbcType=VARCHAR}, 
+               icon = #{icon, jdbcType=VARCHAR}, 
+               remark = #{remark, jdbcType=VARCHAR}, 
+               type = #{type, jdbcType=VARCHAR}
+         where 1=1 and skillid = #{skillid, jdbcType=VARCHAR}
+    </update>
+</mapper>

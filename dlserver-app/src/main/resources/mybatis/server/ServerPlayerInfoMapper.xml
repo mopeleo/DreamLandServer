@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.server.ServerPlayerInfoDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.server.ServerPlayerInfo">
+        <id column="playerid" jdbcType="VARCHAR" property="playerid" />
+        <result column="serverid" jdbcType="VARCHAR" property="serverid" />
+        <result column="custno" jdbcType="INTEGER" property="custno" />
+        <result column="playernick" jdbcType="VARCHAR" property="playernick" />
+        <result column="logindate" jdbcType="VARCHAR" property="logindate" />
+        <result column="logintime" jdbcType="VARCHAR" property="logintime" />
+        <result column="level" jdbcType="INTEGER" property="level" />
+    </resultMap>
+  
+    <select id="findUnique" parameterType="com.dl.server.entity.server.ServerPlayerInfo" resultMap="BaseResultMap">
+        select playerid, serverid, custno, playernick, logindate, logintime, level
+          from server_player_info
+		<where>
+			<if test="playerid != null and playerid != ''">
+				and playerid = #{playerid, jdbcType=VARCHAR}
+			</if>
+			<if test="serverid != null and serverid != ''">
+				and serverid = #{serverid, jdbcType=VARCHAR}
+			</if>
+			<if test="custno != null and custno != ''">
+				and custno = #{custno, jdbcType=INTEGER}
+			</if>
+			<if test="playernick != null and playernick != ''">
+				and playernick = #{playernick, jdbcType=VARCHAR}
+			</if>
+			<if test="logindate != null and logindate != ''">
+				and logindate = #{logindate, jdbcType=VARCHAR}
+			</if>
+			<if test="logintime != null and logintime != ''">
+				and logintime = #{logintime, jdbcType=VARCHAR}
+			</if>
+			<if test="level != null and level != ''">
+				and level = #{level, jdbcType=INTEGER}
+			</if>
+		</where>
+    </select>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.server.ServerPlayerInfo">
+        insert into server_player_info (playerid, serverid, custno, playernick, logindate, logintime, level)
+        values (#{playerid, jdbcType=VARCHAR}, #{serverid, jdbcType=VARCHAR}, #{custno, jdbcType=INTEGER}, #{playernick, jdbcType=VARCHAR}, #{logindate, jdbcType=VARCHAR}, #{logintime, jdbcType=VARCHAR}, #{level, jdbcType=INTEGER})
+    </insert>
+  
+    <select id="selectAll" resultMap="BaseResultMap">
+        select playerid, serverid, custno, playernick, logindate, logintime, level
+          from server_player_info
+    </select>
+
+    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
+        select playerid, serverid, custno, playernick, logindate, logintime, level
+          from server_player_info
+         where 1=1 and playerid = #{arg0}
+    </select>
+
+    <delete id="deleteById" parameterType="map">
+        delete from server_player_info
+         where 1=1 and playerid = #{arg0}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.server.ServerPlayerInfo">
+        update server_player_info set 
+               serverid = #{serverid, jdbcType=VARCHAR}, 
+               custno = #{custno, jdbcType=INTEGER}, 
+               playernick = #{playernick, jdbcType=VARCHAR}, 
+               logindate = #{logindate, jdbcType=VARCHAR}, 
+               logintime = #{logintime, jdbcType=VARCHAR}, 
+               level = #{level, jdbcType=INTEGER}
+         where 1=1 and playerid = #{playerid, jdbcType=VARCHAR}
+    </update>
+</mapper>

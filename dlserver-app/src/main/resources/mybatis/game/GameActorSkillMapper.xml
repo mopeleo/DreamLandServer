@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.game.GameActorSkillDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.game.GameActorSkill">
+        <id column="actorid" jdbcType="VARCHAR" property="actorid" />
+        <id column="skillid" jdbcType="VARCHAR" property="skillid" />
+    </resultMap>
+  
+    <select id="findUnique" parameterType="com.dl.server.entity.game.GameActorSkill" resultMap="BaseResultMap">
+        select actorid, skillid
+          from game_actor_skill
+		<where>
+			<if test="actorid != null and actorid != ''">
+				and actorid = #{actorid, jdbcType=VARCHAR}
+			</if>
+			<if test="skillid != null and skillid != ''">
+				and skillid = #{skillid, jdbcType=VARCHAR}
+			</if>
+		</where>
+    </select>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.game.GameActorSkill">
+        insert into game_actor_skill (actorid, skillid)
+        values (#{actorid, jdbcType=VARCHAR}, #{skillid, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" resultMap="BaseResultMap">
+        select actorid, skillid
+          from game_actor_skill
+    </select>
+
+    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
+        select actorid, skillid
+          from game_actor_skill
+         where 1=1 and actorid = #{arg0} and skillid = #{arg1}
+    </select>
+
+    <delete id="deleteById" parameterType="map">
+        delete from game_actor_skill
+         where 1=1 and actorid = #{arg0} and skillid = #{arg1}
+    </delete>
+  
+</mapper>

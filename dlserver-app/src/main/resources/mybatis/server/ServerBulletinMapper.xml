@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.server.ServerBulletinDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.server.ServerBulletin">
+        <id column="title" jdbcType="VARCHAR" property="title" />
+        <result column="serverid" jdbcType="VARCHAR" property="serverid" />
+        <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="startdate" jdbcType="VARCHAR" property="startdate" />
+        <result column="enddate" jdbcType="VARCHAR" property="enddate" />
+        <result column="issuer" jdbcType="VARCHAR" property="issuer" />
+    </resultMap>
+  
+    <select id="findUnique" parameterType="com.dl.server.entity.server.ServerBulletin" resultMap="BaseResultMap">
+        select serverid, title, content, startdate, enddate, issuer
+          from server_bulletin
+		<where>
+			<if test="serverid != null and serverid != ''">
+				and serverid = #{serverid, jdbcType=VARCHAR}
+			</if>
+			<if test="title != null and title != ''">
+				and title = #{title, jdbcType=VARCHAR}
+			</if>
+			<if test="content != null and content != ''">
+				and content = #{content, jdbcType=VARCHAR}
+			</if>
+			<if test="startdate != null and startdate != ''">
+				and startdate = #{startdate, jdbcType=VARCHAR}
+			</if>
+			<if test="enddate != null and enddate != ''">
+				and enddate = #{enddate, jdbcType=VARCHAR}
+			</if>
+			<if test="issuer != null and issuer != ''">
+				and issuer = #{issuer, jdbcType=VARCHAR}
+			</if>
+		</where>
+    </select>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.server.ServerBulletin">
+        insert into server_bulletin (serverid, title, content, startdate, enddate, issuer)
+        values (#{serverid, jdbcType=VARCHAR}, #{title, jdbcType=VARCHAR}, #{content, jdbcType=VARCHAR}, #{startdate, jdbcType=VARCHAR}, #{enddate, jdbcType=VARCHAR}, #{issuer, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" resultMap="BaseResultMap">
+        select serverid, title, content, startdate, enddate, issuer
+          from server_bulletin
+    </select>
+
+    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
+        select serverid, title, content, startdate, enddate, issuer
+          from server_bulletin
+         where 1=1 and title = #{arg0}
+    </select>
+
+    <delete id="deleteById" parameterType="map">
+        delete from server_bulletin
+         where 1=1 and title = #{arg0}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.server.ServerBulletin">
+        update server_bulletin set 
+               serverid = #{serverid, jdbcType=VARCHAR}, 
+               content = #{content, jdbcType=VARCHAR}, 
+               startdate = #{startdate, jdbcType=VARCHAR}, 
+               enddate = #{enddate, jdbcType=VARCHAR}, 
+               issuer = #{issuer, jdbcType=VARCHAR}
+         where 1=1 and title = #{title, jdbcType=VARCHAR}
+    </update>
+</mapper>

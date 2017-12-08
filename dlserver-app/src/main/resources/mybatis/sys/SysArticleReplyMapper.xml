@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.sys.SysArticleReplyDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.sys.SysArticleReply">
+        <id column="artid" jdbcType="INTEGER" property="artid" />
+        <id column="replyid" jdbcType="INTEGER" property="replyid" />
+        <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="replyer" jdbcType="INTEGER" property="replyer" />
+        <result column="replydate" jdbcType="VARCHAR" property="replydate" />
+        <result column="replytime" jdbcType="VARCHAR" property="replytime" />
+    </resultMap>
+  
+    <select id="findUnique" parameterType="com.dl.server.entity.sys.SysArticleReply" resultMap="BaseResultMap">
+        select artid, replyid, content, replyer, replydate, replytime
+          from sys_article_reply
+		<where>
+			<if test="artid != null and artid != ''">
+				and artid = #{artid, jdbcType=INTEGER}
+			</if>
+			<if test="replyid != null and replyid != ''">
+				and replyid = #{replyid, jdbcType=INTEGER}
+			</if>
+			<if test="content != null and content != ''">
+				and content = #{content, jdbcType=VARCHAR}
+			</if>
+			<if test="replyer != null and replyer != ''">
+				and replyer = #{replyer, jdbcType=INTEGER}
+			</if>
+			<if test="replydate != null and replydate != ''">
+				and replydate = #{replydate, jdbcType=VARCHAR}
+			</if>
+			<if test="replytime != null and replytime != ''">
+				and replytime = #{replytime, jdbcType=VARCHAR}
+			</if>
+		</where>
+    </select>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.sys.SysArticleReply">
+        insert into sys_article_reply (artid, replyid, content, replyer, replydate, replytime)
+        values (#{artid, jdbcType=INTEGER}, #{replyid, jdbcType=INTEGER}, #{content, jdbcType=VARCHAR}, #{replyer, jdbcType=INTEGER}, #{replydate, jdbcType=VARCHAR}, #{replytime, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" resultMap="BaseResultMap">
+        select artid, replyid, content, replyer, replydate, replytime
+          from sys_article_reply
+    </select>
+
+    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
+        select artid, replyid, content, replyer, replydate, replytime
+          from sys_article_reply
+         where 1=1 and artid = #{arg0} and replyid = #{arg1}
+    </select>
+
+    <delete id="deleteById" parameterType="map">
+        delete from sys_article_reply
+         where 1=1 and artid = #{arg0} and replyid = #{arg1}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.sys.SysArticleReply">
+        update sys_article_reply set 
+               content = #{content, jdbcType=VARCHAR}, 
+               replyer = #{replyer, jdbcType=INTEGER}, 
+               replydate = #{replydate, jdbcType=VARCHAR}, 
+               replytime = #{replytime, jdbcType=VARCHAR}
+         where 1=1 and artid = #{artid, jdbcType=INTEGER} and replyid = #{replyid, jdbcType=INTEGER}
+    </update>
+</mapper>

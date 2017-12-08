@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.game.GameItemInfoDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.game.GameItemInfo">
+        <id column="itemid" jdbcType="VARCHAR" property="itemid" />
+        <result column="itemname" jdbcType="VARCHAR" property="itemname" />
+        <result column="icon" jdbcType="VARCHAR" property="icon" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+        <result column="type" jdbcType="INTEGER" property="type" />
+        <result column="rank" jdbcType="VARCHAR" property="rank" />
+    </resultMap>
+  
+    <select id="findUnique" parameterType="com.dl.server.entity.game.GameItemInfo" resultMap="BaseResultMap">
+        select itemid, itemname, icon, remark, type, rank
+          from game_item_info
+		<where>
+			<if test="itemid != null and itemid != ''">
+				and itemid = #{itemid, jdbcType=VARCHAR}
+			</if>
+			<if test="itemname != null and itemname != ''">
+				and itemname = #{itemname, jdbcType=VARCHAR}
+			</if>
+			<if test="icon != null and icon != ''">
+				and icon = #{icon, jdbcType=VARCHAR}
+			</if>
+			<if test="remark != null and remark != ''">
+				and remark = #{remark, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null and type != ''">
+				and type = #{type, jdbcType=INTEGER}
+			</if>
+			<if test="rank != null and rank != ''">
+				and rank = #{rank, jdbcType=VARCHAR}
+			</if>
+		</where>
+    </select>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.game.GameItemInfo">
+        insert into game_item_info (itemid, itemname, icon, remark, type, rank)
+        values (#{itemid, jdbcType=VARCHAR}, #{itemname, jdbcType=VARCHAR}, #{icon, jdbcType=VARCHAR}, #{remark, jdbcType=VARCHAR}, #{type, jdbcType=INTEGER}, #{rank, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" resultMap="BaseResultMap">
+        select itemid, itemname, icon, remark, type, rank
+          from game_item_info
+    </select>
+
+    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
+        select itemid, itemname, icon, remark, type, rank
+          from game_item_info
+         where 1=1 and itemid = #{arg0}
+    </select>
+
+    <delete id="deleteById" parameterType="map">
+        delete from game_item_info
+         where 1=1 and itemid = #{arg0}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.game.GameItemInfo">
+        update game_item_info set 
+               itemname = #{itemname, jdbcType=VARCHAR}, 
+               icon = #{icon, jdbcType=VARCHAR}, 
+               remark = #{remark, jdbcType=VARCHAR}, 
+               type = #{type, jdbcType=INTEGER}, 
+               rank = #{rank, jdbcType=VARCHAR}
+         where 1=1 and itemid = #{itemid, jdbcType=VARCHAR}
+    </update>
+</mapper>

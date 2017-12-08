@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.server.ServerLeagueInfoDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.server.ServerLeagueInfo">
+        <id column="leagueid" jdbcType="VARCHAR" property="leagueid" />
+        <result column="serverid" jdbcType="VARCHAR" property="serverid" />
+        <result column="leaguename" jdbcType="VARCHAR" property="leaguename" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+        <result column="maxleaguer" jdbcType="INTEGER" property="maxleaguer" />
+    </resultMap>
+  
+    <select id="findUnique" parameterType="com.dl.server.entity.server.ServerLeagueInfo" resultMap="BaseResultMap">
+        select leagueid, serverid, leaguename, remark, maxleaguer
+          from server_league_info
+		<where>
+			<if test="leagueid != null and leagueid != ''">
+				and leagueid = #{leagueid, jdbcType=VARCHAR}
+			</if>
+			<if test="serverid != null and serverid != ''">
+				and serverid = #{serverid, jdbcType=VARCHAR}
+			</if>
+			<if test="leaguename != null and leaguename != ''">
+				and leaguename = #{leaguename, jdbcType=VARCHAR}
+			</if>
+			<if test="remark != null and remark != ''">
+				and remark = #{remark, jdbcType=VARCHAR}
+			</if>
+			<if test="maxleaguer != null and maxleaguer != ''">
+				and maxleaguer = #{maxleaguer, jdbcType=INTEGER}
+			</if>
+		</where>
+    </select>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.server.ServerLeagueInfo">
+        insert into server_league_info (leagueid, serverid, leaguename, remark, maxleaguer)
+        values (#{leagueid, jdbcType=VARCHAR}, #{serverid, jdbcType=VARCHAR}, #{leaguename, jdbcType=VARCHAR}, #{remark, jdbcType=VARCHAR}, #{maxleaguer, jdbcType=INTEGER})
+    </insert>
+  
+    <select id="selectAll" resultMap="BaseResultMap">
+        select leagueid, serverid, leaguename, remark, maxleaguer
+          from server_league_info
+    </select>
+
+    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
+        select leagueid, serverid, leaguename, remark, maxleaguer
+          from server_league_info
+         where 1=1 and leagueid = #{arg0}
+    </select>
+
+    <delete id="deleteById" parameterType="map">
+        delete from server_league_info
+         where 1=1 and leagueid = #{arg0}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.server.ServerLeagueInfo">
+        update server_league_info set 
+               serverid = #{serverid, jdbcType=VARCHAR}, 
+               leaguename = #{leaguename, jdbcType=VARCHAR}, 
+               remark = #{remark, jdbcType=VARCHAR}, 
+               maxleaguer = #{maxleaguer, jdbcType=INTEGER}
+         where 1=1 and leagueid = #{leagueid, jdbcType=VARCHAR}
+    </update>
+</mapper>

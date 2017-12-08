@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.game.GamePromotionInfoDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.game.GamePromotionInfo">
+        <id column="promid" jdbcType="INTEGER" property="promid" />
+        <result column="promname" jdbcType="VARCHAR" property="promname" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+    </resultMap>
+  
+    <select id="findUnique" parameterType="com.dl.server.entity.game.GamePromotionInfo" resultMap="BaseResultMap">
+        select promid, promname, remark
+          from game_promotion_info
+		<where>
+			<if test="promid != null and promid != ''">
+				and promid = #{promid, jdbcType=INTEGER}
+			</if>
+			<if test="promname != null and promname != ''">
+				and promname = #{promname, jdbcType=VARCHAR}
+			</if>
+			<if test="remark != null and remark != ''">
+				and remark = #{remark, jdbcType=VARCHAR}
+			</if>
+		</where>
+    </select>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.game.GamePromotionInfo">
+        insert into game_promotion_info (promid, promname, remark)
+        values (#{promid, jdbcType=INTEGER}, #{promname, jdbcType=VARCHAR}, #{remark, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" resultMap="BaseResultMap">
+        select promid, promname, remark
+          from game_promotion_info
+    </select>
+
+    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
+        select promid, promname, remark
+          from game_promotion_info
+         where 1=1 and promid = #{arg0}
+    </select>
+
+    <delete id="deleteById" parameterType="map">
+        delete from game_promotion_info
+         where 1=1 and promid = #{arg0}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.game.GamePromotionInfo">
+        update game_promotion_info set 
+               promname = #{promname, jdbcType=VARCHAR}, 
+               remark = #{remark, jdbcType=VARCHAR}
+         where 1=1 and promid = #{promid, jdbcType=INTEGER}
+    </update>
+</mapper>

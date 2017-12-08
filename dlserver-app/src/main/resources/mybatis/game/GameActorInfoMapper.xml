@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.game.GameActorInfoDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.game.GameActorInfo">
+        <id column="actorid" jdbcType="VARCHAR" property="actorid" />
+        <result column="actorname" jdbcType="VARCHAR" property="actorname" />
+        <result column="aptitude" jdbcType="INTEGER" property="aptitude" />
+        <result column="attack" jdbcType="INTEGER" property="attack" />
+        <result column="defense" jdbcType="INTEGER" property="defense" />
+        <result column="hp" jdbcType="INTEGER" property="hp" />
+        <result column="mp" jdbcType="INTEGER" property="mp" />
+        <result column="ep" jdbcType="INTEGER" property="ep" />
+        <result column="initrank" jdbcType="INTEGER" property="initrank" />
+        <result column="maxrank" jdbcType="INTEGER" property="maxrank" />
+        <result column="attr" jdbcType="INTEGER" property="attr" />
+    </resultMap>
+  
+    <select id="findUnique" parameterType="com.dl.server.entity.game.GameActorInfo" resultMap="BaseResultMap">
+        select actorid, actorname, aptitude, attack, defense, hp, mp, ep, initrank, maxrank, attr
+          from game_actor_info
+		<where>
+			<if test="actorid != null and actorid != ''">
+				and actorid = #{actorid, jdbcType=VARCHAR}
+			</if>
+			<if test="actorname != null and actorname != ''">
+				and actorname = #{actorname, jdbcType=VARCHAR}
+			</if>
+			<if test="aptitude != null and aptitude != ''">
+				and aptitude = #{aptitude, jdbcType=INTEGER}
+			</if>
+			<if test="attack != null and attack != ''">
+				and attack = #{attack, jdbcType=INTEGER}
+			</if>
+			<if test="defense != null and defense != ''">
+				and defense = #{defense, jdbcType=INTEGER}
+			</if>
+			<if test="hp != null and hp != ''">
+				and hp = #{hp, jdbcType=INTEGER}
+			</if>
+			<if test="mp != null and mp != ''">
+				and mp = #{mp, jdbcType=INTEGER}
+			</if>
+			<if test="ep != null and ep != ''">
+				and ep = #{ep, jdbcType=INTEGER}
+			</if>
+			<if test="initrank != null and initrank != ''">
+				and initrank = #{initrank, jdbcType=INTEGER}
+			</if>
+			<if test="maxrank != null and maxrank != ''">
+				and maxrank = #{maxrank, jdbcType=INTEGER}
+			</if>
+			<if test="attr != null and attr != ''">
+				and attr = #{attr, jdbcType=INTEGER}
+			</if>
+		</where>
+    </select>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.game.GameActorInfo">
+        insert into game_actor_info (actorid, actorname, aptitude, attack, defense, hp, mp, ep, initrank, maxrank, attr)
+        values (#{actorid, jdbcType=VARCHAR}, #{actorname, jdbcType=VARCHAR}, #{aptitude, jdbcType=INTEGER}, #{attack, jdbcType=INTEGER}, #{defense, jdbcType=INTEGER}, #{hp, jdbcType=INTEGER}, #{mp, jdbcType=INTEGER}, #{ep, jdbcType=INTEGER}, #{initrank, jdbcType=INTEGER}, #{maxrank, jdbcType=INTEGER}, #{attr, jdbcType=INTEGER})
+    </insert>
+  
+    <select id="selectAll" resultMap="BaseResultMap">
+        select actorid, actorname, aptitude, attack, defense, hp, mp, ep, initrank, maxrank, attr
+          from game_actor_info
+    </select>
+
+    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
+        select actorid, actorname, aptitude, attack, defense, hp, mp, ep, initrank, maxrank, attr
+          from game_actor_info
+         where 1=1 and actorid = #{arg0}
+    </select>
+
+    <delete id="deleteById" parameterType="map">
+        delete from game_actor_info
+         where 1=1 and actorid = #{arg0}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.game.GameActorInfo">
+        update game_actor_info set 
+               actorname = #{actorname, jdbcType=VARCHAR}, 
+               aptitude = #{aptitude, jdbcType=INTEGER}, 
+               attack = #{attack, jdbcType=INTEGER}, 
+               defense = #{defense, jdbcType=INTEGER}, 
+               hp = #{hp, jdbcType=INTEGER}, 
+               mp = #{mp, jdbcType=INTEGER}, 
+               ep = #{ep, jdbcType=INTEGER}, 
+               initrank = #{initrank, jdbcType=INTEGER}, 
+               maxrank = #{maxrank, jdbcType=INTEGER}, 
+               attr = #{attr, jdbcType=INTEGER}
+         where 1=1 and actorid = #{actorid, jdbcType=VARCHAR}
+    </update>
+</mapper>

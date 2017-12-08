@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.game.GameServerInfoDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.game.GameServerInfo">
+        <id column="serverid" jdbcType="VARCHAR" property="serverid" />
+        <result column="servername" jdbcType="VARCHAR" property="servername" />
+        <result column="sno" jdbcType="INTEGER" property="sno" />
+        <result column="opendate" jdbcType="VARCHAR" property="opendate" />
+        <result column="opentime" jdbcType="VARCHAR" property="opentime" />
+        <result column="maxplayer" jdbcType="INTEGER" property="maxplayer" />
+        <result column="regplayer" jdbcType="INTEGER" property="regplayer" />
+        <result column="onlineplayer" jdbcType="INTEGER" property="onlineplayer" />
+    </resultMap>
+  
+    <select id="findUnique" parameterType="com.dl.server.entity.game.GameServerInfo" resultMap="BaseResultMap">
+        select serverid, servername, sno, opendate, opentime, maxplayer, regplayer, onlineplayer
+          from game_server_info
+		<where>
+			<if test="serverid != null and serverid != ''">
+				and serverid = #{serverid, jdbcType=VARCHAR}
+			</if>
+			<if test="servername != null and servername != ''">
+				and servername = #{servername, jdbcType=VARCHAR}
+			</if>
+			<if test="sno != null and sno != ''">
+				and sno = #{sno, jdbcType=INTEGER}
+			</if>
+			<if test="opendate != null and opendate != ''">
+				and opendate = #{opendate, jdbcType=VARCHAR}
+			</if>
+			<if test="opentime != null and opentime != ''">
+				and opentime = #{opentime, jdbcType=VARCHAR}
+			</if>
+			<if test="maxplayer != null and maxplayer != ''">
+				and maxplayer = #{maxplayer, jdbcType=INTEGER}
+			</if>
+			<if test="regplayer != null and regplayer != ''">
+				and regplayer = #{regplayer, jdbcType=INTEGER}
+			</if>
+			<if test="onlineplayer != null and onlineplayer != ''">
+				and onlineplayer = #{onlineplayer, jdbcType=INTEGER}
+			</if>
+		</where>
+    </select>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.game.GameServerInfo">
+        insert into game_server_info (serverid, servername, sno, opendate, opentime, maxplayer, regplayer, onlineplayer)
+        values (#{serverid, jdbcType=VARCHAR}, #{servername, jdbcType=VARCHAR}, #{sno, jdbcType=INTEGER}, #{opendate, jdbcType=VARCHAR}, #{opentime, jdbcType=VARCHAR}, #{maxplayer, jdbcType=INTEGER}, #{regplayer, jdbcType=INTEGER}, #{onlineplayer, jdbcType=INTEGER})
+    </insert>
+  
+    <select id="selectAll" resultMap="BaseResultMap">
+        select serverid, servername, sno, opendate, opentime, maxplayer, regplayer, onlineplayer
+          from game_server_info
+    </select>
+
+    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
+        select serverid, servername, sno, opendate, opentime, maxplayer, regplayer, onlineplayer
+          from game_server_info
+         where 1=1 and serverid = #{arg0}
+    </select>
+
+    <delete id="deleteById" parameterType="map">
+        delete from game_server_info
+         where 1=1 and serverid = #{arg0}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.game.GameServerInfo">
+        update game_server_info set 
+               servername = #{servername, jdbcType=VARCHAR}, 
+               sno = #{sno, jdbcType=INTEGER}, 
+               opendate = #{opendate, jdbcType=VARCHAR}, 
+               opentime = #{opentime, jdbcType=VARCHAR}, 
+               maxplayer = #{maxplayer, jdbcType=INTEGER}, 
+               regplayer = #{regplayer, jdbcType=INTEGER}, 
+               onlineplayer = #{onlineplayer, jdbcType=INTEGER}
+         where 1=1 and serverid = #{serverid, jdbcType=VARCHAR}
+    </update>
+</mapper>

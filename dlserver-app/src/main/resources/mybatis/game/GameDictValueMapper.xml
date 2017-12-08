@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.game.GameDictValueDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.game.GameDictValue">
+        <id column="dictcode" jdbcType="INTEGER" property="dictcode" />
+        <id column="itemcode" jdbcType="VARCHAR" property="itemcode" />
+        <result column="itemvalue" jdbcType="VARCHAR" property="itemvalue" />
+    </resultMap>
+  
+    <select id="findUnique" parameterType="com.dl.server.entity.game.GameDictValue" resultMap="BaseResultMap">
+        select dictcode, itemcode, itemvalue
+          from game_dict_value
+		<where>
+			<if test="dictcode != null and dictcode != ''">
+				and dictcode = #{dictcode, jdbcType=INTEGER}
+			</if>
+			<if test="itemcode != null and itemcode != ''">
+				and itemcode = #{itemcode, jdbcType=VARCHAR}
+			</if>
+			<if test="itemvalue != null and itemvalue != ''">
+				and itemvalue = #{itemvalue, jdbcType=VARCHAR}
+			</if>
+		</where>
+    </select>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.game.GameDictValue">
+        insert into game_dict_value (dictcode, itemcode, itemvalue)
+        values (#{dictcode, jdbcType=INTEGER}, #{itemcode, jdbcType=VARCHAR}, #{itemvalue, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" resultMap="BaseResultMap">
+        select dictcode, itemcode, itemvalue
+          from game_dict_value
+    </select>
+
+    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
+        select dictcode, itemcode, itemvalue
+          from game_dict_value
+         where 1=1 and dictcode = #{arg0} and itemcode = #{arg1}
+    </select>
+
+    <delete id="deleteById" parameterType="map">
+        delete from game_dict_value
+         where 1=1 and dictcode = #{arg0} and itemcode = #{arg1}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.game.GameDictValue">
+        update game_dict_value set 
+               itemvalue = #{itemvalue, jdbcType=VARCHAR}
+         where 1=1 and dictcode = #{dictcode, jdbcType=INTEGER} and itemcode = #{itemcode, jdbcType=VARCHAR}
+    </update>
+</mapper>

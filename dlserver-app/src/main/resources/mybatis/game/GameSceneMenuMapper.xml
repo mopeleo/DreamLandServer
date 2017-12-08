@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.game.GameSceneMenuDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.game.GameSceneMenu">
+        <id column="sceneid" jdbcType="INTEGER" property="sceneid" />
+        <id column="menuid" jdbcType="VARCHAR" property="menuid" />
+    </resultMap>
+  
+    <select id="findUnique" parameterType="com.dl.server.entity.game.GameSceneMenu" resultMap="BaseResultMap">
+        select sceneid, menuid
+          from game_scene_menu
+		<where>
+			<if test="sceneid != null and sceneid != ''">
+				and sceneid = #{sceneid, jdbcType=INTEGER}
+			</if>
+			<if test="menuid != null and menuid != ''">
+				and menuid = #{menuid, jdbcType=VARCHAR}
+			</if>
+		</where>
+    </select>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.game.GameSceneMenu">
+        insert into game_scene_menu (sceneid, menuid)
+        values (#{sceneid, jdbcType=INTEGER}, #{menuid, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" resultMap="BaseResultMap">
+        select sceneid, menuid
+          from game_scene_menu
+    </select>
+
+    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
+        select sceneid, menuid
+          from game_scene_menu
+         where 1=1 and sceneid = #{arg0} and menuid = #{arg1}
+    </select>
+
+    <delete id="deleteById" parameterType="map">
+        delete from game_scene_menu
+         where 1=1 and sceneid = #{arg0} and menuid = #{arg1}
+    </delete>
+  
+</mapper>

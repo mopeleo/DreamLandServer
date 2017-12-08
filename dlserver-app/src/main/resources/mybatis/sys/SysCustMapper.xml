@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.sys.SysCustDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.sys.SysCust">
+        <id column="custno" jdbcType="INTEGER" property="custno" />
+        <result column="loginid" jdbcType="VARCHAR" property="loginid" />
+        <result column="loginpwd" jdbcType="VARCHAR" property="loginpwd" />
+        <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+        <result column="idtype" jdbcType="VARCHAR" property="idtype" />
+        <result column="idcode" jdbcType="VARCHAR" property="idcode" />
+        <result column="idname" jdbcType="VARCHAR" property="idname" />
+        <result column="birthday" jdbcType="VARCHAR" property="birthday" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+        <result column="regdate" jdbcType="VARCHAR" property="regdate" />
+    </resultMap>
+  
+    <select id="findUnique" parameterType="com.dl.server.entity.sys.SysCust" resultMap="BaseResultMap">
+        select custno, loginid, loginpwd, nickname, idtype, idcode, idname, birthday, email, mobile, regdate
+          from sys_cust
+		<where>
+			<if test="custno != null and custno != ''">
+				and custno = #{custno, jdbcType=INTEGER}
+			</if>
+			<if test="loginid != null and loginid != ''">
+				and loginid = #{loginid, jdbcType=VARCHAR}
+			</if>
+			<if test="loginpwd != null and loginpwd != ''">
+				and loginpwd = #{loginpwd, jdbcType=VARCHAR}
+			</if>
+			<if test="nickname != null and nickname != ''">
+				and nickname = #{nickname, jdbcType=VARCHAR}
+			</if>
+			<if test="idtype != null and idtype != ''">
+				and idtype = #{idtype, jdbcType=VARCHAR}
+			</if>
+			<if test="idcode != null and idcode != ''">
+				and idcode = #{idcode, jdbcType=VARCHAR}
+			</if>
+			<if test="idname != null and idname != ''">
+				and idname = #{idname, jdbcType=VARCHAR}
+			</if>
+			<if test="birthday != null and birthday != ''">
+				and birthday = #{birthday, jdbcType=VARCHAR}
+			</if>
+			<if test="email != null and email != ''">
+				and email = #{email, jdbcType=VARCHAR}
+			</if>
+			<if test="mobile != null and mobile != ''">
+				and mobile = #{mobile, jdbcType=VARCHAR}
+			</if>
+			<if test="regdate != null and regdate != ''">
+				and regdate = #{regdate, jdbcType=VARCHAR}
+			</if>
+		</where>
+    </select>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.sys.SysCust">
+        insert into sys_cust (custno, loginid, loginpwd, nickname, idtype, idcode, idname, birthday, email, mobile, regdate)
+        values (#{custno, jdbcType=INTEGER}, #{loginid, jdbcType=VARCHAR}, #{loginpwd, jdbcType=VARCHAR}, #{nickname, jdbcType=VARCHAR}, #{idtype, jdbcType=VARCHAR}, #{idcode, jdbcType=VARCHAR}, #{idname, jdbcType=VARCHAR}, #{birthday, jdbcType=VARCHAR}, #{email, jdbcType=VARCHAR}, #{mobile, jdbcType=VARCHAR}, #{regdate, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" resultMap="BaseResultMap">
+        select custno, loginid, loginpwd, nickname, idtype, idcode, idname, birthday, email, mobile, regdate
+          from sys_cust
+    </select>
+
+    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
+        select custno, loginid, loginpwd, nickname, idtype, idcode, idname, birthday, email, mobile, regdate
+          from sys_cust
+         where 1=1 and custno = #{arg0}
+    </select>
+
+    <delete id="deleteById" parameterType="map">
+        delete from sys_cust
+         where 1=1 and custno = #{arg0}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.sys.SysCust">
+        update sys_cust set 
+               loginid = #{loginid, jdbcType=VARCHAR}, 
+               loginpwd = #{loginpwd, jdbcType=VARCHAR}, 
+               nickname = #{nickname, jdbcType=VARCHAR}, 
+               idtype = #{idtype, jdbcType=VARCHAR}, 
+               idcode = #{idcode, jdbcType=VARCHAR}, 
+               idname = #{idname, jdbcType=VARCHAR}, 
+               birthday = #{birthday, jdbcType=VARCHAR}, 
+               email = #{email, jdbcType=VARCHAR}, 
+               mobile = #{mobile, jdbcType=VARCHAR}, 
+               regdate = #{regdate, jdbcType=VARCHAR}
+         where 1=1 and custno = #{custno, jdbcType=INTEGER}
+    </update>
+</mapper>

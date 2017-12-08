@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.server.ServerPlayerActorDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.server.ServerPlayerActor">
+        <id column="playerid" jdbcType="VARCHAR" property="playerid" />
+        <id column="actorid" jdbcType="VARCHAR" property="actorid" />
+        <result column="rank" jdbcType="INTEGER" property="rank" />
+        <result column="level" jdbcType="INTEGER" property="level" />
+    </resultMap>
+  
+    <select id="findUnique" parameterType="com.dl.server.entity.server.ServerPlayerActor" resultMap="BaseResultMap">
+        select playerid, actorid, rank, level
+          from server_player_actor
+		<where>
+			<if test="playerid != null and playerid != ''">
+				and playerid = #{playerid, jdbcType=VARCHAR}
+			</if>
+			<if test="actorid != null and actorid != ''">
+				and actorid = #{actorid, jdbcType=VARCHAR}
+			</if>
+			<if test="rank != null and rank != ''">
+				and rank = #{rank, jdbcType=INTEGER}
+			</if>
+			<if test="level != null and level != ''">
+				and level = #{level, jdbcType=INTEGER}
+			</if>
+		</where>
+    </select>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.server.ServerPlayerActor">
+        insert into server_player_actor (playerid, actorid, rank, level)
+        values (#{playerid, jdbcType=VARCHAR}, #{actorid, jdbcType=VARCHAR}, #{rank, jdbcType=INTEGER}, #{level, jdbcType=INTEGER})
+    </insert>
+  
+    <select id="selectAll" resultMap="BaseResultMap">
+        select playerid, actorid, rank, level
+          from server_player_actor
+    </select>
+
+    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
+        select playerid, actorid, rank, level
+          from server_player_actor
+         where 1=1 and playerid = #{arg0} and actorid = #{arg1}
+    </select>
+
+    <delete id="deleteById" parameterType="map">
+        delete from server_player_actor
+         where 1=1 and playerid = #{arg0} and actorid = #{arg1}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.server.ServerPlayerActor">
+        update server_player_actor set 
+               rank = #{rank, jdbcType=INTEGER}, 
+               level = #{level, jdbcType=INTEGER}
+         where 1=1 and playerid = #{playerid, jdbcType=VARCHAR} and actorid = #{actorid, jdbcType=VARCHAR}
+    </update>
+</mapper>

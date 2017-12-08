@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.server.ServerPlayerItemDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.server.ServerPlayerItem">
+        <id column="playid" jdbcType="VARCHAR" property="playid" />
+        <id column="itemid" jdbcType="VARCHAR" property="itemid" />
+        <result column="num" jdbcType="INTEGER" property="num" />
+    </resultMap>
+  
+    <select id="findUnique" parameterType="com.dl.server.entity.server.ServerPlayerItem" resultMap="BaseResultMap">
+        select playid, itemid, num
+          from server_player_item
+		<where>
+			<if test="playid != null and playid != ''">
+				and playid = #{playid, jdbcType=VARCHAR}
+			</if>
+			<if test="itemid != null and itemid != ''">
+				and itemid = #{itemid, jdbcType=VARCHAR}
+			</if>
+			<if test="num != null and num != ''">
+				and num = #{num, jdbcType=INTEGER}
+			</if>
+		</where>
+    </select>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.server.ServerPlayerItem">
+        insert into server_player_item (playid, itemid, num)
+        values (#{playid, jdbcType=VARCHAR}, #{itemid, jdbcType=VARCHAR}, #{num, jdbcType=INTEGER})
+    </insert>
+  
+    <select id="selectAll" resultMap="BaseResultMap">
+        select playid, itemid, num
+          from server_player_item
+    </select>
+
+    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
+        select playid, itemid, num
+          from server_player_item
+         where 1=1 and playid = #{arg0} and itemid = #{arg1}
+    </select>
+
+    <delete id="deleteById" parameterType="map">
+        delete from server_player_item
+         where 1=1 and playid = #{arg0} and itemid = #{arg1}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.server.ServerPlayerItem">
+        update server_player_item set 
+               num = #{num, jdbcType=INTEGER}
+         where 1=1 and playid = #{playid, jdbcType=VARCHAR} and itemid = #{itemid, jdbcType=VARCHAR}
+    </update>
+</mapper>
