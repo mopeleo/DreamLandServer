@@ -25,6 +25,7 @@ public class CDMParser {
     private static final String ELEMENT_COLUMNS = "Attributes";
     private static final String ELEMENT_DATAITEM = "DataItem";
     private static final String ELEMENT_IDENTIFIERS = "Identifiers";
+    private static final String ELEMENT_IDENTIFIER = "Identifier";
     private static final String ELEMENT_IDENTIFIER_ATTR = "Identifier.Attributes";
     private static final String ELEMENT_IDENTIFIER_ENTITY_ATTR = "EntityAttribute";
     private static final String NODE_ROOT = "//Model";
@@ -65,7 +66,7 @@ public class CDMParser {
                 }
 
                 Element elementDataType = colItem.element(ELEMENT_DATATYPE);
-                column.setDatatype(elementDataType.getTextTrim());
+                column.setDatatype(elementDataType.getTextTrim().toUpperCase());
 
                 Element elementLength = colItem.element(ELEMENT_LENGTH);
                 if(elementLength == null){
@@ -112,17 +113,20 @@ public class CDMParser {
 				}
 				
 				//解析主键节点
-				Element elementPKNode =  elementTable.element(ELEMENT_IDENTIFIERS);
-				List<String> keyList = new ArrayList<String>();
-				if(elementPKNode != null){
-	                List keys = elementPKNode.elements();
-	                for(int j = 0; j < keys.size(); j++){
-	                    Element elementKey = (Element)keys.get(j);                  
-	                    String keyRef = elementKey.element(ELEMENT_IDENTIFIER_ATTR).element(ELEMENT_IDENTIFIER_ENTITY_ATTR).attribute(ATTR_REF).getValue();
-//	                    System.out.println("parse key ref : " + keyRef);
-	                    keyList.add(keyRef);
-	                }
-				}				
+                Element identifiersNode = elementTable.element(ELEMENT_IDENTIFIERS);
+                List<String> keyList = new ArrayList<String>();
+                if(identifiersNode != null){
+                    List identifier = identifiersNode.elements(ELEMENT_IDENTIFIER);
+                    for(int j = 0; j < identifier.size(); j++){
+                        Element elementIdentifier = (Element)identifier.get(j);
+                        List idenAttributes = elementIdentifier.element(ELEMENT_IDENTIFIER_ATTR).elements(ELEMENT_IDENTIFIER_ENTITY_ATTR);
+                        for(int k = 0; k< idenAttributes.size(); k++){
+                            Element elementKey = (Element)idenAttributes.get(k);
+                            String keyRef = elementKey.attribute(ATTR_REF).getValue();
+                            keyList.add(keyRef);
+                        }
+                    }
+                }               
 				
 				//解析c:Columns节点
 				List columns = elementTable.element(ELEMENT_COLUMNS).elements();
@@ -130,13 +134,15 @@ public class CDMParser {
 					Element elementColumn = (Element)columns.get(j);
 					String id = elementColumn.attribute(ATTR_ID).getValue();
 					String refId = elementColumn.element(ELEMENT_DATAITEM).element(ELEMENT_DATAITEM).attribute(ATTR_REF).getValue();
-//                    System.out.println("parse col id " + id + ",  ref : " + refId);
+					Column refCol = (Column)colMap.get(refId);
 					if(colMap.containsKey(refId)){
-					    table.addColumn((Column)colMap.get(refId));
+					    table.addColumn(refCol);
 					}
 					
 					if(keyList.contains(id)){
-					    table.addKey((Column)colMap.get(refId));
+					    table.addKey(refCol);
+					}else{
+					    table.addColsExceptKey(refCol);
 					}
 				}
 

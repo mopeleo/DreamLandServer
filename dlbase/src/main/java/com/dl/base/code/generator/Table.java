@@ -11,16 +11,21 @@ public class Table {
 	private String comment;
 	
 	private List<Column> columns = new ArrayList<Column>();
-	private List<Column> keys = new ArrayList<Column>();
+    private List<Column> keys = new ArrayList<Column>();
+    private List<Column> colsExceptKey = new ArrayList<Column>();
 	
 	public void addColumn(Column col){
 		columns.add(col);
 	}
 	
-	public void addKey(Column key){
-		keys.add(key);
-	}
-	
+    public void addKey(Column key){
+        keys.add(key);
+    }
+    
+    public void addColsExceptKey(Column key){
+        colsExceptKey.add(key);
+    }
+    
 	public String getId() {
 		return id;
 	}
@@ -57,5 +62,11 @@ public class Table {
 	public void setKeys(List<Column> keys) {
 		this.keys = keys;
 	}
-	
+    public List<Column> getColsExceptKey() {
+        return colsExceptKey;
+    }
+
+    public void setColsExceptKey(List<Column> colsExceptKey) {
+        this.colsExceptKey = colsExceptKey;
+    }	
 }

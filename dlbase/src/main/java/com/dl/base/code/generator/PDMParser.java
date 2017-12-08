@@ -113,7 +113,7 @@ public class PDMParser {
 					}
 
 					Element elementDataType = elementColumn.element(ELEMENT_DATATYPE);
-					column.setDatatype(elementDataType.getTextTrim());
+					column.setDatatype(elementDataType.getTextTrim().toUpperCase());
 
 					Element elementLength = elementColumn.element(ELEMENT_LENGTH);
 					if(elementLength == null){
@@ -139,6 +139,8 @@ public class PDMParser {
 					table.addColumn(column);
 					if(keyList.contains(column.getId())){
 						table.addKey(column);
+					}else{
+					    table.addColsExceptKey(column);
 					}
 				}
 

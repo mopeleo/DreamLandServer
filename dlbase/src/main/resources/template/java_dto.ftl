@@ -1,8 +1,9 @@
 <#macro type datatype precision><#if datatype?contains("A")>String<#elseif datatype=="INT">int<#elseif precision != "">double<#else>int</#if></#macro>
-<#macro initNull datatype precision><#if datatype?contains("A")>null<#elseif datatype=="INT">0<#elseif precision != "">0<#else>0</#if></#macro>
 package ${package};
 
-public class ${entity}{
+import com.dl.server.dto.BaseDTO;
+
+public class ${entity}DTO extends BaseDTO {
 
 <#list table.columns as column>
 	private <@type datatype=column.datatype precision=column.precision /> ${column.code};    //${column.comment}
@@ -18,9 +19,4 @@ public class ${entity}{
 	}
 
 </#list>
-	public void clear(){
-<#list table.columns as column>
-		this.${column.code} = <@initNull datatype=column.datatype precision=column.precision />;
-</#list>
-	}
 }
