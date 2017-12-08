@@ -6,17 +6,17 @@ import com.corundumstudio.socketio.listener.DataListener;
 import com.dl.base.exception.DLServiceException;
 import com.dl.server.common.SpringContext;
 import com.dl.server.dto.ResultDTO;
-import com.dl.server.dto.system.SysUserDTO;
-import com.dl.server.service.system.SysUserService;
+import com.dl.server.dto.sys.SysCustDTO;
+import com.dl.server.service.sys.SysCustService;
 
-public class UserServiceListener implements DataListener<SysUserDTO>{
+public class CustServiceListener implements DataListener<SysCustDTO>{
 
     @Override
-    public void onData(SocketIOClient client, SysUserDTO user, AckRequest ackSender) throws Exception {
+    public void onData(SocketIOClient client, SysCustDTO user, AckRequest ackSender) throws Exception {
         String action = user.getAction();
         if(action.equalsIgnoreCase("login")){
-            SysUserService userService = SpringContext.getBean("sysUserServiceImpl");
-            ResultDTO<SysUserDTO> result = userService.getById(user.getUserid());
+            SysCustService userService = SpringContext.getBean("sysCustServiceImpl");
+            ResultDTO<SysCustDTO> result = userService.login(user);
             client.sendEvent("userservice", result);
         }else if(action.equalsIgnoreCase("query")){
 

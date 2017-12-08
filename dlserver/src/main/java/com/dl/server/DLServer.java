@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 import com.corundumstudio.socketio.Configuration;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.dl.server.common.SpringContext;
-import com.dl.server.listener.ListenerRegedit;
+import com.dl.server.listener.ListenerRegistry;
 
 public class DLServer {
     private static final ResourceBundle rb = ResourceBundle.getBundle("dlserver");
@@ -34,7 +34,7 @@ public class DLServer {
         config.setPort(Integer.parseInt(getConfig("port", "3000")));
         SocketIOServer server = new SocketIOServer(config);
         //添加事件监听器
-        ListenerRegedit.registerListener(server);
+        ListenerRegistry.registerListener(server);
         server.start();
         Thread.sleep(Integer.MAX_VALUE);
         server.stop();
