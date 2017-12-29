@@ -7,7 +7,12 @@
         <result column="remark" jdbcType="VARCHAR" property="remark" />
     </resultMap>
   
-    <select id="findUnique" parameterType="com.dl.server.entity.game.GamePromotionInfo" resultMap="BaseResultMap">
+    <insert id="insert" parameterType="com.dl.server.entity.game.GamePromotionInfo">
+        insert into game_promotion_info (promid, promname, remark)
+        values (#{promid, jdbcType=INTEGER}, #{promname, jdbcType=VARCHAR}, #{remark, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.game.GamePromotionInfo" resultMap="BaseResultMap">
         select promid, promname, remark
           from game_promotion_info
 		<where>
@@ -21,16 +26,6 @@
 				and remark = #{remark, jdbcType=VARCHAR}
 			</if>
 		</where>
-    </select>
-  
-    <insert id="insert" parameterType="com.dl.server.entity.game.GamePromotionInfo">
-        insert into game_promotion_info (promid, promname, remark)
-        values (#{promid, jdbcType=INTEGER}, #{promname, jdbcType=VARCHAR}, #{remark, jdbcType=VARCHAR})
-    </insert>
-  
-    <select id="selectAll" resultMap="BaseResultMap">
-        select promid, promname, remark
-          from game_promotion_info
     </select>
 
     <select id="selectById" parameterType="map" resultMap="BaseResultMap">

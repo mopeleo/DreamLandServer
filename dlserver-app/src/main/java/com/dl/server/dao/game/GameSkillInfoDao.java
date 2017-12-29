@@ -5,11 +5,13 @@ import java.util.List;
 
 public interface GameSkillInfoDao{
 
-    GameSkillInfo findUnique(GameSkillInfo entity);
+    //int dynamicUpdate(GameSkillInfo entity);
+    
+    //int updateWhere(GameSkillInfo entity);
     
     int insert(GameSkillInfo entity);
 
-    List<GameSkillInfo> selectAll();
+    List<GameSkillInfo> selectAll(GameSkillInfo entity);
 
     GameSkillInfo selectById(String skillid);
 

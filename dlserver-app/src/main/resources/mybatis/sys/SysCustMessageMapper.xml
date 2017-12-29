@@ -7,7 +7,12 @@
         <result column="isread" jdbcType="VARCHAR" property="isread" />
     </resultMap>
   
-    <select id="findUnique" parameterType="com.dl.server.entity.sys.SysCustMessage" resultMap="BaseResultMap">
+    <insert id="insert" parameterType="com.dl.server.entity.sys.SysCustMessage">
+        insert into sys_cust_message (custno, msgid, isread)
+        values (#{custno, jdbcType=INTEGER}, #{msgid, jdbcType=INTEGER}, #{isread, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.sys.SysCustMessage" resultMap="BaseResultMap">
         select custno, msgid, isread
           from sys_cust_message
 		<where>
@@ -21,16 +26,6 @@
 				and isread = #{isread, jdbcType=VARCHAR}
 			</if>
 		</where>
-    </select>
-  
-    <insert id="insert" parameterType="com.dl.server.entity.sys.SysCustMessage">
-        insert into sys_cust_message (custno, msgid, isread)
-        values (#{custno, jdbcType=INTEGER}, #{msgid, jdbcType=INTEGER}, #{isread, jdbcType=VARCHAR})
-    </insert>
-  
-    <select id="selectAll" resultMap="BaseResultMap">
-        select custno, msgid, isread
-          from sys_cust_message
     </select>
 
     <select id="selectById" parameterType="map" resultMap="BaseResultMap">

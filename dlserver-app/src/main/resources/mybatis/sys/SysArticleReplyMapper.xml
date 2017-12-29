@@ -10,7 +10,12 @@
         <result column="replytime" jdbcType="VARCHAR" property="replytime" />
     </resultMap>
   
-    <select id="findUnique" parameterType="com.dl.server.entity.sys.SysArticleReply" resultMap="BaseResultMap">
+    <insert id="insert" parameterType="com.dl.server.entity.sys.SysArticleReply">
+        insert into sys_article_reply (artid, replyid, content, replyer, replydate, replytime)
+        values (#{artid, jdbcType=INTEGER}, #{replyid, jdbcType=INTEGER}, #{content, jdbcType=VARCHAR}, #{replyer, jdbcType=INTEGER}, #{replydate, jdbcType=VARCHAR}, #{replytime, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.sys.SysArticleReply" resultMap="BaseResultMap">
         select artid, replyid, content, replyer, replydate, replytime
           from sys_article_reply
 		<where>
@@ -33,16 +38,6 @@
 				and replytime = #{replytime, jdbcType=VARCHAR}
 			</if>
 		</where>
-    </select>
-  
-    <insert id="insert" parameterType="com.dl.server.entity.sys.SysArticleReply">
-        insert into sys_article_reply (artid, replyid, content, replyer, replydate, replytime)
-        values (#{artid, jdbcType=INTEGER}, #{replyid, jdbcType=INTEGER}, #{content, jdbcType=VARCHAR}, #{replyer, jdbcType=INTEGER}, #{replydate, jdbcType=VARCHAR}, #{replytime, jdbcType=VARCHAR})
-    </insert>
-  
-    <select id="selectAll" resultMap="BaseResultMap">
-        select artid, replyid, content, replyer, replydate, replytime
-          from sys_article_reply
     </select>
 
     <select id="selectById" parameterType="map" resultMap="BaseResultMap">

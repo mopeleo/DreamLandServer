@@ -5,11 +5,13 @@ import java.util.List;
 
 public interface GamePromotionInfoDao{
 
-    GamePromotionInfo findUnique(GamePromotionInfo entity);
+    //int dynamicUpdate(GamePromotionInfo entity);
+    
+    //int updateWhere(GamePromotionInfo entity);
     
     int insert(GamePromotionInfo entity);
 
-    List<GamePromotionInfo> selectAll();
+    List<GamePromotionInfo> selectAll(GamePromotionInfo entity);
 
     GamePromotionInfo selectById(Integer promid);
 

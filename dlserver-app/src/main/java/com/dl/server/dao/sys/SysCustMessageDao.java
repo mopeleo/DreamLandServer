@@ -5,11 +5,13 @@ import java.util.List;
 
 public interface SysCustMessageDao{
 
-    SysCustMessage findUnique(SysCustMessage entity);
+    //int dynamicUpdate(SysCustMessage entity);
+    
+    //int updateWhere(SysCustMessage entity);
     
     int insert(SysCustMessage entity);
 
-    List<SysCustMessage> selectAll();
+    List<SysCustMessage> selectAll(SysCustMessage entity);
 
     SysCustMessage selectById(Integer custno, Integer msgid);
 

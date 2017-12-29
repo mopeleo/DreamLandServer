@@ -20,7 +20,12 @@
         <result column="closer" jdbcType="INTEGER" property="closer" />
     </resultMap>
   
-    <select id="findUnique" parameterType="com.dl.server.entity.sys.SysArticle" resultMap="BaseResultMap">
+    <insert id="insert" parameterType="com.dl.server.entity.sys.SysArticle">
+        insert into sys_article (artid, title, author, content, pubflag, pubdate, pubtime, lastreplydate, lastreplytime, readtimes, replytimes, topflag, checkflag, checker, closeflag, closer)
+        values (#{artid, jdbcType=INTEGER}, #{title, jdbcType=VARCHAR}, #{author, jdbcType=INTEGER}, #{content, jdbcType=VARCHAR}, #{pubflag, jdbcType=VARCHAR}, #{pubdate, jdbcType=VARCHAR}, #{pubtime, jdbcType=VARCHAR}, #{lastreplydate, jdbcType=VARCHAR}, #{lastreplytime, jdbcType=VARCHAR}, #{readtimes, jdbcType=INTEGER}, #{replytimes, jdbcType=INTEGER}, #{topflag, jdbcType=VARCHAR}, #{checkflag, jdbcType=VARCHAR}, #{checker, jdbcType=INTEGER}, #{closeflag, jdbcType=VARCHAR}, #{closer, jdbcType=INTEGER})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.sys.SysArticle" resultMap="BaseResultMap">
         select artid, title, author, content, pubflag, pubdate, pubtime, lastreplydate, lastreplytime, readtimes, replytimes, topflag, checkflag, checker, closeflag, closer
           from sys_article
 		<where>
@@ -73,16 +78,6 @@
 				and closer = #{closer, jdbcType=INTEGER}
 			</if>
 		</where>
-    </select>
-  
-    <insert id="insert" parameterType="com.dl.server.entity.sys.SysArticle">
-        insert into sys_article (artid, title, author, content, pubflag, pubdate, pubtime, lastreplydate, lastreplytime, readtimes, replytimes, topflag, checkflag, checker, closeflag, closer)
-        values (#{artid, jdbcType=INTEGER}, #{title, jdbcType=VARCHAR}, #{author, jdbcType=INTEGER}, #{content, jdbcType=VARCHAR}, #{pubflag, jdbcType=VARCHAR}, #{pubdate, jdbcType=VARCHAR}, #{pubtime, jdbcType=VARCHAR}, #{lastreplydate, jdbcType=VARCHAR}, #{lastreplytime, jdbcType=VARCHAR}, #{readtimes, jdbcType=INTEGER}, #{replytimes, jdbcType=INTEGER}, #{topflag, jdbcType=VARCHAR}, #{checkflag, jdbcType=VARCHAR}, #{checker, jdbcType=INTEGER}, #{closeflag, jdbcType=VARCHAR}, #{closer, jdbcType=INTEGER})
-    </insert>
-  
-    <select id="selectAll" resultMap="BaseResultMap">
-        select artid, title, author, content, pubflag, pubdate, pubtime, lastreplydate, lastreplytime, readtimes, replytimes, topflag, checkflag, checker, closeflag, closer
-          from sys_article
     </select>
 
     <select id="selectById" parameterType="map" resultMap="BaseResultMap">

@@ -5,11 +5,13 @@ import java.util.List;
 
 public interface GameSceneMenuDao{
 
-    GameSceneMenu findUnique(GameSceneMenu entity);
+    //int dynamicUpdate(GameSceneMenu entity);
+    
+    //int updateWhere(GameSceneMenu entity);
     
     int insert(GameSceneMenu entity);
 
-    List<GameSceneMenu> selectAll();
+    List<GameSceneMenu> selectAll(GameSceneMenu entity);
 
     GameSceneMenu selectById(Integer sceneid, String menuid);
 

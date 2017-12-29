@@ -6,7 +6,12 @@
         <id column="skillid" jdbcType="VARCHAR" property="skillid" />
     </resultMap>
   
-    <select id="findUnique" parameterType="com.dl.server.entity.game.GameActorSkill" resultMap="BaseResultMap">
+    <insert id="insert" parameterType="com.dl.server.entity.game.GameActorSkill">
+        insert into game_actor_skill (actorid, skillid)
+        values (#{actorid, jdbcType=VARCHAR}, #{skillid, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.game.GameActorSkill" resultMap="BaseResultMap">
         select actorid, skillid
           from game_actor_skill
 		<where>
@@ -17,16 +22,6 @@
 				and skillid = #{skillid, jdbcType=VARCHAR}
 			</if>
 		</where>
-    </select>
-  
-    <insert id="insert" parameterType="com.dl.server.entity.game.GameActorSkill">
-        insert into game_actor_skill (actorid, skillid)
-        values (#{actorid, jdbcType=VARCHAR}, #{skillid, jdbcType=VARCHAR})
-    </insert>
-  
-    <select id="selectAll" resultMap="BaseResultMap">
-        select actorid, skillid
-          from game_actor_skill
     </select>
 
     <select id="selectById" parameterType="map" resultMap="BaseResultMap">

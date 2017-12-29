@@ -29,7 +29,8 @@ public class RedisCache {
         }
     }
     
-    public static void cache(String key, String value){
+    //暂时关闭，只提供对Entity类型的对象进行缓存
+    private static void cache(String key, String value){
         try{
             getStringRedis().opsForValue().set(key, value);
         }catch(RedisConnectionFailureException e){
@@ -48,7 +49,7 @@ public class RedisCache {
     }
     
     //从缓存获取数据
-    public static <T> T get(String key, Class<T> clz){
+    public static <T> T get(String key, Class<? extends DLEntity> clz){
         String json = get(key);
         if(json == null || json.equals("")){
             return null;

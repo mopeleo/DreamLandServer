@@ -9,7 +9,12 @@
         <result column="maxleaguer" jdbcType="INTEGER" property="maxleaguer" />
     </resultMap>
   
-    <select id="findUnique" parameterType="com.dl.server.entity.server.ServerLeagueInfo" resultMap="BaseResultMap">
+    <insert id="insert" parameterType="com.dl.server.entity.server.ServerLeagueInfo">
+        insert into server_league_info (leagueid, serverid, leaguename, remark, maxleaguer)
+        values (#{leagueid, jdbcType=VARCHAR}, #{serverid, jdbcType=VARCHAR}, #{leaguename, jdbcType=VARCHAR}, #{remark, jdbcType=VARCHAR}, #{maxleaguer, jdbcType=INTEGER})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.server.ServerLeagueInfo" resultMap="BaseResultMap">
         select leagueid, serverid, leaguename, remark, maxleaguer
           from server_league_info
 		<where>
@@ -29,16 +34,6 @@
 				and maxleaguer = #{maxleaguer, jdbcType=INTEGER}
 			</if>
 		</where>
-    </select>
-  
-    <insert id="insert" parameterType="com.dl.server.entity.server.ServerLeagueInfo">
-        insert into server_league_info (leagueid, serverid, leaguename, remark, maxleaguer)
-        values (#{leagueid, jdbcType=VARCHAR}, #{serverid, jdbcType=VARCHAR}, #{leaguename, jdbcType=VARCHAR}, #{remark, jdbcType=VARCHAR}, #{maxleaguer, jdbcType=INTEGER})
-    </insert>
-  
-    <select id="selectAll" resultMap="BaseResultMap">
-        select leagueid, serverid, leaguename, remark, maxleaguer
-          from server_league_info
     </select>
 
     <select id="selectById" parameterType="map" resultMap="BaseResultMap">

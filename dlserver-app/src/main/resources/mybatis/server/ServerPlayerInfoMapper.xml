@@ -11,7 +11,12 @@
         <result column="level" jdbcType="INTEGER" property="level" />
     </resultMap>
   
-    <select id="findUnique" parameterType="com.dl.server.entity.server.ServerPlayerInfo" resultMap="BaseResultMap">
+    <insert id="insert" parameterType="com.dl.server.entity.server.ServerPlayerInfo">
+        insert into server_player_info (playerid, serverid, custno, playernick, logindate, logintime, level)
+        values (#{playerid, jdbcType=VARCHAR}, #{serverid, jdbcType=VARCHAR}, #{custno, jdbcType=INTEGER}, #{playernick, jdbcType=VARCHAR}, #{logindate, jdbcType=VARCHAR}, #{logintime, jdbcType=VARCHAR}, #{level, jdbcType=INTEGER})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.server.ServerPlayerInfo" resultMap="BaseResultMap">
         select playerid, serverid, custno, playernick, logindate, logintime, level
           from server_player_info
 		<where>
@@ -37,16 +42,6 @@
 				and level = #{level, jdbcType=INTEGER}
 			</if>
 		</where>
-    </select>
-  
-    <insert id="insert" parameterType="com.dl.server.entity.server.ServerPlayerInfo">
-        insert into server_player_info (playerid, serverid, custno, playernick, logindate, logintime, level)
-        values (#{playerid, jdbcType=VARCHAR}, #{serverid, jdbcType=VARCHAR}, #{custno, jdbcType=INTEGER}, #{playernick, jdbcType=VARCHAR}, #{logindate, jdbcType=VARCHAR}, #{logintime, jdbcType=VARCHAR}, #{level, jdbcType=INTEGER})
-    </insert>
-  
-    <select id="selectAll" resultMap="BaseResultMap">
-        select playerid, serverid, custno, playernick, logindate, logintime, level
-          from server_player_info
     </select>
 
     <select id="selectById" parameterType="map" resultMap="BaseResultMap">

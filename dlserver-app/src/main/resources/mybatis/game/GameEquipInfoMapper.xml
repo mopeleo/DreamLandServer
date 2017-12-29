@@ -10,7 +10,12 @@
         <result column="rank" jdbcType="VARCHAR" property="rank" />
     </resultMap>
   
-    <select id="findUnique" parameterType="com.dl.server.entity.game.GameEquipInfo" resultMap="BaseResultMap">
+    <insert id="insert" parameterType="com.dl.server.entity.game.GameEquipInfo">
+        insert into game_equip_info (equipid, equipname, icon, remark, position, rank)
+        values (#{equipid, jdbcType=VARCHAR}, #{equipname, jdbcType=VARCHAR}, #{icon, jdbcType=VARCHAR}, #{remark, jdbcType=VARCHAR}, #{position, jdbcType=VARCHAR}, #{rank, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.game.GameEquipInfo" resultMap="BaseResultMap">
         select equipid, equipname, icon, remark, position, rank
           from game_equip_info
 		<where>
@@ -33,16 +38,6 @@
 				and rank = #{rank, jdbcType=VARCHAR}
 			</if>
 		</where>
-    </select>
-  
-    <insert id="insert" parameterType="com.dl.server.entity.game.GameEquipInfo">
-        insert into game_equip_info (equipid, equipname, icon, remark, position, rank)
-        values (#{equipid, jdbcType=VARCHAR}, #{equipname, jdbcType=VARCHAR}, #{icon, jdbcType=VARCHAR}, #{remark, jdbcType=VARCHAR}, #{position, jdbcType=VARCHAR}, #{rank, jdbcType=VARCHAR})
-    </insert>
-  
-    <select id="selectAll" resultMap="BaseResultMap">
-        select equipid, equipname, icon, remark, position, rank
-          from game_equip_info
     </select>
 
     <select id="selectById" parameterType="map" resultMap="BaseResultMap">

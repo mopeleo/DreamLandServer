@@ -5,11 +5,13 @@ import java.util.List;
 
 public interface ServerPlayerFriendDao{
 
-    ServerPlayerFriend findUnique(ServerPlayerFriend entity);
+    //int dynamicUpdate(ServerPlayerFriend entity);
+    
+    //int updateWhere(ServerPlayerFriend entity);
     
     int insert(ServerPlayerFriend entity);
 
-    List<ServerPlayerFriend> selectAll();
+    List<ServerPlayerFriend> selectAll(ServerPlayerFriend entity);
 
     ServerPlayerFriend selectById(String playerid);
 

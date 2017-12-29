@@ -52,6 +52,8 @@
 
         <!-- sql占位符，表示所有的表 -->
         <table tableName="SYS_USER"></table>
+        <table tableName="prod_info"></table>
+        <table tableName="log_info"></table>
 
     </context>
 </generatorConfiguration>

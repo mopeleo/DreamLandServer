@@ -5,11 +5,13 @@ import java.util.List;
 
 public interface SysMessageDao{
 
-    SysMessage findUnique(SysMessage entity);
+    //int dynamicUpdate(SysMessage entity);
+    
+    //int updateWhere(SysMessage entity);
     
     int insert(SysMessage entity);
 
-    List<SysMessage> selectAll();
+    List<SysMessage> selectAll(SysMessage entity);
 
     SysMessage selectById(Integer msgid);
 

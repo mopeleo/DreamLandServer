@@ -8,7 +8,12 @@
         <result column="url" jdbcType="VARCHAR" property="url" />
     </resultMap>
   
-    <select id="findUnique" parameterType="com.dl.server.entity.game.GameMenuInfo" resultMap="BaseResultMap">
+    <insert id="insert" parameterType="com.dl.server.entity.game.GameMenuInfo">
+        insert into game_menu_info (menuid, menuname, icon, url)
+        values (#{menuid, jdbcType=VARCHAR}, #{menuname, jdbcType=VARCHAR}, #{icon, jdbcType=VARCHAR}, #{url, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.game.GameMenuInfo" resultMap="BaseResultMap">
         select menuid, menuname, icon, url
           from game_menu_info
 		<where>
@@ -25,16 +30,6 @@
 				and url = #{url, jdbcType=VARCHAR}
 			</if>
 		</where>
-    </select>
-  
-    <insert id="insert" parameterType="com.dl.server.entity.game.GameMenuInfo">
-        insert into game_menu_info (menuid, menuname, icon, url)
-        values (#{menuid, jdbcType=VARCHAR}, #{menuname, jdbcType=VARCHAR}, #{icon, jdbcType=VARCHAR}, #{url, jdbcType=VARCHAR})
-    </insert>
-  
-    <select id="selectAll" resultMap="BaseResultMap">
-        select menuid, menuname, icon, url
-          from game_menu_info
     </select>
 
     <select id="selectById" parameterType="map" resultMap="BaseResultMap">

@@ -10,7 +10,12 @@
         <result column="remark" jdbcType="VARCHAR" property="remark" />
     </resultMap>
   
-    <select id="findUnique" parameterType="com.dl.server.entity.game.GameLevelInfo" resultMap="BaseResultMap">
+    <insert id="insert" parameterType="com.dl.server.entity.game.GameLevelInfo">
+        insert into game_level_info (levelid, levelname, icon, minpoint, maxpoint, remark)
+        values (#{levelid, jdbcType=INTEGER}, #{levelname, jdbcType=VARCHAR}, #{icon, jdbcType=VARCHAR}, #{minpoint, jdbcType=INTEGER}, #{maxpoint, jdbcType=INTEGER}, #{remark, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.game.GameLevelInfo" resultMap="BaseResultMap">
         select levelid, levelname, icon, minpoint, maxpoint, remark
           from game_level_info
 		<where>
@@ -33,16 +38,6 @@
 				and remark = #{remark, jdbcType=VARCHAR}
 			</if>
 		</where>
-    </select>
-  
-    <insert id="insert" parameterType="com.dl.server.entity.game.GameLevelInfo">
-        insert into game_level_info (levelid, levelname, icon, minpoint, maxpoint, remark)
-        values (#{levelid, jdbcType=INTEGER}, #{levelname, jdbcType=VARCHAR}, #{icon, jdbcType=VARCHAR}, #{minpoint, jdbcType=INTEGER}, #{maxpoint, jdbcType=INTEGER}, #{remark, jdbcType=VARCHAR})
-    </insert>
-  
-    <select id="selectAll" resultMap="BaseResultMap">
-        select levelid, levelname, icon, minpoint, maxpoint, remark
-          from game_level_info
     </select>
 
     <select id="selectById" parameterType="map" resultMap="BaseResultMap">

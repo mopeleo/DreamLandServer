@@ -9,7 +9,12 @@
         <result column="type" jdbcType="VARCHAR" property="type" />
     </resultMap>
   
-    <select id="findUnique" parameterType="com.dl.server.entity.game.GameSkillInfo" resultMap="BaseResultMap">
+    <insert id="insert" parameterType="com.dl.server.entity.game.GameSkillInfo">
+        insert into game_skill_info (skillid, skillname, icon, remark, type)
+        values (#{skillid, jdbcType=VARCHAR}, #{skillname, jdbcType=VARCHAR}, #{icon, jdbcType=VARCHAR}, #{remark, jdbcType=VARCHAR}, #{type, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.game.GameSkillInfo" resultMap="BaseResultMap">
         select skillid, skillname, icon, remark, type
           from game_skill_info
 		<where>
@@ -29,16 +34,6 @@
 				and type = #{type, jdbcType=VARCHAR}
 			</if>
 		</where>
-    </select>
-  
-    <insert id="insert" parameterType="com.dl.server.entity.game.GameSkillInfo">
-        insert into game_skill_info (skillid, skillname, icon, remark, type)
-        values (#{skillid, jdbcType=VARCHAR}, #{skillname, jdbcType=VARCHAR}, #{icon, jdbcType=VARCHAR}, #{remark, jdbcType=VARCHAR}, #{type, jdbcType=VARCHAR})
-    </insert>
-  
-    <select id="selectAll" resultMap="BaseResultMap">
-        select skillid, skillname, icon, remark, type
-          from game_skill_info
     </select>
 
     <select id="selectById" parameterType="map" resultMap="BaseResultMap">

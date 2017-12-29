@@ -7,7 +7,12 @@
         <result column="itemvalue" jdbcType="VARCHAR" property="itemvalue" />
     </resultMap>
   
-    <select id="findUnique" parameterType="com.dl.server.entity.game.GameDictValue" resultMap="BaseResultMap">
+    <insert id="insert" parameterType="com.dl.server.entity.game.GameDictValue">
+        insert into game_dict_value (dictcode, itemcode, itemvalue)
+        values (#{dictcode, jdbcType=INTEGER}, #{itemcode, jdbcType=VARCHAR}, #{itemvalue, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.game.GameDictValue" resultMap="BaseResultMap">
         select dictcode, itemcode, itemvalue
           from game_dict_value
 		<where>
@@ -21,16 +26,6 @@
 				and itemvalue = #{itemvalue, jdbcType=VARCHAR}
 			</if>
 		</where>
-    </select>
-  
-    <insert id="insert" parameterType="com.dl.server.entity.game.GameDictValue">
-        insert into game_dict_value (dictcode, itemcode, itemvalue)
-        values (#{dictcode, jdbcType=INTEGER}, #{itemcode, jdbcType=VARCHAR}, #{itemvalue, jdbcType=VARCHAR})
-    </insert>
-  
-    <select id="selectAll" resultMap="BaseResultMap">
-        select dictcode, itemcode, itemvalue
-          from game_dict_value
     </select>
 
     <select id="selectById" parameterType="map" resultMap="BaseResultMap">

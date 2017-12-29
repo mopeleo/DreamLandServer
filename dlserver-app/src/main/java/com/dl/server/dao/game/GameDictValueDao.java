@@ -5,11 +5,13 @@ import java.util.List;
 
 public interface GameDictValueDao{
 
-    GameDictValue findUnique(GameDictValue entity);
+    //int dynamicUpdate(GameDictValue entity);
+    
+    //int updateWhere(GameDictValue entity);
     
     int insert(GameDictValue entity);
 
-    List<GameDictValue> selectAll();
+    List<GameDictValue> selectAll(GameDictValue entity);
 
     GameDictValue selectById(Integer dictcode, String itemcode);
 

@@ -10,7 +10,12 @@
         <result column="issuer" jdbcType="VARCHAR" property="issuer" />
     </resultMap>
   
-    <select id="findUnique" parameterType="com.dl.server.entity.server.ServerBulletin" resultMap="BaseResultMap">
+    <insert id="insert" parameterType="com.dl.server.entity.server.ServerBulletin">
+        insert into server_bulletin (serverid, title, content, startdate, enddate, issuer)
+        values (#{serverid, jdbcType=VARCHAR}, #{title, jdbcType=VARCHAR}, #{content, jdbcType=VARCHAR}, #{startdate, jdbcType=VARCHAR}, #{enddate, jdbcType=VARCHAR}, #{issuer, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.server.ServerBulletin" resultMap="BaseResultMap">
         select serverid, title, content, startdate, enddate, issuer
           from server_bulletin
 		<where>
@@ -33,16 +38,6 @@
 				and issuer = #{issuer, jdbcType=VARCHAR}
 			</if>
 		</where>
-    </select>
-  
-    <insert id="insert" parameterType="com.dl.server.entity.server.ServerBulletin">
-        insert into server_bulletin (serverid, title, content, startdate, enddate, issuer)
-        values (#{serverid, jdbcType=VARCHAR}, #{title, jdbcType=VARCHAR}, #{content, jdbcType=VARCHAR}, #{startdate, jdbcType=VARCHAR}, #{enddate, jdbcType=VARCHAR}, #{issuer, jdbcType=VARCHAR})
-    </insert>
-  
-    <select id="selectAll" resultMap="BaseResultMap">
-        select serverid, title, content, startdate, enddate, issuer
-          from server_bulletin
     </select>
 
     <select id="selectById" parameterType="map" resultMap="BaseResultMap">

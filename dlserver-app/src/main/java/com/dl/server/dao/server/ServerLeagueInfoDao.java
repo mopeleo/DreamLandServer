@@ -5,11 +5,13 @@ import java.util.List;
 
 public interface ServerLeagueInfoDao{
 
-    ServerLeagueInfo findUnique(ServerLeagueInfo entity);
+    //int dynamicUpdate(ServerLeagueInfo entity);
+    
+    //int updateWhere(ServerLeagueInfo entity);
     
     int insert(ServerLeagueInfo entity);
 
-    List<ServerLeagueInfo> selectAll();
+    List<ServerLeagueInfo> selectAll(ServerLeagueInfo entity);
 
     ServerLeagueInfo selectById(String leagueid);
 

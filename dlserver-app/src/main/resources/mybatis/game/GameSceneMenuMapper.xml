@@ -6,7 +6,12 @@
         <id column="menuid" jdbcType="VARCHAR" property="menuid" />
     </resultMap>
   
-    <select id="findUnique" parameterType="com.dl.server.entity.game.GameSceneMenu" resultMap="BaseResultMap">
+    <insert id="insert" parameterType="com.dl.server.entity.game.GameSceneMenu">
+        insert into game_scene_menu (sceneid, menuid)
+        values (#{sceneid, jdbcType=INTEGER}, #{menuid, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.game.GameSceneMenu" resultMap="BaseResultMap">
         select sceneid, menuid
           from game_scene_menu
 		<where>
@@ -17,16 +22,6 @@
 				and menuid = #{menuid, jdbcType=VARCHAR}
 			</if>
 		</where>
-    </select>
-  
-    <insert id="insert" parameterType="com.dl.server.entity.game.GameSceneMenu">
-        insert into game_scene_menu (sceneid, menuid)
-        values (#{sceneid, jdbcType=INTEGER}, #{menuid, jdbcType=VARCHAR})
-    </insert>
-  
-    <select id="selectAll" resultMap="BaseResultMap">
-        select sceneid, menuid
-          from game_scene_menu
     </select>
 
     <select id="selectById" parameterType="map" resultMap="BaseResultMap">

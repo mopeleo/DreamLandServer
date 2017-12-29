@@ -15,7 +15,12 @@
         <result column="regdate" jdbcType="VARCHAR" property="regdate" />
     </resultMap>
   
-    <select id="findUnique" parameterType="com.dl.server.entity.sys.SysCust" resultMap="BaseResultMap">
+    <insert id="insert" parameterType="com.dl.server.entity.sys.SysCust">
+        insert into sys_cust (custno, loginid, loginpwd, nickname, idtype, idcode, idname, birthday, email, mobile, regdate)
+        values (#{custno, jdbcType=INTEGER}, #{loginid, jdbcType=VARCHAR}, #{loginpwd, jdbcType=VARCHAR}, #{nickname, jdbcType=VARCHAR}, #{idtype, jdbcType=VARCHAR}, #{idcode, jdbcType=VARCHAR}, #{idname, jdbcType=VARCHAR}, #{birthday, jdbcType=VARCHAR}, #{email, jdbcType=VARCHAR}, #{mobile, jdbcType=VARCHAR}, #{regdate, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.sys.SysCust" resultMap="BaseResultMap">
         select custno, loginid, loginpwd, nickname, idtype, idcode, idname, birthday, email, mobile, regdate
           from sys_cust
 		<where>
@@ -53,16 +58,6 @@
 				and regdate = #{regdate, jdbcType=VARCHAR}
 			</if>
 		</where>
-    </select>
-  
-    <insert id="insert" parameterType="com.dl.server.entity.sys.SysCust">
-        insert into sys_cust (custno, loginid, loginpwd, nickname, idtype, idcode, idname, birthday, email, mobile, regdate)
-        values (#{custno, jdbcType=INTEGER}, #{loginid, jdbcType=VARCHAR}, #{loginpwd, jdbcType=VARCHAR}, #{nickname, jdbcType=VARCHAR}, #{idtype, jdbcType=VARCHAR}, #{idcode, jdbcType=VARCHAR}, #{idname, jdbcType=VARCHAR}, #{birthday, jdbcType=VARCHAR}, #{email, jdbcType=VARCHAR}, #{mobile, jdbcType=VARCHAR}, #{regdate, jdbcType=VARCHAR})
-    </insert>
-  
-    <select id="selectAll" resultMap="BaseResultMap">
-        select custno, loginid, loginpwd, nickname, idtype, idcode, idname, birthday, email, mobile, regdate
-          from sys_cust
     </select>
 
     <select id="selectById" parameterType="map" resultMap="BaseResultMap">

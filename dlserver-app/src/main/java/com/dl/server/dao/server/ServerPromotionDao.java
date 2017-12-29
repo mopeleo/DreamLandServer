@@ -5,11 +5,13 @@ import java.util.List;
 
 public interface ServerPromotionDao{
 
-    ServerPromotion findUnique(ServerPromotion entity);
+    //int dynamicUpdate(ServerPromotion entity);
+    
+    //int updateWhere(ServerPromotion entity);
     
     int insert(ServerPromotion entity);
 
-    List<ServerPromotion> selectAll();
+    List<ServerPromotion> selectAll(ServerPromotion entity);
 
     ServerPromotion selectById(String serverid, Integer promid);
 

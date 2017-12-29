@@ -5,11 +5,13 @@ import java.util.List;
 
 public interface SysArticleReplyDao{
 
-    SysArticleReply findUnique(SysArticleReply entity);
+    //int dynamicUpdate(SysArticleReply entity);
+    
+    //int updateWhere(SysArticleReply entity);
     
     int insert(SysArticleReply entity);
 
-    List<SysArticleReply> selectAll();
+    List<SysArticleReply> selectAll(SysArticleReply entity);
 
     SysArticleReply selectById(Integer artid, Integer replyid);
 

@@ -6,11 +6,13 @@ import java.util.List;
 
 public interface ${entity}Dao{
 
-    ${entity} findUnique(${entity} entity);
+    //int dynamicUpdate(${entity} entity);
+    
+    //int updateWhere(${entity} entity);
     
     int insert(${entity} entity);
 
-    List<${entity}> selectAll();
+    List<${entity}> selectAll(${entity} where);
 
 <#if (table.keys?size > 0)>
     ${entity} selectById(<#list table.keys as column><@type datatype=column.datatype precision=column.precision /> ${column.code}<#if column_has_next>, </#if></#list>);

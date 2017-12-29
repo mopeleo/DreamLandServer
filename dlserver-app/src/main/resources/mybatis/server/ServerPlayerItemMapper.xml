@@ -7,7 +7,12 @@
         <result column="num" jdbcType="INTEGER" property="num" />
     </resultMap>
   
-    <select id="findUnique" parameterType="com.dl.server.entity.server.ServerPlayerItem" resultMap="BaseResultMap">
+    <insert id="insert" parameterType="com.dl.server.entity.server.ServerPlayerItem">
+        insert into server_player_item (playid, itemid, num)
+        values (#{playid, jdbcType=VARCHAR}, #{itemid, jdbcType=VARCHAR}, #{num, jdbcType=INTEGER})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.server.ServerPlayerItem" resultMap="BaseResultMap">
         select playid, itemid, num
           from server_player_item
 		<where>
@@ -21,16 +26,6 @@
 				and num = #{num, jdbcType=INTEGER}
 			</if>
 		</where>
-    </select>
-  
-    <insert id="insert" parameterType="com.dl.server.entity.server.ServerPlayerItem">
-        insert into server_player_item (playid, itemid, num)
-        values (#{playid, jdbcType=VARCHAR}, #{itemid, jdbcType=VARCHAR}, #{num, jdbcType=INTEGER})
-    </insert>
-  
-    <select id="selectAll" resultMap="BaseResultMap">
-        select playid, itemid, num
-          from server_player_item
     </select>
 
     <select id="selectById" parameterType="map" resultMap="BaseResultMap">

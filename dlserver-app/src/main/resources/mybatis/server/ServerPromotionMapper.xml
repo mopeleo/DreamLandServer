@@ -10,7 +10,12 @@
         <result column="endtime" jdbcType="VARCHAR" property="endtime" />
     </resultMap>
   
-    <select id="findUnique" parameterType="com.dl.server.entity.server.ServerPromotion" resultMap="BaseResultMap">
+    <insert id="insert" parameterType="com.dl.server.entity.server.ServerPromotion">
+        insert into server_promotion (serverid, promid, startdate, starttime, enddate, endtime)
+        values (#{serverid, jdbcType=VARCHAR}, #{promid, jdbcType=INTEGER}, #{startdate, jdbcType=VARCHAR}, #{starttime, jdbcType=VARCHAR}, #{enddate, jdbcType=VARCHAR}, #{endtime, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.server.ServerPromotion" resultMap="BaseResultMap">
         select serverid, promid, startdate, starttime, enddate, endtime
           from server_promotion
 		<where>
@@ -33,16 +38,6 @@
 				and endtime = #{endtime, jdbcType=VARCHAR}
 			</if>
 		</where>
-    </select>
-  
-    <insert id="insert" parameterType="com.dl.server.entity.server.ServerPromotion">
-        insert into server_promotion (serverid, promid, startdate, starttime, enddate, endtime)
-        values (#{serverid, jdbcType=VARCHAR}, #{promid, jdbcType=INTEGER}, #{startdate, jdbcType=VARCHAR}, #{starttime, jdbcType=VARCHAR}, #{enddate, jdbcType=VARCHAR}, #{endtime, jdbcType=VARCHAR})
-    </insert>
-  
-    <select id="selectAll" resultMap="BaseResultMap">
-        select serverid, promid, startdate, starttime, enddate, endtime
-          from server_promotion
     </select>
 
     <select id="selectById" parameterType="map" resultMap="BaseResultMap">

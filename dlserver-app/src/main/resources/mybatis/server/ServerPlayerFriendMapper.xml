@@ -7,7 +7,12 @@
         <result column="friendnum" jdbcType="INTEGER" property="friendnum" />
     </resultMap>
   
-    <select id="findUnique" parameterType="com.dl.server.entity.server.ServerPlayerFriend" resultMap="BaseResultMap">
+    <insert id="insert" parameterType="com.dl.server.entity.server.ServerPlayerFriend">
+        insert into server_player_friend (playerid, friendlist, friendnum)
+        values (#{playerid, jdbcType=VARCHAR}, #{friendlist, jdbcType=VARCHAR}, #{friendnum, jdbcType=INTEGER})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.server.ServerPlayerFriend" resultMap="BaseResultMap">
         select playerid, friendlist, friendnum
           from server_player_friend
 		<where>
@@ -21,16 +26,6 @@
 				and friendnum = #{friendnum, jdbcType=INTEGER}
 			</if>
 		</where>
-    </select>
-  
-    <insert id="insert" parameterType="com.dl.server.entity.server.ServerPlayerFriend">
-        insert into server_player_friend (playerid, friendlist, friendnum)
-        values (#{playerid, jdbcType=VARCHAR}, #{friendlist, jdbcType=VARCHAR}, #{friendnum, jdbcType=INTEGER})
-    </insert>
-  
-    <select id="selectAll" resultMap="BaseResultMap">
-        select playerid, friendlist, friendnum
-          from server_player_friend
     </select>
 
     <select id="selectById" parameterType="map" resultMap="BaseResultMap">

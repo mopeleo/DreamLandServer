@@ -7,8 +7,8 @@ import java.util.List;
 public class ResultDTO<T extends BaseDTO> implements Serializable{
 
     private boolean success = true;
-    private String retcode;
-    private String retmsg;
+    private String retcode = "0000";
+    private String retmsg = "success";
     private List<T> results;
 
     public String getRetcode() {

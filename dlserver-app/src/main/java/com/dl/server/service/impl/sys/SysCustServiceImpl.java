@@ -15,7 +15,6 @@ import com.dl.server.dto.ResultDTO;
 import com.dl.server.dto.sys.SysCustDTO;
 import com.dl.server.entity.sys.SysCust;
 import com.dl.server.service.sys.SysCustService;
-import com.dl.server.service.test.sys.SysCustServiceTest;
 
 @Service
 @Transactional
@@ -63,12 +62,13 @@ public class SysCustServiceImpl implements SysCustService {
         ResultDTO<SysCustDTO> result = new ResultDTO<SysCustDTO>();
         SysCust cond = new SysCust();
         cond.setLoginid(cust.getLoginid());
-        SysCust user = sysCustDao.findUnique(cond);
-        if(user == null){
+        List<SysCust> userList = sysCustDao.selectAll(cond);
+        if(userList == null || userList.size() == 0){
             result.setSuccess(false);
             result.setRetmsg("用户不存在");
             return result;
         }
+        SysCust user = userList.get(0);
         if(!user.getLoginpwd().equals(cust.getLoginpwd())){
             result.setSuccess(false);
             result.setRetmsg("用户密码错误");

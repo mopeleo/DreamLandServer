@@ -9,7 +9,12 @@
         <result column="sendtime" jdbcType="VARCHAR" property="sendtime" />
     </resultMap>
   
-    <select id="findUnique" parameterType="com.dl.server.entity.sys.SysMessage" resultMap="BaseResultMap">
+    <insert id="insert" parameterType="com.dl.server.entity.sys.SysMessage">
+        insert into sys_message (msgid, content, author, senddate, sendtime)
+        values (#{msgid, jdbcType=INTEGER}, #{content, jdbcType=VARCHAR}, #{author, jdbcType=INTEGER}, #{senddate, jdbcType=VARCHAR}, #{sendtime, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.sys.SysMessage" resultMap="BaseResultMap">
         select msgid, content, author, senddate, sendtime
           from sys_message
 		<where>
@@ -29,16 +34,6 @@
 				and sendtime = #{sendtime, jdbcType=VARCHAR}
 			</if>
 		</where>
-    </select>
-  
-    <insert id="insert" parameterType="com.dl.server.entity.sys.SysMessage">
-        insert into sys_message (msgid, content, author, senddate, sendtime)
-        values (#{msgid, jdbcType=INTEGER}, #{content, jdbcType=VARCHAR}, #{author, jdbcType=INTEGER}, #{senddate, jdbcType=VARCHAR}, #{sendtime, jdbcType=VARCHAR})
-    </insert>
-  
-    <select id="selectAll" resultMap="BaseResultMap">
-        select msgid, content, author, senddate, sendtime
-          from sys_message
     </select>
 
     <select id="selectById" parameterType="map" resultMap="BaseResultMap">

@@ -15,7 +15,12 @@
         <result column="attr" jdbcType="INTEGER" property="attr" />
     </resultMap>
   
-    <select id="findUnique" parameterType="com.dl.server.entity.game.GameActorInfo" resultMap="BaseResultMap">
+    <insert id="insert" parameterType="com.dl.server.entity.game.GameActorInfo">
+        insert into game_actor_info (actorid, actorname, aptitude, attack, defense, hp, mp, ep, initrank, maxrank, attr)
+        values (#{actorid, jdbcType=VARCHAR}, #{actorname, jdbcType=VARCHAR}, #{aptitude, jdbcType=INTEGER}, #{attack, jdbcType=INTEGER}, #{defense, jdbcType=INTEGER}, #{hp, jdbcType=INTEGER}, #{mp, jdbcType=INTEGER}, #{ep, jdbcType=INTEGER}, #{initrank, jdbcType=INTEGER}, #{maxrank, jdbcType=INTEGER}, #{attr, jdbcType=INTEGER})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.game.GameActorInfo" resultMap="BaseResultMap">
         select actorid, actorname, aptitude, attack, defense, hp, mp, ep, initrank, maxrank, attr
           from game_actor_info
 		<where>
@@ -53,16 +58,6 @@
 				and attr = #{attr, jdbcType=INTEGER}
 			</if>
 		</where>
-    </select>
-  
-    <insert id="insert" parameterType="com.dl.server.entity.game.GameActorInfo">
-        insert into game_actor_info (actorid, actorname, aptitude, attack, defense, hp, mp, ep, initrank, maxrank, attr)
-        values (#{actorid, jdbcType=VARCHAR}, #{actorname, jdbcType=VARCHAR}, #{aptitude, jdbcType=INTEGER}, #{attack, jdbcType=INTEGER}, #{defense, jdbcType=INTEGER}, #{hp, jdbcType=INTEGER}, #{mp, jdbcType=INTEGER}, #{ep, jdbcType=INTEGER}, #{initrank, jdbcType=INTEGER}, #{maxrank, jdbcType=INTEGER}, #{attr, jdbcType=INTEGER})
-    </insert>
-  
-    <select id="selectAll" resultMap="BaseResultMap">
-        select actorid, actorname, aptitude, attack, defense, hp, mp, ep, initrank, maxrank, attr
-          from game_actor_info
     </select>
 
     <select id="selectById" parameterType="map" resultMap="BaseResultMap">

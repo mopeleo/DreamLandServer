@@ -5,11 +5,13 @@ import java.util.List;
 
 public interface SysArticleDao{
 
-    SysArticle findUnique(SysArticle entity);
+    //int dynamicUpdate(SysArticle entity);
+    
+    //int updateWhere(SysArticle entity);
     
     int insert(SysArticle entity);
 
-    List<SysArticle> selectAll();
+    List<SysArticle> selectAll(SysArticle entity);
 
     SysArticle selectById(Integer artid);
 

@@ -5,11 +5,13 @@ import java.util.List;
 
 public interface SysCustDao{
 
-    SysCust findUnique(SysCust entity);
+    //int dynamicUpdate(SysCust entity);
+    
+    //int updateWhere(SysCust entity);
     
     int insert(SysCust entity);
 
-    List<SysCust> selectAll();
+    List<SysCust> selectAll(SysCust entity);
 
     SysCust selectById(Integer custno);
 

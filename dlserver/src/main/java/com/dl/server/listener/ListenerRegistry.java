@@ -12,5 +12,6 @@ public class ListenerRegistry {
         
         //业务监听器
         server.addEventListener("userservice", SysCustDTO.class, new CustServiceListener());
+
     }
 }

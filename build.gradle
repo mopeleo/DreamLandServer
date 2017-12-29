@@ -4,6 +4,10 @@ buildscript {
   	mavenLocal()
     mavenCentral()
   }
+
+  dependencies {
+    classpath 'com.bmuschko:gradle-tomcat-plugin:2.2.2'
+  }
 }
 
 allprojects {
@@ -29,6 +33,7 @@ subprojects {
     mybatisVersion='3.4.4'  
     slf4jVersion='1.7.25'
 	nettySocketioVersion='1.7.7'
+    tomcatVersion = '8.0.48'
   }
   
   repositories {
@@ -71,6 +76,17 @@ subprojects {
 //    ) 
   }
   
+  //指定eclipse的JDT来编译，对于泛型JAVAC要求更严格
+  compileJava {   
+    options.encoding = 'utf-8'  
+    options.debug=false  
+    options.warnings=false  
+    options.fork = true  
+    options.forkOptions.executable = 'java'  
+    //jdt是eclipse的编译器  
+    options.forkOptions.jvmArgs = ['-cp','E:/eclipse/plugins/org.eclipse.jdt.core_3.11.2.v20160128-0629.jar','org.eclipse.jdt.internal.compiler.batch.Main']          
+  }
+	
   // 显示当前项目下所有用于 compile 的 jar.
   task listJars(description: 'Display all compile jars.') << {
     configurations.compile.each { File file -> println file.name }

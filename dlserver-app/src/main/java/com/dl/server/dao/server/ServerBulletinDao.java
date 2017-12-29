@@ -5,11 +5,13 @@ import java.util.List;
 
 public interface ServerBulletinDao{
 
-    ServerBulletin findUnique(ServerBulletin entity);
+    //int dynamicUpdate(ServerBulletin entity);
+    
+    //int updateWhere(ServerBulletin entity);
     
     int insert(ServerBulletin entity);
 
-    List<ServerBulletin> selectAll();
+    List<ServerBulletin> selectAll(ServerBulletin entity);
 
     ServerBulletin selectById(String title);
 

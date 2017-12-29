@@ -8,7 +8,12 @@
         <result column="level" jdbcType="INTEGER" property="level" />
     </resultMap>
   
-    <select id="findUnique" parameterType="com.dl.server.entity.server.ServerPlayerActor" resultMap="BaseResultMap">
+    <insert id="insert" parameterType="com.dl.server.entity.server.ServerPlayerActor">
+        insert into server_player_actor (playerid, actorid, rank, level)
+        values (#{playerid, jdbcType=VARCHAR}, #{actorid, jdbcType=VARCHAR}, #{rank, jdbcType=INTEGER}, #{level, jdbcType=INTEGER})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.server.ServerPlayerActor" resultMap="BaseResultMap">
         select playerid, actorid, rank, level
           from server_player_actor
 		<where>
@@ -25,16 +30,6 @@
 				and level = #{level, jdbcType=INTEGER}
 			</if>
 		</where>
-    </select>
-  
-    <insert id="insert" parameterType="com.dl.server.entity.server.ServerPlayerActor">
-        insert into server_player_actor (playerid, actorid, rank, level)
-        values (#{playerid, jdbcType=VARCHAR}, #{actorid, jdbcType=VARCHAR}, #{rank, jdbcType=INTEGER}, #{level, jdbcType=INTEGER})
-    </insert>
-  
-    <select id="selectAll" resultMap="BaseResultMap">
-        select playerid, actorid, rank, level
-          from server_player_actor
     </select>
 
     <select id="selectById" parameterType="map" resultMap="BaseResultMap">

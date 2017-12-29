@@ -5,11 +5,13 @@ import java.util.List;
 
 public interface GameLevelInfoDao{
 
-    GameLevelInfo findUnique(GameLevelInfo entity);
+    //int dynamicUpdate(GameLevelInfo entity);
+    
+    //int updateWhere(GameLevelInfo entity);
     
     int insert(GameLevelInfo entity);
 
-    List<GameLevelInfo> selectAll();
+    List<GameLevelInfo> selectAll(GameLevelInfo entity);
 
     GameLevelInfo selectById(Integer levelid);
 

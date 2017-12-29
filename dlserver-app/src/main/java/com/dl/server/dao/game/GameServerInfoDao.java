@@ -5,11 +5,13 @@ import java.util.List;
 
 public interface GameServerInfoDao{
 
-    GameServerInfo findUnique(GameServerInfo entity);
+    //int dynamicUpdate(GameServerInfo entity);
+    
+    //int updateWhere(GameServerInfo entity);
     
     int insert(GameServerInfo entity);
 
-    List<GameServerInfo> selectAll();
+    List<GameServerInfo> selectAll(GameServerInfo entity);
 
     GameServerInfo selectById(String serverid);
 
