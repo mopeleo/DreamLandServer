@@ -1,5 +1,8 @@
 package com.dl.server.websocket.handler;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketMessage;
@@ -14,7 +17,7 @@ import com.google.gson.Gson;
 public class CustServiceHandler extends BaseHandler {
     @Autowired
     private SysCustService userService;
-    
+
     @Override
     public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
         Gson gson = new Gson();

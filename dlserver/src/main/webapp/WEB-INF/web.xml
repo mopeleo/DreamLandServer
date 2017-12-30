@@ -7,15 +7,6 @@
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
     
-    <!-- Spring ApplicationContext配置文件的路径,可使用通配符,多个路径用,号分隔  -->
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>
-            classpath*:spring/*.xml
-            <!-- ,classpath*:/quartz.xml  -->
-        </param-value>
-    </context-param>
-
 	<!--  spring3可以配置多套环境，通过此参数来进行选择
 	      Spring3自定义环境配置 <beans profile="">
 	<context-param>
@@ -25,23 +16,27 @@
  	-->	
 	
 	<!-- 配置SpringMVC参数 -->  
-   	<servlet>  
-    	<servlet-name>SpringMVC</servlet-name>  
+   	<servlet>
+    	<servlet-name>SpringMVC</servlet-name>
     	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>  
-    	<init-param>  
-       		<param-name>contextConfigLocation</param-name>  
-       		<param-value>classpath*:spring/springmvc.xml</param-value>  
-     	</init-param>  
-     	<load-on-startup>1</load-on-startup>  
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>com.dl.server.websocket.DLWebSocketConfigurer</param-value>  
+        </init-param>
+        <init-param>
+            <param-name>contextClass</param-name>
+            <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>  
+        </init-param>
+     	<load-on-startup>1</load-on-startup>
      	<async-supported>true</async-supported>
    	</servlet>
    	  
 	<!-- 这里可以用 / 但不能用 /* ,拦截了所有请求会导致静态资源无法访问，
 		所以要在spring3-servlet.xml中配置mvc:resources -->
-   	<servlet-mapping>  
+   	<servlet-mapping>
     	<servlet-name>SpringMVC</servlet-name>
-    	<url-pattern>/</url-pattern>  
-   	</servlet-mapping>  
+    	<url-pattern>/</url-pattern>
+   	</servlet-mapping>
 
     <!-- 允许跨域访问tomcat??? 有待验证
 	<filter>
@@ -83,17 +78,17 @@
 	</filter-mapping>
 
 	<!--Spring ApplicationContext 载入 -->
+    <!-- Spring ApplicationContext配置文件的路径,可使用通配符,多个路径用,号分隔  -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            classpath*:spring/*.xml
+            <!-- ,classpath*:/quartz.xml  -->
+        </param-value>
+    </context-param>
+
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
-	<!-- 为了可以使用RequestContextHolder获得request -->
-	<listener>
-		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
-	</listener>
-
-	<!-- Spring 刷新Introspector防止内存泄露 -->
-	<listener>
-		<listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
 	</listener>
 
 	<!-- 系统session文监听
