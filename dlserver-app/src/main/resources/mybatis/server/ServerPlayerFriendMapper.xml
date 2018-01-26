@@ -6,6 +6,10 @@
         <result column="friendlist" jdbcType="VARCHAR" property="friendlist" />
         <result column="friendnum" jdbcType="INTEGER" property="friendnum" />
     </resultMap>
+	
+	<sql id="column_list">
+        playerid, friendlist, friendnum
+	</sql>
   
     <insert id="insert" parameterType="com.dl.server.entity.server.ServerPlayerFriend">
         insert into server_player_friend (playerid, friendlist, friendnum)
@@ -13,30 +17,30 @@
     </insert>
   
     <select id="selectAll" parameterType="com.dl.server.entity.server.ServerPlayerFriend" resultMap="BaseResultMap">
-        select playerid, friendlist, friendnum
+        select <include refid="column_list" />
           from server_player_friend
 		<where>
-			<if test="playerid != null and playerid != ''">
+			<if test="playerid != null ">
 				and playerid = #{playerid, jdbcType=VARCHAR}
 			</if>
-			<if test="friendlist != null and friendlist != ''">
+			<if test="friendlist != null ">
 				and friendlist = #{friendlist, jdbcType=VARCHAR}
 			</if>
-			<if test="friendnum != null and friendnum != ''">
+			<if test="friendnum != null ">
 				and friendnum = #{friendnum, jdbcType=INTEGER}
 			</if>
 		</where>
     </select>
 
-    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
-        select playerid, friendlist, friendnum
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
           from server_player_friend
-         where 1=1 and playerid = #{arg0}
+         where 1=1 and playerid = #{0}
     </select>
 
-    <delete id="deleteById" parameterType="map">
+    <delete id="deleteById">
         delete from server_player_friend
-         where 1=1 and playerid = #{arg0}
+         where 1=1 and playerid = #{0}
     </delete>
   
     <update id="updateById" parameterType="com.dl.server.entity.server.ServerPlayerFriend">
@@ -45,4 +49,17 @@
                friendnum = #{friendnum, jdbcType=INTEGER}
          where 1=1 and playerid = #{playerid, jdbcType=VARCHAR}
     </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.server.ServerPlayerFriend">
+		update server_player_friend
+		<set>
+		    <if test="friendlist != null">
+				friendlist = #{friendlist, jdbcType=VARCHAR},
+		    </if>
+		    <if test="friendnum != null">
+				friendnum = #{friendnum, jdbcType=INTEGER},
+		    </if>
+		</set>
+		where 1=1 and playerid = #{playerid, jdbcType=VARCHAR}
+	</update>
 </mapper>

@@ -4,26 +4,26 @@ import com.dl.server.dto.BaseDTO;
 
 public class SysArticleReplyDTO extends BaseDTO {
 
-	private int artid;    //artid
-	private int replyid;    //replyid
+	private Long artid;    //artid
+	private Long replyid;    //replyid
 	private String content;    //content
-	private int replyer;    //replyer
+	private Integer replyer;    //replyer
 	private String replydate;    //replydate
 	private String replytime;    //replytime
 
-	public int getArtid() {
+	public Long getArtid() {
 		return this.artid;
 	}
 
-	public void setArtid(int artid) {
+	public void setArtid(Long artid) {
 		this.artid = artid;
 	}
 
-	public int getReplyid() {
+	public Long getReplyid() {
 		return this.replyid;
 	}
 
-	public void setReplyid(int replyid) {
+	public void setReplyid(Long replyid) {
 		this.replyid = replyid;
 	}
 
@@ -35,11 +35,11 @@ public class SysArticleReplyDTO extends BaseDTO {
 		this.content = content;
 	}
 
-	public int getReplyer() {
+	public Integer getReplyer() {
 		return this.replyer;
 	}
 
-	public void setReplyer(int replyer) {
+	public void setReplyer(Integer replyer) {
 		this.replyer = replyer;
 	}
 
@@ -59,4 +59,29 @@ public class SysArticleReplyDTO extends BaseDTO {
 		this.replytime = replytime;
 	}
 
+
+	public void clear(){
+		this.artid = null;
+		this.replyid = null;
+		this.content = null;
+		this.replyer = null;
+		this.replydate = null;
+		this.replytime = null;
+	}
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+		sb.append(", artid=").append(artid);
+		sb.append(", replyid=").append(replyid);
+		sb.append(", content=").append(content);
+		sb.append(", replyer=").append(replyer);
+		sb.append(", replydate=").append(replydate);
+		sb.append(", replytime=").append(replytime);
+        sb.append("]");
+        return sb.toString();
+	}
 }

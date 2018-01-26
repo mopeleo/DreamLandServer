@@ -2,53 +2,57 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dl.server.dao.sys.SysArticleReplyDao">
     <resultMap id="BaseResultMap" type="com.dl.server.entity.sys.SysArticleReply">
-        <id column="artid" jdbcType="INTEGER" property="artid" />
-        <id column="replyid" jdbcType="INTEGER" property="replyid" />
+        <id column="artid" jdbcType="DECIMAL" property="artid" />
+        <id column="replyid" jdbcType="DECIMAL" property="replyid" />
         <result column="content" jdbcType="VARCHAR" property="content" />
         <result column="replyer" jdbcType="INTEGER" property="replyer" />
         <result column="replydate" jdbcType="VARCHAR" property="replydate" />
         <result column="replytime" jdbcType="VARCHAR" property="replytime" />
     </resultMap>
+	
+	<sql id="column_list">
+        artid, replyid, content, replyer, replydate, replytime
+	</sql>
   
     <insert id="insert" parameterType="com.dl.server.entity.sys.SysArticleReply">
         insert into sys_article_reply (artid, replyid, content, replyer, replydate, replytime)
-        values (#{artid, jdbcType=INTEGER}, #{replyid, jdbcType=INTEGER}, #{content, jdbcType=VARCHAR}, #{replyer, jdbcType=INTEGER}, #{replydate, jdbcType=VARCHAR}, #{replytime, jdbcType=VARCHAR})
+        values (#{artid, jdbcType=DECIMAL}, #{replyid, jdbcType=DECIMAL}, #{content, jdbcType=VARCHAR}, #{replyer, jdbcType=INTEGER}, #{replydate, jdbcType=VARCHAR}, #{replytime, jdbcType=VARCHAR})
     </insert>
   
     <select id="selectAll" parameterType="com.dl.server.entity.sys.SysArticleReply" resultMap="BaseResultMap">
-        select artid, replyid, content, replyer, replydate, replytime
+        select <include refid="column_list" />
           from sys_article_reply
 		<where>
-			<if test="artid != null and artid != ''">
-				and artid = #{artid, jdbcType=INTEGER}
+			<if test="artid != null ">
+				and artid = #{artid, jdbcType=DECIMAL}
 			</if>
-			<if test="replyid != null and replyid != ''">
-				and replyid = #{replyid, jdbcType=INTEGER}
+			<if test="replyid != null ">
+				and replyid = #{replyid, jdbcType=DECIMAL}
 			</if>
-			<if test="content != null and content != ''">
+			<if test="content != null ">
 				and content = #{content, jdbcType=VARCHAR}
 			</if>
-			<if test="replyer != null and replyer != ''">
+			<if test="replyer != null ">
 				and replyer = #{replyer, jdbcType=INTEGER}
 			</if>
-			<if test="replydate != null and replydate != ''">
+			<if test="replydate != null ">
 				and replydate = #{replydate, jdbcType=VARCHAR}
 			</if>
-			<if test="replytime != null and replytime != ''">
+			<if test="replytime != null ">
 				and replytime = #{replytime, jdbcType=VARCHAR}
 			</if>
 		</where>
     </select>
 
-    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
-        select artid, replyid, content, replyer, replydate, replytime
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
           from sys_article_reply
-         where 1=1 and artid = #{arg0} and replyid = #{arg1}
+         where 1=1 and artid = #{0} and replyid = #{1}
     </select>
 
-    <delete id="deleteById" parameterType="map">
+    <delete id="deleteById">
         delete from sys_article_reply
-         where 1=1 and artid = #{arg0} and replyid = #{arg1}
+         where 1=1 and artid = #{0} and replyid = #{1}
     </delete>
   
     <update id="updateById" parameterType="com.dl.server.entity.sys.SysArticleReply">
@@ -57,6 +61,25 @@
                replyer = #{replyer, jdbcType=INTEGER}, 
                replydate = #{replydate, jdbcType=VARCHAR}, 
                replytime = #{replytime, jdbcType=VARCHAR}
-         where 1=1 and artid = #{artid, jdbcType=INTEGER} and replyid = #{replyid, jdbcType=INTEGER}
+         where 1=1 and artid = #{artid, jdbcType=DECIMAL} and replyid = #{replyid, jdbcType=DECIMAL}
     </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.sys.SysArticleReply">
+		update sys_article_reply
+		<set>
+		    <if test="content != null">
+				content = #{content, jdbcType=VARCHAR},
+		    </if>
+		    <if test="replyer != null">
+				replyer = #{replyer, jdbcType=INTEGER},
+		    </if>
+		    <if test="replydate != null">
+				replydate = #{replydate, jdbcType=VARCHAR},
+		    </if>
+		    <if test="replytime != null">
+				replytime = #{replytime, jdbcType=VARCHAR},
+		    </if>
+		</set>
+		where 1=1 and artid = #{artid, jdbcType=DECIMAL} and replyid = #{replyid, jdbcType=DECIMAL}
+	</update>
 </mapper>

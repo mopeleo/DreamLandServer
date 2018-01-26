@@ -5,17 +5,15 @@ import java.util.List;
 
 public interface GameDictValueDao{
 
-    //int dynamicUpdate(GameDictValue entity);
-    
-    //int updateWhere(GameDictValue entity);
-    
     int insert(GameDictValue entity);
 
-    List<GameDictValue> selectAll(GameDictValue entity);
+    List<GameDictValue> selectAll(GameDictValue where);
 
     GameDictValue selectById(Integer dictcode, String itemcode);
 
     int deleteById(Integer dictcode, String itemcode);
 
     int updateById(GameDictValue entity);
+	
+    int dynamicUpdateById(GameDictValue entity);
 }

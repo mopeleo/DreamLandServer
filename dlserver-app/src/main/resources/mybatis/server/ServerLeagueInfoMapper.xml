@@ -8,6 +8,10 @@
         <result column="remark" jdbcType="VARCHAR" property="remark" />
         <result column="maxleaguer" jdbcType="INTEGER" property="maxleaguer" />
     </resultMap>
+	
+	<sql id="column_list">
+        leagueid, serverid, leaguename, remark, maxleaguer
+	</sql>
   
     <insert id="insert" parameterType="com.dl.server.entity.server.ServerLeagueInfo">
         insert into server_league_info (leagueid, serverid, leaguename, remark, maxleaguer)
@@ -15,36 +19,36 @@
     </insert>
   
     <select id="selectAll" parameterType="com.dl.server.entity.server.ServerLeagueInfo" resultMap="BaseResultMap">
-        select leagueid, serverid, leaguename, remark, maxleaguer
+        select <include refid="column_list" />
           from server_league_info
 		<where>
-			<if test="leagueid != null and leagueid != ''">
+			<if test="leagueid != null ">
 				and leagueid = #{leagueid, jdbcType=VARCHAR}
 			</if>
-			<if test="serverid != null and serverid != ''">
+			<if test="serverid != null ">
 				and serverid = #{serverid, jdbcType=VARCHAR}
 			</if>
-			<if test="leaguename != null and leaguename != ''">
+			<if test="leaguename != null ">
 				and leaguename = #{leaguename, jdbcType=VARCHAR}
 			</if>
-			<if test="remark != null and remark != ''">
+			<if test="remark != null ">
 				and remark = #{remark, jdbcType=VARCHAR}
 			</if>
-			<if test="maxleaguer != null and maxleaguer != ''">
+			<if test="maxleaguer != null ">
 				and maxleaguer = #{maxleaguer, jdbcType=INTEGER}
 			</if>
 		</where>
     </select>
 
-    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
-        select leagueid, serverid, leaguename, remark, maxleaguer
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
           from server_league_info
-         where 1=1 and leagueid = #{arg0}
+         where 1=1 and leagueid = #{0}
     </select>
 
-    <delete id="deleteById" parameterType="map">
+    <delete id="deleteById">
         delete from server_league_info
-         where 1=1 and leagueid = #{arg0}
+         where 1=1 and leagueid = #{0}
     </delete>
   
     <update id="updateById" parameterType="com.dl.server.entity.server.ServerLeagueInfo">
@@ -55,4 +59,23 @@
                maxleaguer = #{maxleaguer, jdbcType=INTEGER}
          where 1=1 and leagueid = #{leagueid, jdbcType=VARCHAR}
     </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.server.ServerLeagueInfo">
+		update server_league_info
+		<set>
+		    <if test="serverid != null">
+				serverid = #{serverid, jdbcType=VARCHAR},
+		    </if>
+		    <if test="leaguename != null">
+				leaguename = #{leaguename, jdbcType=VARCHAR},
+		    </if>
+		    <if test="remark != null">
+				remark = #{remark, jdbcType=VARCHAR},
+		    </if>
+		    <if test="maxleaguer != null">
+				maxleaguer = #{maxleaguer, jdbcType=INTEGER},
+		    </if>
+		</set>
+		where 1=1 and leagueid = #{leagueid, jdbcType=VARCHAR}
+	</update>
 </mapper>

@@ -4,14 +4,14 @@ import com.dl.server.entity.DLEntity;
 
 public class GameSceneInfo extends DLEntity{
 
-	private int sceneid;    //场景ID
+	private Integer sceneid;    //场景ID
 	private String scenename;    //场景名称
 
-	public int getSceneid() {
+	public Integer getSceneid() {
 		return this.sceneid;
 	}
 
-	public void setSceneid(int sceneid) {
+	public void setSceneid(Integer sceneid) {
 		this.sceneid = sceneid;
 	}
 
@@ -23,7 +23,7 @@ public class GameSceneInfo extends DLEntity{
 		this.scenename = scenename;
 	}
 
-    public boolean hasId(){
+    public boolean existId(){
         return true;
     }
     
@@ -32,13 +32,25 @@ public class GameSceneInfo extends DLEntity{
 		return build.append(this.sceneid).toString();
 	}
 
-    public static String buildEntityKey(int sceneid){
+    public static String buildEntityKey(Integer sceneid){
         StringBuilder build = new StringBuilder("GameSceneInfo");
         return build.append(sceneid).toString();
     }
 	
 	public void clear(){
-		this.sceneid = 0;
+		this.sceneid = null;
 		this.scenename = null;
+	}
+
+	@Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+		sb.append(", sceneid=").append(sceneid);
+		sb.append(", scenename=").append(scenename);
+        sb.append("]");
+        return sb.toString();
 	}
 }

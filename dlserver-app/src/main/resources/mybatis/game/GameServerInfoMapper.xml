@@ -11,6 +11,10 @@
         <result column="regplayer" jdbcType="INTEGER" property="regplayer" />
         <result column="onlineplayer" jdbcType="INTEGER" property="onlineplayer" />
     </resultMap>
+	
+	<sql id="column_list">
+        serverid, servername, sno, opendate, opentime, maxplayer, regplayer, onlineplayer
+	</sql>
   
     <insert id="insert" parameterType="com.dl.server.entity.game.GameServerInfo">
         insert into game_server_info (serverid, servername, sno, opendate, opentime, maxplayer, regplayer, onlineplayer)
@@ -18,45 +22,45 @@
     </insert>
   
     <select id="selectAll" parameterType="com.dl.server.entity.game.GameServerInfo" resultMap="BaseResultMap">
-        select serverid, servername, sno, opendate, opentime, maxplayer, regplayer, onlineplayer
+        select <include refid="column_list" />
           from game_server_info
 		<where>
-			<if test="serverid != null and serverid != ''">
+			<if test="serverid != null ">
 				and serverid = #{serverid, jdbcType=VARCHAR}
 			</if>
-			<if test="servername != null and servername != ''">
+			<if test="servername != null ">
 				and servername = #{servername, jdbcType=VARCHAR}
 			</if>
-			<if test="sno != null and sno != ''">
+			<if test="sno != null ">
 				and sno = #{sno, jdbcType=INTEGER}
 			</if>
-			<if test="opendate != null and opendate != ''">
+			<if test="opendate != null ">
 				and opendate = #{opendate, jdbcType=VARCHAR}
 			</if>
-			<if test="opentime != null and opentime != ''">
+			<if test="opentime != null ">
 				and opentime = #{opentime, jdbcType=VARCHAR}
 			</if>
-			<if test="maxplayer != null and maxplayer != ''">
+			<if test="maxplayer != null ">
 				and maxplayer = #{maxplayer, jdbcType=INTEGER}
 			</if>
-			<if test="regplayer != null and regplayer != ''">
+			<if test="regplayer != null ">
 				and regplayer = #{regplayer, jdbcType=INTEGER}
 			</if>
-			<if test="onlineplayer != null and onlineplayer != ''">
+			<if test="onlineplayer != null ">
 				and onlineplayer = #{onlineplayer, jdbcType=INTEGER}
 			</if>
 		</where>
     </select>
 
-    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
-        select serverid, servername, sno, opendate, opentime, maxplayer, regplayer, onlineplayer
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
           from game_server_info
-         where 1=1 and serverid = #{arg0}
+         where 1=1 and serverid = #{0}
     </select>
 
-    <delete id="deleteById" parameterType="map">
+    <delete id="deleteById">
         delete from game_server_info
-         where 1=1 and serverid = #{arg0}
+         where 1=1 and serverid = #{0}
     </delete>
   
     <update id="updateById" parameterType="com.dl.server.entity.game.GameServerInfo">
@@ -70,4 +74,32 @@
                onlineplayer = #{onlineplayer, jdbcType=INTEGER}
          where 1=1 and serverid = #{serverid, jdbcType=VARCHAR}
     </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.game.GameServerInfo">
+		update game_server_info
+		<set>
+		    <if test="servername != null">
+				servername = #{servername, jdbcType=VARCHAR},
+		    </if>
+		    <if test="sno != null">
+				sno = #{sno, jdbcType=INTEGER},
+		    </if>
+		    <if test="opendate != null">
+				opendate = #{opendate, jdbcType=VARCHAR},
+		    </if>
+		    <if test="opentime != null">
+				opentime = #{opentime, jdbcType=VARCHAR},
+		    </if>
+		    <if test="maxplayer != null">
+				maxplayer = #{maxplayer, jdbcType=INTEGER},
+		    </if>
+		    <if test="regplayer != null">
+				regplayer = #{regplayer, jdbcType=INTEGER},
+		    </if>
+		    <if test="onlineplayer != null">
+				onlineplayer = #{onlineplayer, jdbcType=INTEGER},
+		    </if>
+		</set>
+		where 1=1 and serverid = #{serverid, jdbcType=VARCHAR}
+	</update>
 </mapper>

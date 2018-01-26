@@ -4,7 +4,7 @@ import com.dl.server.entity.DLEntity;
 
 public class SysCust extends DLEntity{
 
-	private int custno;    //客户号，自动生成
+	private Integer custno;    //客户号，自动生成
 	private String loginid;    //登录ID
 	private String loginpwd;    //登录密码
 	private String nickname;    //用户昵称
@@ -16,11 +16,11 @@ public class SysCust extends DLEntity{
 	private String mobile;    //手机号码
 	private String regdate;    //注册日期
 
-	public int getCustno() {
+	public Integer getCustno() {
 		return this.custno;
 	}
 
-	public void setCustno(int custno) {
+	public void setCustno(Integer custno) {
 		this.custno = custno;
 	}
 
@@ -104,7 +104,7 @@ public class SysCust extends DLEntity{
 		this.regdate = regdate;
 	}
 
-    public boolean hasId(){
+    public boolean existId(){
         return true;
     }
     
@@ -113,13 +113,13 @@ public class SysCust extends DLEntity{
 		return build.append(this.custno).toString();
 	}
 
-    public static String buildEntityKey(int custno){
+    public static String buildEntityKey(Integer custno){
         StringBuilder build = new StringBuilder("SysCust");
         return build.append(custno).toString();
     }
 	
 	public void clear(){
-		this.custno = 0;
+		this.custno = null;
 		this.loginid = null;
 		this.loginpwd = null;
 		this.nickname = null;
@@ -130,5 +130,26 @@ public class SysCust extends DLEntity{
 		this.email = null;
 		this.mobile = null;
 		this.regdate = null;
+	}
+
+	@Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+		sb.append(", custno=").append(custno);
+		sb.append(", loginid=").append(loginid);
+		sb.append(", loginpwd=").append(loginpwd);
+		sb.append(", nickname=").append(nickname);
+		sb.append(", idtype=").append(idtype);
+		sb.append(", idcode=").append(idcode);
+		sb.append(", idname=").append(idname);
+		sb.append(", birthday=").append(birthday);
+		sb.append(", email=").append(email);
+		sb.append(", mobile=").append(mobile);
+		sb.append(", regdate=").append(regdate);
+        sb.append("]");
+        return sb.toString();
 	}
 }

@@ -59,7 +59,7 @@ public class GameEquipInfo extends DLEntity{
 		this.rank = rank;
 	}
 
-    public boolean hasId(){
+    public boolean existId(){
         return true;
     }
     
@@ -80,5 +80,21 @@ public class GameEquipInfo extends DLEntity{
 		this.remark = null;
 		this.position = null;
 		this.rank = null;
+	}
+
+	@Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+		sb.append(", equipid=").append(equipid);
+		sb.append(", equipname=").append(equipname);
+		sb.append(", icon=").append(icon);
+		sb.append(", remark=").append(remark);
+		sb.append(", position=").append(position);
+		sb.append(", rank=").append(rank);
+        sb.append("]");
+        return sb.toString();
 	}
 }

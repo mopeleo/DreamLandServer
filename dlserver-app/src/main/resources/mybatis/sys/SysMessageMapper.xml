@@ -2,57 +2,80 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dl.server.dao.sys.SysMessageDao">
     <resultMap id="BaseResultMap" type="com.dl.server.entity.sys.SysMessage">
-        <id column="msgid" jdbcType="INTEGER" property="msgid" />
+        <id column="msgid" jdbcType="DECIMAL" property="msgid" />
         <result column="content" jdbcType="VARCHAR" property="content" />
-        <result column="author" jdbcType="INTEGER" property="author" />
+        <result column="author" jdbcType="DECIMAL" property="author" />
         <result column="senddate" jdbcType="VARCHAR" property="senddate" />
         <result column="sendtime" jdbcType="VARCHAR" property="sendtime" />
     </resultMap>
+	
+	<sql id="column_list">
+        msgid, content, author, senddate, sendtime
+	</sql>
   
     <insert id="insert" parameterType="com.dl.server.entity.sys.SysMessage">
         insert into sys_message (msgid, content, author, senddate, sendtime)
-        values (#{msgid, jdbcType=INTEGER}, #{content, jdbcType=VARCHAR}, #{author, jdbcType=INTEGER}, #{senddate, jdbcType=VARCHAR}, #{sendtime, jdbcType=VARCHAR})
+        values (#{msgid, jdbcType=DECIMAL}, #{content, jdbcType=VARCHAR}, #{author, jdbcType=DECIMAL}, #{senddate, jdbcType=VARCHAR}, #{sendtime, jdbcType=VARCHAR})
     </insert>
   
     <select id="selectAll" parameterType="com.dl.server.entity.sys.SysMessage" resultMap="BaseResultMap">
-        select msgid, content, author, senddate, sendtime
+        select <include refid="column_list" />
           from sys_message
 		<where>
-			<if test="msgid != null and msgid != ''">
-				and msgid = #{msgid, jdbcType=INTEGER}
+			<if test="msgid != null ">
+				and msgid = #{msgid, jdbcType=DECIMAL}
 			</if>
-			<if test="content != null and content != ''">
+			<if test="content != null ">
 				and content = #{content, jdbcType=VARCHAR}
 			</if>
-			<if test="author != null and author != ''">
-				and author = #{author, jdbcType=INTEGER}
+			<if test="author != null ">
+				and author = #{author, jdbcType=DECIMAL}
 			</if>
-			<if test="senddate != null and senddate != ''">
+			<if test="senddate != null ">
 				and senddate = #{senddate, jdbcType=VARCHAR}
 			</if>
-			<if test="sendtime != null and sendtime != ''">
+			<if test="sendtime != null ">
 				and sendtime = #{sendtime, jdbcType=VARCHAR}
 			</if>
 		</where>
     </select>
 
-    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
-        select msgid, content, author, senddate, sendtime
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
           from sys_message
-         where 1=1 and msgid = #{arg0}
+         where 1=1 and msgid = #{0}
     </select>
 
-    <delete id="deleteById" parameterType="map">
+    <delete id="deleteById">
         delete from sys_message
-         where 1=1 and msgid = #{arg0}
+         where 1=1 and msgid = #{0}
     </delete>
   
     <update id="updateById" parameterType="com.dl.server.entity.sys.SysMessage">
         update sys_message set 
                content = #{content, jdbcType=VARCHAR}, 
-               author = #{author, jdbcType=INTEGER}, 
+               author = #{author, jdbcType=DECIMAL}, 
                senddate = #{senddate, jdbcType=VARCHAR}, 
                sendtime = #{sendtime, jdbcType=VARCHAR}
-         where 1=1 and msgid = #{msgid, jdbcType=INTEGER}
+         where 1=1 and msgid = #{msgid, jdbcType=DECIMAL}
     </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.sys.SysMessage">
+		update sys_message
+		<set>
+		    <if test="content != null">
+				content = #{content, jdbcType=VARCHAR},
+		    </if>
+		    <if test="author != null">
+				author = #{author, jdbcType=DECIMAL},
+		    </if>
+		    <if test="senddate != null">
+				senddate = #{senddate, jdbcType=VARCHAR},
+		    </if>
+		    <if test="sendtime != null">
+				sendtime = #{sendtime, jdbcType=VARCHAR},
+		    </if>
+		</set>
+		where 1=1 and msgid = #{msgid, jdbcType=DECIMAL}
+	</update>
 </mapper>

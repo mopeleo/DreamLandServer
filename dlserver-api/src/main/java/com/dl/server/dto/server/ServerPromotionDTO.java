@@ -5,7 +5,7 @@ import com.dl.server.dto.BaseDTO;
 public class ServerPromotionDTO extends BaseDTO {
 
 	private String serverid;    //serverid
-	private int promid;    //promid
+	private Integer promid;    //promid
 	private String startdate;    //startdate
 	private String starttime;    //starttime
 	private String enddate;    //enddate
@@ -19,11 +19,11 @@ public class ServerPromotionDTO extends BaseDTO {
 		this.serverid = serverid;
 	}
 
-	public int getPromid() {
+	public Integer getPromid() {
 		return this.promid;
 	}
 
-	public void setPromid(int promid) {
+	public void setPromid(Integer promid) {
 		this.promid = promid;
 	}
 
@@ -59,4 +59,29 @@ public class ServerPromotionDTO extends BaseDTO {
 		this.endtime = endtime;
 	}
 
+
+	public void clear(){
+		this.serverid = null;
+		this.promid = null;
+		this.startdate = null;
+		this.starttime = null;
+		this.enddate = null;
+		this.endtime = null;
+	}
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+		sb.append(", serverid=").append(serverid);
+		sb.append(", promid=").append(promid);
+		sb.append(", startdate=").append(startdate);
+		sb.append(", starttime=").append(starttime);
+		sb.append(", enddate=").append(enddate);
+		sb.append(", endtime=").append(endtime);
+        sb.append("]");
+        return sb.toString();
+	}
 }

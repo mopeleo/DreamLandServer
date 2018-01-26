@@ -5,17 +5,15 @@ import java.util.List;
 
 public interface GameActorInfoDao{
 
-    //int dynamicUpdate(GameActorInfo entity);
-    
-    //int updateWhere(GameActorInfo entity);
-    
     int insert(GameActorInfo entity);
 
-    List<GameActorInfo> selectAll(GameActorInfo entity);
+    List<GameActorInfo> selectAll(GameActorInfo where);
 
     GameActorInfo selectById(String actorid);
 
     int deleteById(String actorid);
 
     int updateById(GameActorInfo entity);
+	
+    int dynamicUpdateById(GameActorInfo entity);
 }

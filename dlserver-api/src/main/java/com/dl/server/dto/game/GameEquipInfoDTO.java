@@ -59,4 +59,29 @@ public class GameEquipInfoDTO extends BaseDTO {
 		this.rank = rank;
 	}
 
+
+	public void clear(){
+		this.equipid = null;
+		this.equipname = null;
+		this.icon = null;
+		this.remark = null;
+		this.position = null;
+		this.rank = null;
+	}
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+		sb.append(", equipid=").append(equipid);
+		sb.append(", equipname=").append(equipname);
+		sb.append(", icon=").append(icon);
+		sb.append(", remark=").append(remark);
+		sb.append(", position=").append(position);
+		sb.append(", rank=").append(rank);
+        sb.append("]");
+        return sb.toString();
+	}
 }

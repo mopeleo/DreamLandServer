@@ -4,17 +4,17 @@ import com.dl.server.dto.BaseDTO;
 
 public class SysMessageDTO extends BaseDTO {
 
-	private int msgid;    //消息ID
+	private Long msgid;    //消息ID
 	private String content;    //消息内容
-	private int author;    //作者
+	private Long author;    //作者
 	private String senddate;    //发送日期
 	private String sendtime;    //发送时间
 
-	public int getMsgid() {
+	public Long getMsgid() {
 		return this.msgid;
 	}
 
-	public void setMsgid(int msgid) {
+	public void setMsgid(Long msgid) {
 		this.msgid = msgid;
 	}
 
@@ -26,11 +26,11 @@ public class SysMessageDTO extends BaseDTO {
 		this.content = content;
 	}
 
-	public int getAuthor() {
+	public Long getAuthor() {
 		return this.author;
 	}
 
-	public void setAuthor(int author) {
+	public void setAuthor(Long author) {
 		this.author = author;
 	}
 
@@ -50,4 +50,27 @@ public class SysMessageDTO extends BaseDTO {
 		this.sendtime = sendtime;
 	}
 
+
+	public void clear(){
+		this.msgid = null;
+		this.content = null;
+		this.author = null;
+		this.senddate = null;
+		this.sendtime = null;
+	}
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+		sb.append(", msgid=").append(msgid);
+		sb.append(", content=").append(content);
+		sb.append(", author=").append(author);
+		sb.append(", senddate=").append(senddate);
+		sb.append(", sendtime=").append(sendtime);
+        sb.append("]");
+        return sb.toString();
+	}
 }

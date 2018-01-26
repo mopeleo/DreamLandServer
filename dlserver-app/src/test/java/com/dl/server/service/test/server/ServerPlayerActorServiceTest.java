@@ -44,7 +44,7 @@ public class ServerPlayerActorServiceTest {
         actorService.update(dto1);
 
         ServerPlayerActorDTO dto2 = getActorDTO(2, 2);
-        dto2.setLevel(20);
+        dto2.setLevel(10);
         actorService.update(dto2);
     }
     

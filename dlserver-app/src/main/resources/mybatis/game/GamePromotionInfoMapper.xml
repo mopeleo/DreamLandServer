@@ -6,6 +6,10 @@
         <result column="promname" jdbcType="VARCHAR" property="promname" />
         <result column="remark" jdbcType="VARCHAR" property="remark" />
     </resultMap>
+	
+	<sql id="column_list">
+        promid, promname, remark
+	</sql>
   
     <insert id="insert" parameterType="com.dl.server.entity.game.GamePromotionInfo">
         insert into game_promotion_info (promid, promname, remark)
@@ -13,30 +17,30 @@
     </insert>
   
     <select id="selectAll" parameterType="com.dl.server.entity.game.GamePromotionInfo" resultMap="BaseResultMap">
-        select promid, promname, remark
+        select <include refid="column_list" />
           from game_promotion_info
 		<where>
-			<if test="promid != null and promid != ''">
+			<if test="promid != null ">
 				and promid = #{promid, jdbcType=INTEGER}
 			</if>
-			<if test="promname != null and promname != ''">
+			<if test="promname != null ">
 				and promname = #{promname, jdbcType=VARCHAR}
 			</if>
-			<if test="remark != null and remark != ''">
+			<if test="remark != null ">
 				and remark = #{remark, jdbcType=VARCHAR}
 			</if>
 		</where>
     </select>
 
-    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
-        select promid, promname, remark
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
           from game_promotion_info
-         where 1=1 and promid = #{arg0}
+         where 1=1 and promid = #{0}
     </select>
 
-    <delete id="deleteById" parameterType="map">
+    <delete id="deleteById">
         delete from game_promotion_info
-         where 1=1 and promid = #{arg0}
+         where 1=1 and promid = #{0}
     </delete>
   
     <update id="updateById" parameterType="com.dl.server.entity.game.GamePromotionInfo">
@@ -45,4 +49,17 @@
                remark = #{remark, jdbcType=VARCHAR}
          where 1=1 and promid = #{promid, jdbcType=INTEGER}
     </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.game.GamePromotionInfo">
+		update game_promotion_info
+		<set>
+		    <if test="promname != null">
+				promname = #{promname, jdbcType=VARCHAR},
+		    </if>
+		    <if test="remark != null">
+				remark = #{remark, jdbcType=VARCHAR},
+		    </if>
+		</set>
+		where 1=1 and promid = #{promid, jdbcType=INTEGER}
+	</update>
 </mapper>

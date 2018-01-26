@@ -41,7 +41,7 @@ public class GameMenuInfo extends DLEntity{
 		this.url = url;
 	}
 
-    public boolean hasId(){
+    public boolean existId(){
         return true;
     }
     
@@ -60,5 +60,19 @@ public class GameMenuInfo extends DLEntity{
 		this.menuname = null;
 		this.icon = null;
 		this.url = null;
+	}
+
+	@Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+		sb.append(", menuid=").append(menuid);
+		sb.append(", menuname=").append(menuname);
+		sb.append(", icon=").append(icon);
+		sb.append(", url=").append(url);
+        sb.append("]");
+        return sb.toString();
 	}
 }

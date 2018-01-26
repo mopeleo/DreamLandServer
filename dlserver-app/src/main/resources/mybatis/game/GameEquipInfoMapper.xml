@@ -9,6 +9,10 @@
         <result column="position" jdbcType="VARCHAR" property="position" />
         <result column="rank" jdbcType="VARCHAR" property="rank" />
     </resultMap>
+	
+	<sql id="column_list">
+        equipid, equipname, icon, remark, position, rank
+	</sql>
   
     <insert id="insert" parameterType="com.dl.server.entity.game.GameEquipInfo">
         insert into game_equip_info (equipid, equipname, icon, remark, position, rank)
@@ -16,39 +20,39 @@
     </insert>
   
     <select id="selectAll" parameterType="com.dl.server.entity.game.GameEquipInfo" resultMap="BaseResultMap">
-        select equipid, equipname, icon, remark, position, rank
+        select <include refid="column_list" />
           from game_equip_info
 		<where>
-			<if test="equipid != null and equipid != ''">
+			<if test="equipid != null ">
 				and equipid = #{equipid, jdbcType=VARCHAR}
 			</if>
-			<if test="equipname != null and equipname != ''">
+			<if test="equipname != null ">
 				and equipname = #{equipname, jdbcType=VARCHAR}
 			</if>
-			<if test="icon != null and icon != ''">
+			<if test="icon != null ">
 				and icon = #{icon, jdbcType=VARCHAR}
 			</if>
-			<if test="remark != null and remark != ''">
+			<if test="remark != null ">
 				and remark = #{remark, jdbcType=VARCHAR}
 			</if>
-			<if test="position != null and position != ''">
+			<if test="position != null ">
 				and position = #{position, jdbcType=VARCHAR}
 			</if>
-			<if test="rank != null and rank != ''">
+			<if test="rank != null ">
 				and rank = #{rank, jdbcType=VARCHAR}
 			</if>
 		</where>
     </select>
 
-    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
-        select equipid, equipname, icon, remark, position, rank
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
           from game_equip_info
-         where 1=1 and equipid = #{arg0}
+         where 1=1 and equipid = #{0}
     </select>
 
-    <delete id="deleteById" parameterType="map">
+    <delete id="deleteById">
         delete from game_equip_info
-         where 1=1 and equipid = #{arg0}
+         where 1=1 and equipid = #{0}
     </delete>
   
     <update id="updateById" parameterType="com.dl.server.entity.game.GameEquipInfo">
@@ -60,4 +64,26 @@
                rank = #{rank, jdbcType=VARCHAR}
          where 1=1 and equipid = #{equipid, jdbcType=VARCHAR}
     </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.game.GameEquipInfo">
+		update game_equip_info
+		<set>
+		    <if test="equipname != null">
+				equipname = #{equipname, jdbcType=VARCHAR},
+		    </if>
+		    <if test="icon != null">
+				icon = #{icon, jdbcType=VARCHAR},
+		    </if>
+		    <if test="remark != null">
+				remark = #{remark, jdbcType=VARCHAR},
+		    </if>
+		    <if test="position != null">
+				position = #{position, jdbcType=VARCHAR},
+		    </if>
+		    <if test="rank != null">
+				rank = #{rank, jdbcType=VARCHAR},
+		    </if>
+		</set>
+		where 1=1 and equipid = #{equipid, jdbcType=VARCHAR}
+	</update>
 </mapper>

@@ -41,4 +41,25 @@ public class GameMenuInfoDTO extends BaseDTO {
 		this.url = url;
 	}
 
+
+	public void clear(){
+		this.menuid = null;
+		this.menuname = null;
+		this.icon = null;
+		this.url = null;
+	}
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+		sb.append(", menuid=").append(menuid);
+		sb.append(", menuname=").append(menuname);
+		sb.append(", icon=").append(icon);
+		sb.append(", url=").append(url);
+        sb.append("]");
+        return sb.toString();
+	}
 }

@@ -8,7 +8,7 @@ public class ServerLeagueInfo extends DLEntity{
 	private String serverid;    //serverid
 	private String leaguename;    //leaguename
 	private String remark;    //remark
-	private int maxleaguer;    //maxleaguer
+	private Integer maxleaguer;    //maxleaguer
 
 	public String getLeagueid() {
 		return this.leagueid;
@@ -42,15 +42,15 @@ public class ServerLeagueInfo extends DLEntity{
 		this.remark = remark;
 	}
 
-	public int getMaxleaguer() {
+	public Integer getMaxleaguer() {
 		return this.maxleaguer;
 	}
 
-	public void setMaxleaguer(int maxleaguer) {
+	public void setMaxleaguer(Integer maxleaguer) {
 		this.maxleaguer = maxleaguer;
 	}
 
-    public boolean hasId(){
+    public boolean existId(){
         return true;
     }
     
@@ -69,6 +69,21 @@ public class ServerLeagueInfo extends DLEntity{
 		this.serverid = null;
 		this.leaguename = null;
 		this.remark = null;
-		this.maxleaguer = 0;
+		this.maxleaguer = null;
+	}
+
+	@Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+		sb.append(", leagueid=").append(leagueid);
+		sb.append(", serverid=").append(serverid);
+		sb.append(", leaguename=").append(leaguename);
+		sb.append(", remark=").append(remark);
+		sb.append(", maxleaguer=").append(maxleaguer);
+        sb.append("]");
+        return sb.toString();
 	}
 }

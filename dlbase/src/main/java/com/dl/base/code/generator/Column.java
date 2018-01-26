@@ -5,12 +5,15 @@ public class Column {
 
 	private String id;
 	private String name;
-	private String code;
+	private String code;               //格式化后的代码
 	private String comment;
 	private String datatype;
 	private String length;
 	private String precision;
-	private String mandatory;  //值为1表示不能为空
+	private String defaultValue;       //默认值
+	private String mandatory;          //值为1表示不能为空
+	private String originCode;         //格式化前原始代码，小写
+	private String originDatatype;     //格式化前原数据类型
 	public String getId() {
 		return id;
 	}
@@ -59,7 +62,25 @@ public class Column {
 	public void setMandatory(String mandatory) {
 		this.mandatory = mandatory;
 	}
-	public boolean equals(Object o){
+	public String getOriginCode() {
+        return originCode;
+    }
+    public void setOriginCode(String originCode) {
+        this.originCode = originCode;
+    }
+    public String getOriginDatatype() {
+        return originDatatype;
+    }
+    public void setOriginDatatype(String originDatatype) {
+        this.originDatatype = originDatatype;
+    }
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+    public boolean equals(Object o){
 		if(o == null || !(o instanceof Column)){
 			return false;
 		}else{

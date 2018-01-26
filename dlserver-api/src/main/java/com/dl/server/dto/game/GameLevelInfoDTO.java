@@ -4,18 +4,18 @@ import com.dl.server.dto.BaseDTO;
 
 public class GameLevelInfoDTO extends BaseDTO {
 
-	private int levelid;    //levelid
+	private Integer levelid;    //levelid
 	private String levelname;    //levelname
 	private String icon;    //icon
-	private int minpoint;    //minpoint
-	private int maxpoint;    //maxpoint
+	private Integer minpoint;    //minpoint
+	private Integer maxpoint;    //maxpoint
 	private String remark;    //remark
 
-	public int getLevelid() {
+	public Integer getLevelid() {
 		return this.levelid;
 	}
 
-	public void setLevelid(int levelid) {
+	public void setLevelid(Integer levelid) {
 		this.levelid = levelid;
 	}
 
@@ -35,19 +35,19 @@ public class GameLevelInfoDTO extends BaseDTO {
 		this.icon = icon;
 	}
 
-	public int getMinpoint() {
+	public Integer getMinpoint() {
 		return this.minpoint;
 	}
 
-	public void setMinpoint(int minpoint) {
+	public void setMinpoint(Integer minpoint) {
 		this.minpoint = minpoint;
 	}
 
-	public int getMaxpoint() {
+	public Integer getMaxpoint() {
 		return this.maxpoint;
 	}
 
-	public void setMaxpoint(int maxpoint) {
+	public void setMaxpoint(Integer maxpoint) {
 		this.maxpoint = maxpoint;
 	}
 
@@ -59,4 +59,29 @@ public class GameLevelInfoDTO extends BaseDTO {
 		this.remark = remark;
 	}
 
+
+	public void clear(){
+		this.levelid = null;
+		this.levelname = null;
+		this.icon = null;
+		this.minpoint = null;
+		this.maxpoint = null;
+		this.remark = null;
+	}
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+		sb.append(", levelid=").append(levelid);
+		sb.append(", levelname=").append(levelname);
+		sb.append(", icon=").append(icon);
+		sb.append(", minpoint=").append(minpoint);
+		sb.append(", maxpoint=").append(maxpoint);
+		sb.append(", remark=").append(remark);
+        sb.append("]");
+        return sb.toString();
+	}
 }

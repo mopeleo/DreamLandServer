@@ -5,17 +5,15 @@ import java.util.List;
 
 public interface SysArticleReplyDao{
 
-    //int dynamicUpdate(SysArticleReply entity);
-    
-    //int updateWhere(SysArticleReply entity);
-    
     int insert(SysArticleReply entity);
 
-    List<SysArticleReply> selectAll(SysArticleReply entity);
+    List<SysArticleReply> selectAll(SysArticleReply where);
 
-    SysArticleReply selectById(Integer artid, Integer replyid);
+    SysArticleReply selectById(Long artid, Long replyid);
 
-    int deleteById(Integer artid, Integer replyid);
+    int deleteById(Long artid, Long replyid);
 
     int updateById(SysArticleReply entity);
+	
+    int dynamicUpdateById(SysArticleReply entity);
 }

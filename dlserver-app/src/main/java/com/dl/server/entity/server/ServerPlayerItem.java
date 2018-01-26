@@ -6,7 +6,7 @@ public class ServerPlayerItem extends DLEntity{
 
 	private String playid;    //playid
 	private String itemid;    //itemid
-	private int num;    //num
+	private Integer num;    //num
 
 	public String getPlayid() {
 		return this.playid;
@@ -24,15 +24,15 @@ public class ServerPlayerItem extends DLEntity{
 		this.itemid = itemid;
 	}
 
-	public int getNum() {
+	public Integer getNum() {
 		return this.num;
 	}
 
-	public void setNum(int num) {
+	public void setNum(Integer num) {
 		this.num = num;
 	}
 
-    public boolean hasId(){
+    public boolean existId(){
         return true;
     }
     
@@ -49,6 +49,19 @@ public class ServerPlayerItem extends DLEntity{
 	public void clear(){
 		this.playid = null;
 		this.itemid = null;
-		this.num = 0;
+		this.num = null;
+	}
+
+	@Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+		sb.append(", playid=").append(playid);
+		sb.append(", itemid=").append(itemid);
+		sb.append(", num=").append(num);
+        sb.append("]");
+        return sb.toString();
 	}
 }

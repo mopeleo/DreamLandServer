@@ -4,15 +4,15 @@ import com.dl.server.entity.DLEntity;
 
 public class GamePromotionInfo extends DLEntity{
 
-	private int promid;    //promid
+	private Integer promid;    //promid
 	private String promname;    //promname
 	private String remark;    //remark
 
-	public int getPromid() {
+	public Integer getPromid() {
 		return this.promid;
 	}
 
-	public void setPromid(int promid) {
+	public void setPromid(Integer promid) {
 		this.promid = promid;
 	}
 
@@ -32,7 +32,7 @@ public class GamePromotionInfo extends DLEntity{
 		this.remark = remark;
 	}
 
-    public boolean hasId(){
+    public boolean existId(){
         return true;
     }
     
@@ -41,14 +41,27 @@ public class GamePromotionInfo extends DLEntity{
 		return build.append(this.promid).toString();
 	}
 
-    public static String buildEntityKey(int promid){
+    public static String buildEntityKey(Integer promid){
         StringBuilder build = new StringBuilder("GamePromotionInfo");
         return build.append(promid).toString();
     }
 	
 	public void clear(){
-		this.promid = 0;
+		this.promid = null;
 		this.promname = null;
 		this.remark = null;
+	}
+
+	@Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+		sb.append(", promid=").append(promid);
+		sb.append(", promname=").append(promname);
+		sb.append(", remark=").append(remark);
+        sb.append("]");
+        return sb.toString();
 	}
 }

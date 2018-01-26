@@ -9,6 +9,10 @@
         <result column="enddate" jdbcType="VARCHAR" property="enddate" />
         <result column="endtime" jdbcType="VARCHAR" property="endtime" />
     </resultMap>
+	
+	<sql id="column_list">
+        serverid, promid, startdate, starttime, enddate, endtime
+	</sql>
   
     <insert id="insert" parameterType="com.dl.server.entity.server.ServerPromotion">
         insert into server_promotion (serverid, promid, startdate, starttime, enddate, endtime)
@@ -16,39 +20,39 @@
     </insert>
   
     <select id="selectAll" parameterType="com.dl.server.entity.server.ServerPromotion" resultMap="BaseResultMap">
-        select serverid, promid, startdate, starttime, enddate, endtime
+        select <include refid="column_list" />
           from server_promotion
 		<where>
-			<if test="serverid != null and serverid != ''">
+			<if test="serverid != null ">
 				and serverid = #{serverid, jdbcType=VARCHAR}
 			</if>
-			<if test="promid != null and promid != ''">
+			<if test="promid != null ">
 				and promid = #{promid, jdbcType=INTEGER}
 			</if>
-			<if test="startdate != null and startdate != ''">
+			<if test="startdate != null ">
 				and startdate = #{startdate, jdbcType=VARCHAR}
 			</if>
-			<if test="starttime != null and starttime != ''">
+			<if test="starttime != null ">
 				and starttime = #{starttime, jdbcType=VARCHAR}
 			</if>
-			<if test="enddate != null and enddate != ''">
+			<if test="enddate != null ">
 				and enddate = #{enddate, jdbcType=VARCHAR}
 			</if>
-			<if test="endtime != null and endtime != ''">
+			<if test="endtime != null ">
 				and endtime = #{endtime, jdbcType=VARCHAR}
 			</if>
 		</where>
     </select>
 
-    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
-        select serverid, promid, startdate, starttime, enddate, endtime
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
           from server_promotion
-         where 1=1 and serverid = #{arg0} and promid = #{arg1}
+         where 1=1 and serverid = #{0} and promid = #{1}
     </select>
 
-    <delete id="deleteById" parameterType="map">
+    <delete id="deleteById">
         delete from server_promotion
-         where 1=1 and serverid = #{arg0} and promid = #{arg1}
+         where 1=1 and serverid = #{0} and promid = #{1}
     </delete>
   
     <update id="updateById" parameterType="com.dl.server.entity.server.ServerPromotion">
@@ -59,4 +63,23 @@
                endtime = #{endtime, jdbcType=VARCHAR}
          where 1=1 and serverid = #{serverid, jdbcType=VARCHAR} and promid = #{promid, jdbcType=INTEGER}
     </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.server.ServerPromotion">
+		update server_promotion
+		<set>
+		    <if test="startdate != null">
+				startdate = #{startdate, jdbcType=VARCHAR},
+		    </if>
+		    <if test="starttime != null">
+				starttime = #{starttime, jdbcType=VARCHAR},
+		    </if>
+		    <if test="enddate != null">
+				enddate = #{enddate, jdbcType=VARCHAR},
+		    </if>
+		    <if test="endtime != null">
+				endtime = #{endtime, jdbcType=VARCHAR},
+		    </if>
+		</set>
+		where 1=1 and serverid = #{serverid, jdbcType=VARCHAR} and promid = #{promid, jdbcType=INTEGER}
+	</update>
 </mapper>

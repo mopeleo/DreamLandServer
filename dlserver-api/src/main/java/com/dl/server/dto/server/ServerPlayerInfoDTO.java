@@ -6,11 +6,11 @@ public class ServerPlayerInfoDTO extends BaseDTO {
 
 	private String playerid;    //玩家ID，serverid+custno
 	private String serverid;    //serverid
-	private int custno;    //custno
+	private Integer custno;    //custno
 	private String playernick;    //playernick
 	private String logindate;    //logindate
 	private String logintime;    //logintime
-	private int level;    //level
+	private Integer level;    //level
 
 	public String getPlayerid() {
 		return this.playerid;
@@ -28,11 +28,11 @@ public class ServerPlayerInfoDTO extends BaseDTO {
 		this.serverid = serverid;
 	}
 
-	public int getCustno() {
+	public Integer getCustno() {
 		return this.custno;
 	}
 
-	public void setCustno(int custno) {
+	public void setCustno(Integer custno) {
 		this.custno = custno;
 	}
 
@@ -60,12 +60,39 @@ public class ServerPlayerInfoDTO extends BaseDTO {
 		this.logintime = logintime;
 	}
 
-	public int getLevel() {
+	public Integer getLevel() {
 		return this.level;
 	}
 
-	public void setLevel(int level) {
+	public void setLevel(Integer level) {
 		this.level = level;
 	}
 
+
+	public void clear(){
+		this.playerid = null;
+		this.serverid = null;
+		this.custno = null;
+		this.playernick = null;
+		this.logindate = null;
+		this.logintime = null;
+		this.level = null;
+	}
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+		sb.append(", playerid=").append(playerid);
+		sb.append(", serverid=").append(serverid);
+		sb.append(", custno=").append(custno);
+		sb.append(", playernick=").append(playernick);
+		sb.append(", logindate=").append(logindate);
+		sb.append(", logintime=").append(logintime);
+		sb.append(", level=").append(level);
+        sb.append("]");
+        return sb.toString();
+	}
 }

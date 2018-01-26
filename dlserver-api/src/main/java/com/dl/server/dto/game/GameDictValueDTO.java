@@ -4,15 +4,15 @@ import com.dl.server.dto.BaseDTO;
 
 public class GameDictValueDTO extends BaseDTO {
 
-	private int dictcode;    //字典代码
+	private Integer dictcode;    //字典代码
 	private String itemcode;    //选项代码
 	private String itemvalue;    //选项值
 
-	public int getDictcode() {
+	public Integer getDictcode() {
 		return this.dictcode;
 	}
 
-	public void setDictcode(int dictcode) {
+	public void setDictcode(Integer dictcode) {
 		this.dictcode = dictcode;
 	}
 
@@ -32,4 +32,23 @@ public class GameDictValueDTO extends BaseDTO {
 		this.itemvalue = itemvalue;
 	}
 
+
+	public void clear(){
+		this.dictcode = null;
+		this.itemcode = null;
+		this.itemvalue = null;
+	}
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+		sb.append(", dictcode=").append(dictcode);
+		sb.append(", itemcode=").append(itemcode);
+		sb.append(", itemvalue=").append(itemvalue);
+        sb.append("]");
+        return sb.toString();
+	}
 }

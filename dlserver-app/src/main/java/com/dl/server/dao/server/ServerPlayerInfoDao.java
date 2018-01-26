@@ -5,17 +5,15 @@ import java.util.List;
 
 public interface ServerPlayerInfoDao{
 
-    //int dynamicUpdate(ServerPlayerInfo entity);
-    
-    //int updateWhere(ServerPlayerInfo entity);
-    
     int insert(ServerPlayerInfo entity);
 
-    List<ServerPlayerInfo> selectAll(ServerPlayerInfo entity);
+    List<ServerPlayerInfo> selectAll(ServerPlayerInfo where);
 
     ServerPlayerInfo selectById(String playerid);
 
     int deleteById(String playerid);
 
     int updateById(ServerPlayerInfo entity);
+	
+    int dynamicUpdateById(ServerPlayerInfo entity);
 }

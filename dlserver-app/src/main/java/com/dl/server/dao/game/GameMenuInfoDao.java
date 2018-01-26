@@ -5,17 +5,15 @@ import java.util.List;
 
 public interface GameMenuInfoDao{
 
-    //int dynamicUpdate(GameMenuInfo entity);
-    
-    //int updateWhere(GameMenuInfo entity);
-    
     int insert(GameMenuInfo entity);
 
-    List<GameMenuInfo> selectAll(GameMenuInfo entity);
+    List<GameMenuInfo> selectAll(GameMenuInfo where);
 
     GameMenuInfo selectById(String menuid);
 
     int deleteById(String menuid);
 
     int updateById(GameMenuInfo entity);
+	
+    int dynamicUpdateById(GameMenuInfo entity);
 }

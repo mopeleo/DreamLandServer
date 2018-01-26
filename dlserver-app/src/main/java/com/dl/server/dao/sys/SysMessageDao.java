@@ -5,17 +5,15 @@ import java.util.List;
 
 public interface SysMessageDao{
 
-    //int dynamicUpdate(SysMessage entity);
-    
-    //int updateWhere(SysMessage entity);
-    
     int insert(SysMessage entity);
 
-    List<SysMessage> selectAll(SysMessage entity);
+    List<SysMessage> selectAll(SysMessage where);
 
-    SysMessage selectById(Integer msgid);
+    SysMessage selectById(Long msgid);
 
-    int deleteById(Integer msgid);
+    int deleteById(Long msgid);
 
     int updateById(SysMessage entity);
+	
+    int dynamicUpdateById(SysMessage entity);
 }

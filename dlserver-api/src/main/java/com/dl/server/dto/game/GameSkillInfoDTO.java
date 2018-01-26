@@ -50,4 +50,27 @@ public class GameSkillInfoDTO extends BaseDTO {
 		this.type = type;
 	}
 
+
+	public void clear(){
+		this.skillid = null;
+		this.skillname = null;
+		this.icon = null;
+		this.remark = null;
+		this.type = null;
+	}
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+		sb.append(", skillid=").append(skillid);
+		sb.append(", skillname=").append(skillname);
+		sb.append(", icon=").append(icon);
+		sb.append(", remark=").append(remark);
+		sb.append(", type=").append(type);
+        sb.append("]");
+        return sb.toString();
+	}
 }

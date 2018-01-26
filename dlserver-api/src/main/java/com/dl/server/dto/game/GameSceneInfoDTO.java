@@ -4,14 +4,14 @@ import com.dl.server.dto.BaseDTO;
 
 public class GameSceneInfoDTO extends BaseDTO {
 
-	private int sceneid;    //场景ID
+	private Integer sceneid;    //场景ID
 	private String scenename;    //场景名称
 
-	public int getSceneid() {
+	public Integer getSceneid() {
 		return this.sceneid;
 	}
 
-	public void setSceneid(int sceneid) {
+	public void setSceneid(Integer sceneid) {
 		this.sceneid = sceneid;
 	}
 
@@ -23,4 +23,21 @@ public class GameSceneInfoDTO extends BaseDTO {
 		this.scenename = scenename;
 	}
 
+
+	public void clear(){
+		this.sceneid = null;
+		this.scenename = null;
+	}
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+		sb.append(", sceneid=").append(sceneid);
+		sb.append(", scenename=").append(scenename);
+        sb.append("]");
+        return sb.toString();
+	}
 }

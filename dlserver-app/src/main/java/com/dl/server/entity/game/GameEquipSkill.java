@@ -23,7 +23,7 @@ public class GameEquipSkill extends DLEntity{
 		this.skillid = skillid;
 	}
 
-    public boolean hasId(){
+    public boolean existId(){
         return true;
     }
     
@@ -40,5 +40,17 @@ public class GameEquipSkill extends DLEntity{
 	public void clear(){
 		this.equipid = null;
 		this.skillid = null;
+	}
+
+	@Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+		sb.append(", equipid=").append(equipid);
+		sb.append(", skillid=").append(skillid);
+        sb.append("]");
+        return sb.toString();
 	}
 }

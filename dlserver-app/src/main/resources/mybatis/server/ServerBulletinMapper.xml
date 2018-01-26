@@ -9,6 +9,10 @@
         <result column="enddate" jdbcType="VARCHAR" property="enddate" />
         <result column="issuer" jdbcType="VARCHAR" property="issuer" />
     </resultMap>
+	
+	<sql id="column_list">
+        serverid, title, content, startdate, enddate, issuer
+	</sql>
   
     <insert id="insert" parameterType="com.dl.server.entity.server.ServerBulletin">
         insert into server_bulletin (serverid, title, content, startdate, enddate, issuer)
@@ -16,39 +20,39 @@
     </insert>
   
     <select id="selectAll" parameterType="com.dl.server.entity.server.ServerBulletin" resultMap="BaseResultMap">
-        select serverid, title, content, startdate, enddate, issuer
+        select <include refid="column_list" />
           from server_bulletin
 		<where>
-			<if test="serverid != null and serverid != ''">
+			<if test="serverid != null ">
 				and serverid = #{serverid, jdbcType=VARCHAR}
 			</if>
-			<if test="title != null and title != ''">
+			<if test="title != null ">
 				and title = #{title, jdbcType=VARCHAR}
 			</if>
-			<if test="content != null and content != ''">
+			<if test="content != null ">
 				and content = #{content, jdbcType=VARCHAR}
 			</if>
-			<if test="startdate != null and startdate != ''">
+			<if test="startdate != null ">
 				and startdate = #{startdate, jdbcType=VARCHAR}
 			</if>
-			<if test="enddate != null and enddate != ''">
+			<if test="enddate != null ">
 				and enddate = #{enddate, jdbcType=VARCHAR}
 			</if>
-			<if test="issuer != null and issuer != ''">
+			<if test="issuer != null ">
 				and issuer = #{issuer, jdbcType=VARCHAR}
 			</if>
 		</where>
     </select>
 
-    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
-        select serverid, title, content, startdate, enddate, issuer
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
           from server_bulletin
-         where 1=1 and title = #{arg0}
+         where 1=1 and title = #{0}
     </select>
 
-    <delete id="deleteById" parameterType="map">
+    <delete id="deleteById">
         delete from server_bulletin
-         where 1=1 and title = #{arg0}
+         where 1=1 and title = #{0}
     </delete>
   
     <update id="updateById" parameterType="com.dl.server.entity.server.ServerBulletin">
@@ -60,4 +64,26 @@
                issuer = #{issuer, jdbcType=VARCHAR}
          where 1=1 and title = #{title, jdbcType=VARCHAR}
     </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.server.ServerBulletin">
+		update server_bulletin
+		<set>
+		    <if test="serverid != null">
+				serverid = #{serverid, jdbcType=VARCHAR},
+		    </if>
+		    <if test="content != null">
+				content = #{content, jdbcType=VARCHAR},
+		    </if>
+		    <if test="startdate != null">
+				startdate = #{startdate, jdbcType=VARCHAR},
+		    </if>
+		    <if test="enddate != null">
+				enddate = #{enddate, jdbcType=VARCHAR},
+		    </if>
+		    <if test="issuer != null">
+				issuer = #{issuer, jdbcType=VARCHAR},
+		    </if>
+		</set>
+		where 1=1 and title = #{title, jdbcType=VARCHAR}
+	</update>
 </mapper>

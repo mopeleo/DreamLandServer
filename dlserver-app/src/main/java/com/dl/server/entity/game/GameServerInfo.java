@@ -6,12 +6,12 @@ public class GameServerInfo extends DLEntity{
 
 	private String serverid;    //服务器ID
 	private String servername;    //服务器名称
-	private int sno;    //开服序号
+	private Integer sno;    //开服序号
 	private String opendate;    //开服日期
 	private String opentime;    //开服时间
-	private int maxplayer;    //最大玩家数
-	private int regplayer;    //注册玩家数
-	private int onlineplayer;    //在线玩家数
+	private Integer maxplayer;    //最大玩家数
+	private Integer regplayer;    //注册玩家数
+	private Integer onlineplayer;    //在线玩家数
 
 	public String getServerid() {
 		return this.serverid;
@@ -29,11 +29,11 @@ public class GameServerInfo extends DLEntity{
 		this.servername = servername;
 	}
 
-	public int getSno() {
+	public Integer getSno() {
 		return this.sno;
 	}
 
-	public void setSno(int sno) {
+	public void setSno(Integer sno) {
 		this.sno = sno;
 	}
 
@@ -53,31 +53,31 @@ public class GameServerInfo extends DLEntity{
 		this.opentime = opentime;
 	}
 
-	public int getMaxplayer() {
+	public Integer getMaxplayer() {
 		return this.maxplayer;
 	}
 
-	public void setMaxplayer(int maxplayer) {
+	public void setMaxplayer(Integer maxplayer) {
 		this.maxplayer = maxplayer;
 	}
 
-	public int getRegplayer() {
+	public Integer getRegplayer() {
 		return this.regplayer;
 	}
 
-	public void setRegplayer(int regplayer) {
+	public void setRegplayer(Integer regplayer) {
 		this.regplayer = regplayer;
 	}
 
-	public int getOnlineplayer() {
+	public Integer getOnlineplayer() {
 		return this.onlineplayer;
 	}
 
-	public void setOnlineplayer(int onlineplayer) {
+	public void setOnlineplayer(Integer onlineplayer) {
 		this.onlineplayer = onlineplayer;
 	}
 
-    public boolean hasId(){
+    public boolean existId(){
         return true;
     }
     
@@ -94,11 +94,29 @@ public class GameServerInfo extends DLEntity{
 	public void clear(){
 		this.serverid = null;
 		this.servername = null;
-		this.sno = 0;
+		this.sno = null;
 		this.opendate = null;
 		this.opentime = null;
-		this.maxplayer = 0;
-		this.regplayer = 0;
-		this.onlineplayer = 0;
+		this.maxplayer = null;
+		this.regplayer = null;
+		this.onlineplayer = null;
+	}
+
+	@Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+		sb.append(", serverid=").append(serverid);
+		sb.append(", servername=").append(servername);
+		sb.append(", sno=").append(sno);
+		sb.append(", opendate=").append(opendate);
+		sb.append(", opentime=").append(opentime);
+		sb.append(", maxplayer=").append(maxplayer);
+		sb.append(", regplayer=").append(regplayer);
+		sb.append(", onlineplayer=").append(onlineplayer);
+        sb.append("]");
+        return sb.toString();
 	}
 }

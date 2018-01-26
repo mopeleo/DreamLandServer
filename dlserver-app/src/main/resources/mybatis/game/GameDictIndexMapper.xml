@@ -6,6 +6,10 @@
         <result column="dictname" jdbcType="VARCHAR" property="dictname" />
         <result column="dftitem" jdbcType="VARCHAR" property="dftitem" />
     </resultMap>
+	
+	<sql id="column_list">
+        dictcode, dictname, dftitem
+	</sql>
   
     <insert id="insert" parameterType="com.dl.server.entity.game.GameDictIndex">
         insert into game_dict_index (dictcode, dictname, dftitem)
@@ -13,30 +17,30 @@
     </insert>
   
     <select id="selectAll" parameterType="com.dl.server.entity.game.GameDictIndex" resultMap="BaseResultMap">
-        select dictcode, dictname, dftitem
+        select <include refid="column_list" />
           from game_dict_index
 		<where>
-			<if test="dictcode != null and dictcode != ''">
+			<if test="dictcode != null ">
 				and dictcode = #{dictcode, jdbcType=INTEGER}
 			</if>
-			<if test="dictname != null and dictname != ''">
+			<if test="dictname != null ">
 				and dictname = #{dictname, jdbcType=VARCHAR}
 			</if>
-			<if test="dftitem != null and dftitem != ''">
+			<if test="dftitem != null ">
 				and dftitem = #{dftitem, jdbcType=VARCHAR}
 			</if>
 		</where>
     </select>
 
-    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
-        select dictcode, dictname, dftitem
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
           from game_dict_index
-         where 1=1 and dictcode = #{arg0}
+         where 1=1 and dictcode = #{0}
     </select>
 
-    <delete id="deleteById" parameterType="map">
+    <delete id="deleteById">
         delete from game_dict_index
-         where 1=1 and dictcode = #{arg0}
+         where 1=1 and dictcode = #{0}
     </delete>
   
     <update id="updateById" parameterType="com.dl.server.entity.game.GameDictIndex">
@@ -45,4 +49,17 @@
                dftitem = #{dftitem, jdbcType=VARCHAR}
          where 1=1 and dictcode = #{dictcode, jdbcType=INTEGER}
     </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.game.GameDictIndex">
+		update game_dict_index
+		<set>
+		    <if test="dictname != null">
+				dictname = #{dictname, jdbcType=VARCHAR},
+		    </if>
+		    <if test="dftitem != null">
+				dftitem = #{dftitem, jdbcType=VARCHAR},
+		    </if>
+		</set>
+		where 1=1 and dictcode = #{dictcode, jdbcType=INTEGER}
+	</update>
 </mapper>

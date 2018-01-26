@@ -5,13 +5,9 @@ import java.util.List;
 
 public interface GameEquipSkillDao{
 
-    //int dynamicUpdate(GameEquipSkill entity);
-    
-    //int updateWhere(GameEquipSkill entity);
-    
     int insert(GameEquipSkill entity);
 
-    List<GameEquipSkill> selectAll(GameEquipSkill entity);
+    List<GameEquipSkill> selectAll(GameEquipSkill where);
 
     GameEquipSkill selectById(String equipid, String skillid);
 

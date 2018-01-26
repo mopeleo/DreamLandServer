@@ -8,6 +8,10 @@
         <result column="remark" jdbcType="VARCHAR" property="remark" />
         <result column="type" jdbcType="VARCHAR" property="type" />
     </resultMap>
+	
+	<sql id="column_list">
+        skillid, skillname, icon, remark, type
+	</sql>
   
     <insert id="insert" parameterType="com.dl.server.entity.game.GameSkillInfo">
         insert into game_skill_info (skillid, skillname, icon, remark, type)
@@ -15,36 +19,36 @@
     </insert>
   
     <select id="selectAll" parameterType="com.dl.server.entity.game.GameSkillInfo" resultMap="BaseResultMap">
-        select skillid, skillname, icon, remark, type
+        select <include refid="column_list" />
           from game_skill_info
 		<where>
-			<if test="skillid != null and skillid != ''">
+			<if test="skillid != null ">
 				and skillid = #{skillid, jdbcType=VARCHAR}
 			</if>
-			<if test="skillname != null and skillname != ''">
+			<if test="skillname != null ">
 				and skillname = #{skillname, jdbcType=VARCHAR}
 			</if>
-			<if test="icon != null and icon != ''">
+			<if test="icon != null ">
 				and icon = #{icon, jdbcType=VARCHAR}
 			</if>
-			<if test="remark != null and remark != ''">
+			<if test="remark != null ">
 				and remark = #{remark, jdbcType=VARCHAR}
 			</if>
-			<if test="type != null and type != ''">
+			<if test="type != null ">
 				and type = #{type, jdbcType=VARCHAR}
 			</if>
 		</where>
     </select>
 
-    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
-        select skillid, skillname, icon, remark, type
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
           from game_skill_info
-         where 1=1 and skillid = #{arg0}
+         where 1=1 and skillid = #{0}
     </select>
 
-    <delete id="deleteById" parameterType="map">
+    <delete id="deleteById">
         delete from game_skill_info
-         where 1=1 and skillid = #{arg0}
+         where 1=1 and skillid = #{0}
     </delete>
   
     <update id="updateById" parameterType="com.dl.server.entity.game.GameSkillInfo">
@@ -55,4 +59,23 @@
                type = #{type, jdbcType=VARCHAR}
          where 1=1 and skillid = #{skillid, jdbcType=VARCHAR}
     </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.game.GameSkillInfo">
+		update game_skill_info
+		<set>
+		    <if test="skillname != null">
+				skillname = #{skillname, jdbcType=VARCHAR},
+		    </if>
+		    <if test="icon != null">
+				icon = #{icon, jdbcType=VARCHAR},
+		    </if>
+		    <if test="remark != null">
+				remark = #{remark, jdbcType=VARCHAR},
+		    </if>
+		    <if test="type != null">
+				type = #{type, jdbcType=VARCHAR},
+		    </if>
+		</set>
+		where 1=1 and skillid = #{skillid, jdbcType=VARCHAR}
+	</update>
 </mapper>

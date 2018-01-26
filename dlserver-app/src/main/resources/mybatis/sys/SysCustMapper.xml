@@ -14,6 +14,10 @@
         <result column="mobile" jdbcType="VARCHAR" property="mobile" />
         <result column="regdate" jdbcType="VARCHAR" property="regdate" />
     </resultMap>
+	
+	<sql id="column_list">
+        custno, loginid, loginpwd, nickname, idtype, idcode, idname, birthday, email, mobile, regdate
+	</sql>
   
     <insert id="insert" parameterType="com.dl.server.entity.sys.SysCust">
         insert into sys_cust (custno, loginid, loginpwd, nickname, idtype, idcode, idname, birthday, email, mobile, regdate)
@@ -21,54 +25,54 @@
     </insert>
   
     <select id="selectAll" parameterType="com.dl.server.entity.sys.SysCust" resultMap="BaseResultMap">
-        select custno, loginid, loginpwd, nickname, idtype, idcode, idname, birthday, email, mobile, regdate
+        select <include refid="column_list" />
           from sys_cust
 		<where>
-			<if test="custno != null and custno != ''">
+			<if test="custno != null ">
 				and custno = #{custno, jdbcType=INTEGER}
 			</if>
-			<if test="loginid != null and loginid != ''">
+			<if test="loginid != null ">
 				and loginid = #{loginid, jdbcType=VARCHAR}
 			</if>
-			<if test="loginpwd != null and loginpwd != ''">
+			<if test="loginpwd != null ">
 				and loginpwd = #{loginpwd, jdbcType=VARCHAR}
 			</if>
-			<if test="nickname != null and nickname != ''">
+			<if test="nickname != null ">
 				and nickname = #{nickname, jdbcType=VARCHAR}
 			</if>
-			<if test="idtype != null and idtype != ''">
+			<if test="idtype != null ">
 				and idtype = #{idtype, jdbcType=VARCHAR}
 			</if>
-			<if test="idcode != null and idcode != ''">
+			<if test="idcode != null ">
 				and idcode = #{idcode, jdbcType=VARCHAR}
 			</if>
-			<if test="idname != null and idname != ''">
+			<if test="idname != null ">
 				and idname = #{idname, jdbcType=VARCHAR}
 			</if>
-			<if test="birthday != null and birthday != ''">
+			<if test="birthday != null ">
 				and birthday = #{birthday, jdbcType=VARCHAR}
 			</if>
-			<if test="email != null and email != ''">
+			<if test="email != null ">
 				and email = #{email, jdbcType=VARCHAR}
 			</if>
-			<if test="mobile != null and mobile != ''">
+			<if test="mobile != null ">
 				and mobile = #{mobile, jdbcType=VARCHAR}
 			</if>
-			<if test="regdate != null and regdate != ''">
+			<if test="regdate != null ">
 				and regdate = #{regdate, jdbcType=VARCHAR}
 			</if>
 		</where>
     </select>
 
-    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
-        select custno, loginid, loginpwd, nickname, idtype, idcode, idname, birthday, email, mobile, regdate
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
           from sys_cust
-         where 1=1 and custno = #{arg0}
+         where 1=1 and custno = #{0}
     </select>
 
-    <delete id="deleteById" parameterType="map">
+    <delete id="deleteById">
         delete from sys_cust
-         where 1=1 and custno = #{arg0}
+         where 1=1 and custno = #{0}
     </delete>
   
     <update id="updateById" parameterType="com.dl.server.entity.sys.SysCust">
@@ -85,4 +89,41 @@
                regdate = #{regdate, jdbcType=VARCHAR}
          where 1=1 and custno = #{custno, jdbcType=INTEGER}
     </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.sys.SysCust">
+		update sys_cust
+		<set>
+		    <if test="loginid != null">
+				loginid = #{loginid, jdbcType=VARCHAR},
+		    </if>
+		    <if test="loginpwd != null">
+				loginpwd = #{loginpwd, jdbcType=VARCHAR},
+		    </if>
+		    <if test="nickname != null">
+				nickname = #{nickname, jdbcType=VARCHAR},
+		    </if>
+		    <if test="idtype != null">
+				idtype = #{idtype, jdbcType=VARCHAR},
+		    </if>
+		    <if test="idcode != null">
+				idcode = #{idcode, jdbcType=VARCHAR},
+		    </if>
+		    <if test="idname != null">
+				idname = #{idname, jdbcType=VARCHAR},
+		    </if>
+		    <if test="birthday != null">
+				birthday = #{birthday, jdbcType=VARCHAR},
+		    </if>
+		    <if test="email != null">
+				email = #{email, jdbcType=VARCHAR},
+		    </if>
+		    <if test="mobile != null">
+				mobile = #{mobile, jdbcType=VARCHAR},
+		    </if>
+		    <if test="regdate != null">
+				regdate = #{regdate, jdbcType=VARCHAR},
+		    </if>
+		</set>
+		where 1=1 and custno = #{custno, jdbcType=INTEGER}
+	</update>
 </mapper>

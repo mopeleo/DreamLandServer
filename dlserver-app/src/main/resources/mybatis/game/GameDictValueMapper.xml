@@ -6,6 +6,10 @@
         <id column="itemcode" jdbcType="VARCHAR" property="itemcode" />
         <result column="itemvalue" jdbcType="VARCHAR" property="itemvalue" />
     </resultMap>
+	
+	<sql id="column_list">
+        dictcode, itemcode, itemvalue
+	</sql>
   
     <insert id="insert" parameterType="com.dl.server.entity.game.GameDictValue">
         insert into game_dict_value (dictcode, itemcode, itemvalue)
@@ -13,30 +17,30 @@
     </insert>
   
     <select id="selectAll" parameterType="com.dl.server.entity.game.GameDictValue" resultMap="BaseResultMap">
-        select dictcode, itemcode, itemvalue
+        select <include refid="column_list" />
           from game_dict_value
 		<where>
-			<if test="dictcode != null and dictcode != ''">
+			<if test="dictcode != null ">
 				and dictcode = #{dictcode, jdbcType=INTEGER}
 			</if>
-			<if test="itemcode != null and itemcode != ''">
+			<if test="itemcode != null ">
 				and itemcode = #{itemcode, jdbcType=VARCHAR}
 			</if>
-			<if test="itemvalue != null and itemvalue != ''">
+			<if test="itemvalue != null ">
 				and itemvalue = #{itemvalue, jdbcType=VARCHAR}
 			</if>
 		</where>
     </select>
 
-    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
-        select dictcode, itemcode, itemvalue
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
           from game_dict_value
-         where 1=1 and dictcode = #{arg0} and itemcode = #{arg1}
+         where 1=1 and dictcode = #{0} and itemcode = #{1}
     </select>
 
-    <delete id="deleteById" parameterType="map">
+    <delete id="deleteById">
         delete from game_dict_value
-         where 1=1 and dictcode = #{arg0} and itemcode = #{arg1}
+         where 1=1 and dictcode = #{0} and itemcode = #{1}
     </delete>
   
     <update id="updateById" parameterType="com.dl.server.entity.game.GameDictValue">
@@ -44,4 +48,14 @@
                itemvalue = #{itemvalue, jdbcType=VARCHAR}
          where 1=1 and dictcode = #{dictcode, jdbcType=INTEGER} and itemcode = #{itemcode, jdbcType=VARCHAR}
     </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.game.GameDictValue">
+		update game_dict_value
+		<set>
+		    <if test="itemvalue != null">
+				itemvalue = #{itemvalue, jdbcType=VARCHAR},
+		    </if>
+		</set>
+		where 1=1 and dictcode = #{dictcode, jdbcType=INTEGER} and itemcode = #{itemcode, jdbcType=VARCHAR}
+	</update>
 </mapper>

@@ -5,7 +5,7 @@ import com.dl.server.entity.DLEntity;
 public class ServerPromotion extends DLEntity{
 
 	private String serverid;    //serverid
-	private int promid;    //promid
+	private Integer promid;    //promid
 	private String startdate;    //startdate
 	private String starttime;    //starttime
 	private String enddate;    //enddate
@@ -19,11 +19,11 @@ public class ServerPromotion extends DLEntity{
 		this.serverid = serverid;
 	}
 
-	public int getPromid() {
+	public Integer getPromid() {
 		return this.promid;
 	}
 
-	public void setPromid(int promid) {
+	public void setPromid(Integer promid) {
 		this.promid = promid;
 	}
 
@@ -59,7 +59,7 @@ public class ServerPromotion extends DLEntity{
 		this.endtime = endtime;
 	}
 
-    public boolean hasId(){
+    public boolean existId(){
         return true;
     }
     
@@ -68,17 +68,33 @@ public class ServerPromotion extends DLEntity{
 		return build.append(this.serverid).append(this.promid).toString();
 	}
 
-    public static String buildEntityKey(String serverid, int promid){
+    public static String buildEntityKey(String serverid, Integer promid){
         StringBuilder build = new StringBuilder("ServerPromotion");
         return build.append(serverid).append(promid).toString();
     }
 	
 	public void clear(){
 		this.serverid = null;
-		this.promid = 0;
+		this.promid = null;
 		this.startdate = null;
 		this.starttime = null;
 		this.enddate = null;
 		this.endtime = null;
+	}
+
+	@Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+		sb.append(", serverid=").append(serverid);
+		sb.append(", promid=").append(promid);
+		sb.append(", startdate=").append(startdate);
+		sb.append(", starttime=").append(starttime);
+		sb.append(", enddate=").append(enddate);
+		sb.append(", endtime=").append(endtime);
+        sb.append("]");
+        return sb.toString();
 	}
 }

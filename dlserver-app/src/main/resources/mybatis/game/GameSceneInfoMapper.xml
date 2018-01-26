@@ -5,6 +5,10 @@
         <id column="sceneid" jdbcType="INTEGER" property="sceneid" />
         <result column="scenename" jdbcType="VARCHAR" property="scenename" />
     </resultMap>
+	
+	<sql id="column_list">
+        sceneid, scenename
+	</sql>
   
     <insert id="insert" parameterType="com.dl.server.entity.game.GameSceneInfo">
         insert into game_scene_info (sceneid, scenename)
@@ -12,27 +16,27 @@
     </insert>
   
     <select id="selectAll" parameterType="com.dl.server.entity.game.GameSceneInfo" resultMap="BaseResultMap">
-        select sceneid, scenename
+        select <include refid="column_list" />
           from game_scene_info
 		<where>
-			<if test="sceneid != null and sceneid != ''">
+			<if test="sceneid != null ">
 				and sceneid = #{sceneid, jdbcType=INTEGER}
 			</if>
-			<if test="scenename != null and scenename != ''">
+			<if test="scenename != null ">
 				and scenename = #{scenename, jdbcType=VARCHAR}
 			</if>
 		</where>
     </select>
 
-    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
-        select sceneid, scenename
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
           from game_scene_info
-         where 1=1 and sceneid = #{arg0}
+         where 1=1 and sceneid = #{0}
     </select>
 
-    <delete id="deleteById" parameterType="map">
+    <delete id="deleteById">
         delete from game_scene_info
-         where 1=1 and sceneid = #{arg0}
+         where 1=1 and sceneid = #{0}
     </delete>
   
     <update id="updateById" parameterType="com.dl.server.entity.game.GameSceneInfo">
@@ -40,4 +44,14 @@
                scenename = #{scenename, jdbcType=VARCHAR}
          where 1=1 and sceneid = #{sceneid, jdbcType=INTEGER}
     </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.game.GameSceneInfo">
+		update game_scene_info
+		<set>
+		    <if test="scenename != null">
+				scenename = #{scenename, jdbcType=VARCHAR},
+		    </if>
+		</set>
+		where 1=1 and sceneid = #{sceneid, jdbcType=INTEGER}
+	</update>
 </mapper>

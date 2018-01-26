@@ -14,6 +14,10 @@
         <result column="maxrank" jdbcType="INTEGER" property="maxrank" />
         <result column="attr" jdbcType="INTEGER" property="attr" />
     </resultMap>
+	
+	<sql id="column_list">
+        actorid, actorname, aptitude, attack, defense, hp, mp, ep, initrank, maxrank, attr
+	</sql>
   
     <insert id="insert" parameterType="com.dl.server.entity.game.GameActorInfo">
         insert into game_actor_info (actorid, actorname, aptitude, attack, defense, hp, mp, ep, initrank, maxrank, attr)
@@ -21,54 +25,54 @@
     </insert>
   
     <select id="selectAll" parameterType="com.dl.server.entity.game.GameActorInfo" resultMap="BaseResultMap">
-        select actorid, actorname, aptitude, attack, defense, hp, mp, ep, initrank, maxrank, attr
+        select <include refid="column_list" />
           from game_actor_info
 		<where>
-			<if test="actorid != null and actorid != ''">
+			<if test="actorid != null ">
 				and actorid = #{actorid, jdbcType=VARCHAR}
 			</if>
-			<if test="actorname != null and actorname != ''">
+			<if test="actorname != null ">
 				and actorname = #{actorname, jdbcType=VARCHAR}
 			</if>
-			<if test="aptitude != null and aptitude != ''">
+			<if test="aptitude != null ">
 				and aptitude = #{aptitude, jdbcType=INTEGER}
 			</if>
-			<if test="attack != null and attack != ''">
+			<if test="attack != null ">
 				and attack = #{attack, jdbcType=INTEGER}
 			</if>
-			<if test="defense != null and defense != ''">
+			<if test="defense != null ">
 				and defense = #{defense, jdbcType=INTEGER}
 			</if>
-			<if test="hp != null and hp != ''">
+			<if test="hp != null ">
 				and hp = #{hp, jdbcType=INTEGER}
 			</if>
-			<if test="mp != null and mp != ''">
+			<if test="mp != null ">
 				and mp = #{mp, jdbcType=INTEGER}
 			</if>
-			<if test="ep != null and ep != ''">
+			<if test="ep != null ">
 				and ep = #{ep, jdbcType=INTEGER}
 			</if>
-			<if test="initrank != null and initrank != ''">
+			<if test="initrank != null ">
 				and initrank = #{initrank, jdbcType=INTEGER}
 			</if>
-			<if test="maxrank != null and maxrank != ''">
+			<if test="maxrank != null ">
 				and maxrank = #{maxrank, jdbcType=INTEGER}
 			</if>
-			<if test="attr != null and attr != ''">
+			<if test="attr != null ">
 				and attr = #{attr, jdbcType=INTEGER}
 			</if>
 		</where>
     </select>
 
-    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
-        select actorid, actorname, aptitude, attack, defense, hp, mp, ep, initrank, maxrank, attr
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
           from game_actor_info
-         where 1=1 and actorid = #{arg0}
+         where 1=1 and actorid = #{0}
     </select>
 
-    <delete id="deleteById" parameterType="map">
+    <delete id="deleteById">
         delete from game_actor_info
-         where 1=1 and actorid = #{arg0}
+         where 1=1 and actorid = #{0}
     </delete>
   
     <update id="updateById" parameterType="com.dl.server.entity.game.GameActorInfo">
@@ -85,4 +89,41 @@
                attr = #{attr, jdbcType=INTEGER}
          where 1=1 and actorid = #{actorid, jdbcType=VARCHAR}
     </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.game.GameActorInfo">
+		update game_actor_info
+		<set>
+		    <if test="actorname != null">
+				actorname = #{actorname, jdbcType=VARCHAR},
+		    </if>
+		    <if test="aptitude != null">
+				aptitude = #{aptitude, jdbcType=INTEGER},
+		    </if>
+		    <if test="attack != null">
+				attack = #{attack, jdbcType=INTEGER},
+		    </if>
+		    <if test="defense != null">
+				defense = #{defense, jdbcType=INTEGER},
+		    </if>
+		    <if test="hp != null">
+				hp = #{hp, jdbcType=INTEGER},
+		    </if>
+		    <if test="mp != null">
+				mp = #{mp, jdbcType=INTEGER},
+		    </if>
+		    <if test="ep != null">
+				ep = #{ep, jdbcType=INTEGER},
+		    </if>
+		    <if test="initrank != null">
+				initrank = #{initrank, jdbcType=INTEGER},
+		    </if>
+		    <if test="maxrank != null">
+				maxrank = #{maxrank, jdbcType=INTEGER},
+		    </if>
+		    <if test="attr != null">
+				attr = #{attr, jdbcType=INTEGER},
+		    </if>
+		</set>
+		where 1=1 and actorid = #{actorid, jdbcType=VARCHAR}
+	</update>
 </mapper>

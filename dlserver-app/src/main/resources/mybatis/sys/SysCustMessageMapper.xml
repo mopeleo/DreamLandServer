@@ -3,45 +3,59 @@
 <mapper namespace="com.dl.server.dao.sys.SysCustMessageDao">
     <resultMap id="BaseResultMap" type="com.dl.server.entity.sys.SysCustMessage">
         <id column="custno" jdbcType="INTEGER" property="custno" />
-        <id column="msgid" jdbcType="INTEGER" property="msgid" />
+        <id column="msgid" jdbcType="DECIMAL" property="msgid" />
         <result column="isread" jdbcType="VARCHAR" property="isread" />
     </resultMap>
+	
+	<sql id="column_list">
+        custno, msgid, isread
+	</sql>
   
     <insert id="insert" parameterType="com.dl.server.entity.sys.SysCustMessage">
         insert into sys_cust_message (custno, msgid, isread)
-        values (#{custno, jdbcType=INTEGER}, #{msgid, jdbcType=INTEGER}, #{isread, jdbcType=VARCHAR})
+        values (#{custno, jdbcType=INTEGER}, #{msgid, jdbcType=DECIMAL}, #{isread, jdbcType=VARCHAR})
     </insert>
   
     <select id="selectAll" parameterType="com.dl.server.entity.sys.SysCustMessage" resultMap="BaseResultMap">
-        select custno, msgid, isread
+        select <include refid="column_list" />
           from sys_cust_message
 		<where>
-			<if test="custno != null and custno != ''">
+			<if test="custno != null ">
 				and custno = #{custno, jdbcType=INTEGER}
 			</if>
-			<if test="msgid != null and msgid != ''">
-				and msgid = #{msgid, jdbcType=INTEGER}
+			<if test="msgid != null ">
+				and msgid = #{msgid, jdbcType=DECIMAL}
 			</if>
-			<if test="isread != null and isread != ''">
+			<if test="isread != null ">
 				and isread = #{isread, jdbcType=VARCHAR}
 			</if>
 		</where>
     </select>
 
-    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
-        select custno, msgid, isread
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
           from sys_cust_message
-         where 1=1 and custno = #{arg0} and msgid = #{arg1}
+         where 1=1 and custno = #{0} and msgid = #{1}
     </select>
 
-    <delete id="deleteById" parameterType="map">
+    <delete id="deleteById">
         delete from sys_cust_message
-         where 1=1 and custno = #{arg0} and msgid = #{arg1}
+         where 1=1 and custno = #{0} and msgid = #{1}
     </delete>
   
     <update id="updateById" parameterType="com.dl.server.entity.sys.SysCustMessage">
         update sys_cust_message set 
                isread = #{isread, jdbcType=VARCHAR}
-         where 1=1 and custno = #{custno, jdbcType=INTEGER} and msgid = #{msgid, jdbcType=INTEGER}
+         where 1=1 and custno = #{custno, jdbcType=INTEGER} and msgid = #{msgid, jdbcType=DECIMAL}
     </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.sys.SysCustMessage">
+		update sys_cust_message
+		<set>
+		    <if test="isread != null">
+				isread = #{isread, jdbcType=VARCHAR},
+		    </if>
+		</set>
+		where 1=1 and custno = #{custno, jdbcType=INTEGER} and msgid = #{msgid, jdbcType=DECIMAL}
+	</update>
 </mapper>

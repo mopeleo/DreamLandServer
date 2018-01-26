@@ -4,15 +4,15 @@ import com.dl.server.entity.DLEntity;
 
 public class GameDictValue extends DLEntity{
 
-	private int dictcode;    //字典代码
+	private Integer dictcode;    //字典代码
 	private String itemcode;    //选项代码
 	private String itemvalue;    //选项值
 
-	public int getDictcode() {
+	public Integer getDictcode() {
 		return this.dictcode;
 	}
 
-	public void setDictcode(int dictcode) {
+	public void setDictcode(Integer dictcode) {
 		this.dictcode = dictcode;
 	}
 
@@ -32,7 +32,7 @@ public class GameDictValue extends DLEntity{
 		this.itemvalue = itemvalue;
 	}
 
-    public boolean hasId(){
+    public boolean existId(){
         return true;
     }
     
@@ -41,14 +41,27 @@ public class GameDictValue extends DLEntity{
 		return build.append(this.dictcode).append(this.itemcode).toString();
 	}
 
-    public static String buildEntityKey(int dictcode, String itemcode){
+    public static String buildEntityKey(Integer dictcode, String itemcode){
         StringBuilder build = new StringBuilder("GameDictValue");
         return build.append(dictcode).append(itemcode).toString();
     }
 	
 	public void clear(){
-		this.dictcode = 0;
+		this.dictcode = null;
 		this.itemcode = null;
 		this.itemvalue = null;
+	}
+
+	@Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+		sb.append(", dictcode=").append(dictcode);
+		sb.append(", itemcode=").append(itemcode);
+		sb.append(", itemvalue=").append(itemvalue);
+        sb.append("]");
+        return sb.toString();
 	}
 }

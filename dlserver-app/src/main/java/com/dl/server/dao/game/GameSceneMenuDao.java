@@ -5,13 +5,9 @@ import java.util.List;
 
 public interface GameSceneMenuDao{
 
-    //int dynamicUpdate(GameSceneMenu entity);
-    
-    //int updateWhere(GameSceneMenu entity);
-    
     int insert(GameSceneMenu entity);
 
-    List<GameSceneMenu> selectAll(GameSceneMenu entity);
+    List<GameSceneMenu> selectAll(GameSceneMenu where);
 
     GameSceneMenu selectById(Integer sceneid, String menuid);
 

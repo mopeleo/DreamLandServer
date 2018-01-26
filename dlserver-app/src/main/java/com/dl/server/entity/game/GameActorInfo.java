@@ -6,15 +6,15 @@ public class GameActorInfo extends DLEntity{
 
 	private String actorid;    //角色ID
 	private String actorname;    //角色名称
-	private int aptitude;    //资质
-	private int attack;    //攻击值
-	private int defense;    //物防值
-	private int hp;    //生命值
-	private int mp;    //魔法值
-	private int ep;    //能量值
-	private int initrank;    //初始星级
-	private int maxrank;    //最大星级
-	private int attr;    //属性
+	private Integer aptitude;    //资质
+	private Integer attack;    //攻击值
+	private Integer defense;    //物防值
+	private Integer hp;    //生命值
+	private Integer mp;    //魔法值
+	private Integer ep;    //能量值
+	private Integer initrank;    //初始星级
+	private Integer maxrank;    //最大星级
+	private Integer attr;    //属性
 
 	public String getActorid() {
 		return this.actorid;
@@ -32,79 +32,79 @@ public class GameActorInfo extends DLEntity{
 		this.actorname = actorname;
 	}
 
-	public int getAptitude() {
+	public Integer getAptitude() {
 		return this.aptitude;
 	}
 
-	public void setAptitude(int aptitude) {
+	public void setAptitude(Integer aptitude) {
 		this.aptitude = aptitude;
 	}
 
-	public int getAttack() {
+	public Integer getAttack() {
 		return this.attack;
 	}
 
-	public void setAttack(int attack) {
+	public void setAttack(Integer attack) {
 		this.attack = attack;
 	}
 
-	public int getDefense() {
+	public Integer getDefense() {
 		return this.defense;
 	}
 
-	public void setDefense(int defense) {
+	public void setDefense(Integer defense) {
 		this.defense = defense;
 	}
 
-	public int getHp() {
+	public Integer getHp() {
 		return this.hp;
 	}
 
-	public void setHp(int hp) {
+	public void setHp(Integer hp) {
 		this.hp = hp;
 	}
 
-	public int getMp() {
+	public Integer getMp() {
 		return this.mp;
 	}
 
-	public void setMp(int mp) {
+	public void setMp(Integer mp) {
 		this.mp = mp;
 	}
 
-	public int getEp() {
+	public Integer getEp() {
 		return this.ep;
 	}
 
-	public void setEp(int ep) {
+	public void setEp(Integer ep) {
 		this.ep = ep;
 	}
 
-	public int getInitrank() {
+	public Integer getInitrank() {
 		return this.initrank;
 	}
 
-	public void setInitrank(int initrank) {
+	public void setInitrank(Integer initrank) {
 		this.initrank = initrank;
 	}
 
-	public int getMaxrank() {
+	public Integer getMaxrank() {
 		return this.maxrank;
 	}
 
-	public void setMaxrank(int maxrank) {
+	public void setMaxrank(Integer maxrank) {
 		this.maxrank = maxrank;
 	}
 
-	public int getAttr() {
+	public Integer getAttr() {
 		return this.attr;
 	}
 
-	public void setAttr(int attr) {
+	public void setAttr(Integer attr) {
 		this.attr = attr;
 	}
 
-    public boolean hasId(){
+    public boolean existId(){
         return true;
     }
     
@@ -121,14 +121,35 @@ public class GameActorInfo extends DLEntity{
 	public void clear(){
 		this.actorid = null;
 		this.actorname = null;
-		this.aptitude = 0;
-		this.attack = 0;
-		this.defense = 0;
-		this.hp = 0;
-		this.mp = 0;
-		this.ep = 0;
-		this.initrank = 0;
-		this.maxrank = 0;
-		this.attr = 0;
+		this.aptitude = null;
+		this.attack = null;
+		this.defense = null;
+		this.hp = null;
+		this.mp = null;
+		this.ep = null;
+		this.initrank = null;
+		this.maxrank = null;
+		this.attr = null;
+	}
+
+	@Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+		sb.append(", actorid=").append(actorid);
+		sb.append(", actorname=").append(actorname);
+		sb.append(", aptitude=").append(aptitude);
+		sb.append(", attack=").append(attack);
+		sb.append(", defense=").append(defense);
+		sb.append(", hp=").append(hp);
+		sb.append(", mp=").append(mp);
+		sb.append(", ep=").append(ep);
+		sb.append(", initrank=").append(initrank);
+		sb.append(", maxrank=").append(maxrank);
+		sb.append(", attr=").append(attr);
+        sb.append("]");
+        return sb.toString();
 	}
 }

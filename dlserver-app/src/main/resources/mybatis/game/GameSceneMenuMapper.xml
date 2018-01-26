@@ -5,6 +5,10 @@
         <id column="sceneid" jdbcType="INTEGER" property="sceneid" />
         <id column="menuid" jdbcType="VARCHAR" property="menuid" />
     </resultMap>
+	
+	<sql id="column_list">
+        sceneid, menuid
+	</sql>
   
     <insert id="insert" parameterType="com.dl.server.entity.game.GameSceneMenu">
         insert into game_scene_menu (sceneid, menuid)
@@ -12,27 +16,27 @@
     </insert>
   
     <select id="selectAll" parameterType="com.dl.server.entity.game.GameSceneMenu" resultMap="BaseResultMap">
-        select sceneid, menuid
+        select <include refid="column_list" />
           from game_scene_menu
 		<where>
-			<if test="sceneid != null and sceneid != ''">
+			<if test="sceneid != null ">
 				and sceneid = #{sceneid, jdbcType=INTEGER}
 			</if>
-			<if test="menuid != null and menuid != ''">
+			<if test="menuid != null ">
 				and menuid = #{menuid, jdbcType=VARCHAR}
 			</if>
 		</where>
     </select>
 
-    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
-        select sceneid, menuid
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
           from game_scene_menu
-         where 1=1 and sceneid = #{arg0} and menuid = #{arg1}
+         where 1=1 and sceneid = #{0} and menuid = #{1}
     </select>
 
-    <delete id="deleteById" parameterType="map">
+    <delete id="deleteById">
         delete from game_scene_menu
-         where 1=1 and sceneid = #{arg0} and menuid = #{arg1}
+         where 1=1 and sceneid = #{0} and menuid = #{1}
     </delete>
   
 </mapper>

@@ -7,6 +7,10 @@
         <result column="icon" jdbcType="VARCHAR" property="icon" />
         <result column="url" jdbcType="VARCHAR" property="url" />
     </resultMap>
+	
+	<sql id="column_list">
+        menuid, menuname, icon, url
+	</sql>
   
     <insert id="insert" parameterType="com.dl.server.entity.game.GameMenuInfo">
         insert into game_menu_info (menuid, menuname, icon, url)
@@ -14,33 +18,33 @@
     </insert>
   
     <select id="selectAll" parameterType="com.dl.server.entity.game.GameMenuInfo" resultMap="BaseResultMap">
-        select menuid, menuname, icon, url
+        select <include refid="column_list" />
           from game_menu_info
 		<where>
-			<if test="menuid != null and menuid != ''">
+			<if test="menuid != null ">
 				and menuid = #{menuid, jdbcType=VARCHAR}
 			</if>
-			<if test="menuname != null and menuname != ''">
+			<if test="menuname != null ">
 				and menuname = #{menuname, jdbcType=VARCHAR}
 			</if>
-			<if test="icon != null and icon != ''">
+			<if test="icon != null ">
 				and icon = #{icon, jdbcType=VARCHAR}
 			</if>
-			<if test="url != null and url != ''">
+			<if test="url != null ">
 				and url = #{url, jdbcType=VARCHAR}
 			</if>
 		</where>
     </select>
 
-    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
-        select menuid, menuname, icon, url
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
           from game_menu_info
-         where 1=1 and menuid = #{arg0}
+         where 1=1 and menuid = #{0}
     </select>
 
-    <delete id="deleteById" parameterType="map">
+    <delete id="deleteById">
         delete from game_menu_info
-         where 1=1 and menuid = #{arg0}
+         where 1=1 and menuid = #{0}
     </delete>
   
     <update id="updateById" parameterType="com.dl.server.entity.game.GameMenuInfo">
@@ -50,4 +54,20 @@
                url = #{url, jdbcType=VARCHAR}
          where 1=1 and menuid = #{menuid, jdbcType=VARCHAR}
     </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.game.GameMenuInfo">
+		update game_menu_info
+		<set>
+		    <if test="menuname != null">
+				menuname = #{menuname, jdbcType=VARCHAR},
+		    </if>
+		    <if test="icon != null">
+				icon = #{icon, jdbcType=VARCHAR},
+		    </if>
+		    <if test="url != null">
+				url = #{url, jdbcType=VARCHAR},
+		    </if>
+		</set>
+		where 1=1 and menuid = #{menuid, jdbcType=VARCHAR}
+	</update>
 </mapper>

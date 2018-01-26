@@ -5,6 +5,10 @@
         <id column="equipid" jdbcType="VARCHAR" property="equipid" />
         <id column="skillid" jdbcType="VARCHAR" property="skillid" />
     </resultMap>
+	
+	<sql id="column_list">
+        equipid, skillid
+	</sql>
   
     <insert id="insert" parameterType="com.dl.server.entity.game.GameEquipSkill">
         insert into game_equip_skill (equipid, skillid)
@@ -12,27 +16,27 @@
     </insert>
   
     <select id="selectAll" parameterType="com.dl.server.entity.game.GameEquipSkill" resultMap="BaseResultMap">
-        select equipid, skillid
+        select <include refid="column_list" />
           from game_equip_skill
 		<where>
-			<if test="equipid != null and equipid != ''">
+			<if test="equipid != null ">
 				and equipid = #{equipid, jdbcType=VARCHAR}
 			</if>
-			<if test="skillid != null and skillid != ''">
+			<if test="skillid != null ">
 				and skillid = #{skillid, jdbcType=VARCHAR}
 			</if>
 		</where>
     </select>
 
-    <select id="selectById" parameterType="map" resultMap="BaseResultMap">
-        select equipid, skillid
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
           from game_equip_skill
-         where 1=1 and equipid = #{arg0} and skillid = #{arg1}
+         where 1=1 and equipid = #{0} and skillid = #{1}
     </select>
 
-    <delete id="deleteById" parameterType="map">
+    <delete id="deleteById">
         delete from game_equip_skill
-         where 1=1 and equipid = #{arg0} and skillid = #{arg1}
+         where 1=1 and equipid = #{0} and skillid = #{1}
     </delete>
   
 </mapper>

@@ -9,6 +9,9 @@ public class Table {
 	private String name;
 	private String code;
 	private String comment;
+	private String group;
+	private String originCode;
+	private String dbms;
 	
 	private List<Column> columns = new ArrayList<Column>();
     private List<Column> keys = new ArrayList<Column>();
@@ -47,7 +50,24 @@ public class Table {
 	public String getComment() {
 		return comment;
 	}
-	public void setComment(String comment) {
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    public String getOriginCode() {
+        return originCode;
+    }
+
+    public void setOriginCode(String originCode) {
+        this.originCode = originCode;
+    }
+
+    public void setComment(String comment) {
 		this.comment = comment;
 	}
 	public List<Column> getColumns() {
@@ -56,7 +76,15 @@ public class Table {
 	public void setColumns(List<Column> columns) {
 		this.columns = columns;
 	}
-	public List<Column> getKeys() {
+	public String getDbms() {
+        return dbms;
+    }
+
+    public void setDbms(String dbms) {
+        this.dbms = dbms;
+    }
+
+    public List<Column> getKeys() {
 		return keys;
 	}
 	public void setKeys(List<Column> keys) {

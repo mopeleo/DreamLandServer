@@ -19,7 +19,6 @@ import freemarker.template.TemplateException;
 
 public class CodeGenerator {
 
-    public static final String TABLE_SEPATATOR = "_";
     public static final String TEMPLATE_DIR = "template";
 
     private ResourceBundle rb = null;
@@ -142,21 +141,7 @@ public class CodeGenerator {
         params.put("tables", tables);
 
         for(Table table : tables){
-            String tableCode = table.getCode();
-            String entity = "";
-            String module = "";
-            if(tableCode.indexOf(TABLE_SEPATATOR) > 0){
-                String[] parts = tableCode.split(TABLE_SEPATATOR);
-                module = parts[0];
-                for(int i = 0; i< parts.length; i++){
-                    entity += parts[i].substring(0, 1).toUpperCase() + parts[i].substring(1);
-                }
-            }else{
-                entity = tableCode.substring(0, 1).toUpperCase() + tableCode.substring(1);
-            }
-            params.put("entity", entity);
-            params.put("table", table);
-            
+            params.put("table", table);            
             String[] types = getGenerateType().split(",");
             for(String type : types){
                 String template = getTemplate(type);
@@ -164,12 +149,12 @@ public class CodeGenerator {
                    continue; 
                 }
                 String pkg = getPackage(type);
-                if(!module.equals("")){
-                    pkg = pkg + "." + module;
+                if(table.getGroup() != null && !table.getGroup().equals("")){
+                    pkg = pkg + "." + table.getGroup();
                 }
                 params.put("package", pkg);
                 params.put(type + "_package", pkg);
-                outFile = getOutPath(getOutput(type), pkg, entity + getFilesuffix(type));
+                outFile = getOutPath(getOutput(type), pkg, table.getCode() + getFilesuffix(type));
                 generate(template, params, outFile);
             }            
             System.out.println("---------生成 ["+table.getName() + "(" + table.getCode() + ")] 代码结束----------");

@@ -5,17 +5,15 @@ import java.util.List;
 
 public interface SysCustDao{
 
-    //int dynamicUpdate(SysCust entity);
-    
-    //int updateWhere(SysCust entity);
-    
     int insert(SysCust entity);
 
-    List<SysCust> selectAll(SysCust entity);
+    List<SysCust> selectAll(SysCust where);
 
     SysCust selectById(Integer custno);
 
     int deleteById(Integer custno);
 
     int updateById(SysCust entity);
+	
+    int dynamicUpdateById(SysCust entity);
 }

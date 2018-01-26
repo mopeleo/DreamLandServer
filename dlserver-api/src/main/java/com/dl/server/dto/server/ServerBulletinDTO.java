@@ -59,4 +59,29 @@ public class ServerBulletinDTO extends BaseDTO {
 		this.issuer = issuer;
 	}
 
+
+	public void clear(){
+		this.serverid = null;
+		this.title = null;
+		this.content = null;
+		this.startdate = null;
+		this.enddate = null;
+		this.issuer = null;
+	}
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+		sb.append(", serverid=").append(serverid);
+		sb.append(", title=").append(title);
+		sb.append(", content=").append(content);
+		sb.append(", startdate=").append(startdate);
+		sb.append(", enddate=").append(enddate);
+		sb.append(", issuer=").append(issuer);
+        sb.append("]");
+        return sb.toString();
+	}
 }

@@ -1,15 +1,15 @@
 package ${package};
 
 import java.util.List;
-import ${package_entity}.${entity}DTO;
+import ${dto_package}.${table.code}DTO;
 
-public interface ${entity}Service{
+public interface ${table.code}Service{
 
-	public ResultDTO<${entity}DTO> query(${entity}DTO request);
+	public ResultDTO<${table.code}DTO> query(${table.code}DTO request);
 	
-	public ResultDTO<${entity}DTO> getById(String id);
+	public ResultDTO<${table.code}DTO> getById(String id);
 	
-    public ResultDTO<${entity}DTO> save(${entity}DTO dto);
+    public ResultDTO<${table.code}DTO> save(${table.code}DTO dto);
 
-	public ResultDTO<${entity}DTO> delete(String id);
+	public ResultDTO<${table.code}DTO> delete(String id);
 }

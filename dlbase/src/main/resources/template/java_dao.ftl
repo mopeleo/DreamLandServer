@@ -1,26 +1,24 @@
-<#macro type datatype precision><#if datatype?contains("A")>String<#elseif datatype=="INT">Integer<#elseif precision != "">Double<#else>Integer</#if></#macro>
+<#macro type datatype><#if datatype=="string">String<#elseif datatype=="int">Integer<#elseif datatype=="double">Double<#else>Long</#if></#macro>
 package ${package};
 
-import ${entity_package}.${entity};
+import ${entity_package}.${table.code};
 import java.util.List;
 
-public interface ${entity}Dao{
+public interface ${table.code}Dao{
 
-    //int dynamicUpdate(${entity} entity);
-    
-    //int updateWhere(${entity} entity);
-    
-    int insert(${entity} entity);
+    int insert(${table.code} entity);
 
-    List<${entity}> selectAll(${entity} where);
+    List<${table.code}> selectAll(${table.code} where);
 
 <#if (table.keys?size > 0)>
-    ${entity} selectById(<#list table.keys as column><@type datatype=column.datatype precision=column.precision /> ${column.code}<#if column_has_next>, </#if></#list>);
+    ${table.code} selectById(<#list table.keys as column><@type datatype=column.datatype /> ${column.code}<#if column_has_next>, </#if></#list>);
 
-    int deleteById(<#list table.keys as column><@type datatype=column.datatype precision=column.precision /> ${column.code}<#if column_has_next>, </#if></#list>);
+    int deleteById(<#list table.keys as column><@type datatype=column.datatype /> ${column.code}<#if column_has_next>, </#if></#list>);
 
 <#if (table.colsExceptKey?size > 0)>
-    int updateById(${entity} entity);
+    int updateById(${table.code} entity);
+	
+    int dynamicUpdateById(${table.code} entity);
 </#if>
 </#if>
 }

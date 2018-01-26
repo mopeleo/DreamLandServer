@@ -5,17 +5,15 @@ import java.util.List;
 
 public interface GameLevelInfoDao{
 
-    //int dynamicUpdate(GameLevelInfo entity);
-    
-    //int updateWhere(GameLevelInfo entity);
-    
     int insert(GameLevelInfo entity);
 
-    List<GameLevelInfo> selectAll(GameLevelInfo entity);
+    List<GameLevelInfo> selectAll(GameLevelInfo where);
 
     GameLevelInfo selectById(Integer levelid);
 
     int deleteById(Integer levelid);
 
     int updateById(GameLevelInfo entity);
+	
+    int dynamicUpdateById(GameLevelInfo entity);
 }

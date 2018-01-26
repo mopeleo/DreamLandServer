@@ -14,6 +14,7 @@ import org.dom4j.io.SAXReader;
 
 public class CDMParser {
 
+    private static final String CODE_SEP = "_";
 	private static final String ATTR_ID = "Id";
 	private static final String ATTR_REF = "Ref";
     private static final String ELEMENT_NAME = "Name";
@@ -22,11 +23,14 @@ public class CDMParser {
     private static final String ELEMENT_DATATYPE = "DataType";
     private static final String ELEMENT_LENGTH = "Length";
     private static final String ELEMENT_PRECISION = "Precision";
+    private static final String ELEMENT_DEFAULTVALUE = "DefaultValue";
     private static final String ELEMENT_COLUMNS = "Attributes";
     private static final String ELEMENT_DATAITEM = "DataItem";
     private static final String ELEMENT_IDENTIFIERS = "Identifiers";
+    private static final String ELEMENT_PRIMARYIDENTIFIER = "PrimaryIdentifier";
     private static final String ELEMENT_IDENTIFIER = "Identifier";
     private static final String ELEMENT_IDENTIFIER_ATTR = "Identifier.Attributes";
+    private static final String ELEMENT_ATTRIBUTE_MANDATORY = "BaseAttribute.Mandatory";
     private static final String ELEMENT_IDENTIFIER_ENTITY_ATTR = "EntityAttribute";
     private static final String NODE_ROOT = "//Model";
     private static final String NODE_TABLE = NODE_ROOT + "/o:RootObject/c:Children/o:Model/c:Entities/o:Entity";
@@ -56,7 +60,19 @@ public class CDMParser {
                 column.setName(elementName.getTextTrim());
 
                 Element elementCode = colItem.element(ELEMENT_CODE);
-                column.setCode(elementCode.getTextTrim().toLowerCase());
+                String origincode = elementCode.getTextTrim().toLowerCase();
+                column.setOriginCode(origincode);
+                String code = "";
+                if(origincode.indexOf(CODE_SEP) > 0){
+                    String[] parts = origincode.split(CODE_SEP);
+                    code = parts[0];
+                    for(int p = 1; p < parts.length; p++){
+                        code += parts[p].substring(0, 1).toUpperCase() + parts[p].substring(1);
+                    }
+                }else{
+                    code = origincode;
+                }
+                column.setCode(code);
 
                 Element elementCommont = colItem.element(ELEMENT_COMMENT);
                 if(elementCommont == null){
@@ -66,7 +82,9 @@ public class CDMParser {
                 }
 
                 Element elementDataType = colItem.element(ELEMENT_DATATYPE);
-                column.setDatatype(elementDataType.getTextTrim().toUpperCase());
+                String origintype = elementDataType.getTextTrim().toUpperCase();
+                column.setOriginDatatype(origintype);
+                column.setDatatype(DataType.convertType(origintype, DataType.SourceType.CDM));
 
                 Element elementLength = colItem.element(ELEMENT_LENGTH);
                 if(elementLength == null){
@@ -82,8 +100,12 @@ public class CDMParser {
                     column.setPrecision(elementPrecision.getTextTrim());
                 }
 
+                Element elementDefaultValue = colItem.element(ELEMENT_DEFAULTVALUE);
+                if(elementDefaultValue != null){
+                    column.setDefaultValue(elementDefaultValue.getTextTrim());
+                }
+                
                 colMap.put(column.getId(), column);
-//                System.out.println("col id : " + column.getId());
 			}
 			
 			//直接跳到o:Entity节点解析
@@ -103,7 +125,19 @@ public class CDMParser {
 				table.setName(elementName.getTextTrim());
 
 				Element elementCode = elementTable.element(ELEMENT_CODE);
-				table.setCode(elementCode.getTextTrim().toLowerCase());
+				String origincode = elementCode.getTextTrim().toLowerCase();
+				table.setOriginCode(origincode);
+                String code = "";
+                if(origincode.indexOf(CODE_SEP) > 0){
+                    String[] parts = origincode.split(CODE_SEP);
+                    table.setGroup(parts[0]);
+                    for(int p = 0; p < parts.length; p++){
+                        code += parts[p].substring(0, 1).toUpperCase() + parts[p].substring(1);
+                    }
+                }else{
+                    code = origincode;
+                }
+                table.setCode(code);
 
 				Element elementCommont = elementTable.element(ELEMENT_COMMENT);
 				if(elementCommont == null){
@@ -111,30 +145,48 @@ public class CDMParser {
 				}else{
 					table.setComment(elementCommont.getTextTrim());
 				}
-				
-				//解析主键节点
-                Element identifiersNode = elementTable.element(ELEMENT_IDENTIFIERS);
+                //解析主键节点
+                Element primaryIndentifierNode = elementTable.element(ELEMENT_PRIMARYIDENTIFIER);
                 List<String> keyList = new ArrayList<String>();
-                if(identifiersNode != null){
-                    List identifier = identifiersNode.elements(ELEMENT_IDENTIFIER);
-                    for(int j = 0; j < identifier.size(); j++){
-                        Element elementIdentifier = (Element)identifier.get(j);
-                        List idenAttributes = elementIdentifier.element(ELEMENT_IDENTIFIER_ATTR).elements(ELEMENT_IDENTIFIER_ENTITY_ATTR);
-                        for(int k = 0; k< idenAttributes.size(); k++){
-                            Element elementKey = (Element)idenAttributes.get(k);
-                            String keyRef = elementKey.attribute(ATTR_REF).getValue();
-                            keyList.add(keyRef);
+                if(primaryIndentifierNode != null){
+                    Element primaryKeyRef = primaryIndentifierNode.element(ELEMENT_IDENTIFIER);
+                    String refId = primaryKeyRef.attribute(ATTR_REF).getValue();
+                    
+                    //解析 Identifiers
+                    Element identifiersNode = elementTable.element(ELEMENT_IDENTIFIERS);
+                    if(identifiersNode != null){
+                        List identifier = identifiersNode.elements(ELEMENT_IDENTIFIER);
+                        for(int j = 0; j < identifier.size(); j++){
+                            Element elementIdentifier = (Element)identifier.get(j);
+                            String identifierId = elementIdentifier.attribute(ATTR_ID).getValue();
+                            if(!refId.equals(identifierId)){
+                                continue;
+                            }
+                            List idenAttributes = elementIdentifier.element(ELEMENT_IDENTIFIER_ATTR).elements(ELEMENT_IDENTIFIER_ENTITY_ATTR);
+                            for(int k = 0; k < idenAttributes.size(); k++){
+                                Element elementKey = (Element)idenAttributes.get(k);
+                                String keyRef = elementKey.attribute(ATTR_REF).getValue();
+                                keyList.add(keyRef);
+                            }
+                            break;
                         }
-                    }
-                }               
-				
-				//解析c:Columns节点
+                    }                    
+                }
+
+				//解析c:Attributes节点 ,即table的column
 				List columns = elementTable.element(ELEMENT_COLUMNS).elements();
 				for(int j = 0; j < columns.size(); j++){
 					Element elementColumn = (Element)columns.get(j);
 					String id = elementColumn.attribute(ATTR_ID).getValue();
 					String refId = elementColumn.element(ELEMENT_DATAITEM).element(ELEMENT_DATAITEM).attribute(ATTR_REF).getValue();
 					Column refCol = (Column)colMap.get(refId);
+                    Element mandatory = elementColumn.element(ELEMENT_ATTRIBUTE_MANDATORY);
+                    if(mandatory != null){
+                        String man = mandatory.getTextTrim();
+                        refCol.setMandatory(man);
+                    }else{
+                        refCol.setMandatory("0");
+                    }
 					if(colMap.containsKey(refId)){
 					    table.addColumn(refCol);
 					}
