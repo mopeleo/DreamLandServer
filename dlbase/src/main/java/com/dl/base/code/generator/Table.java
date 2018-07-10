@@ -11,7 +11,7 @@ public class Table {
 	private String comment;
 	private String group;
 	private String originCode;
-	private String dbms;
+	private String dbType;
 	
 	private List<Column> columns = new ArrayList<Column>();
     private List<Column> keys = new ArrayList<Column>();
@@ -76,12 +76,13 @@ public class Table {
 	public void setColumns(List<Column> columns) {
 		this.columns = columns;
 	}
-	public String getDbms() {
-        return dbms;
+
+    public String getDbType() {
+        return dbType;
     }
 
-    public void setDbms(String dbms) {
-        this.dbms = dbms;
+    public void setDbType(String dbType) {
+        this.dbType = dbType;
     }
 
     public List<Column> getKeys() {

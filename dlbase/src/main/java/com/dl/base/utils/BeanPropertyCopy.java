@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.dl.base.exception.DLUtilException;
+
 import net.sf.cglib.beans.BeanCopier;
 
 public class BeanPropertyCopy {
@@ -13,7 +15,7 @@ public class BeanPropertyCopy {
     
     private BeanPropertyCopy(){}
     
-    public static <S, T> BeanCopier getBeanCopier(Class<S> source, Class<T> target){
+    private static <S, T> BeanCopier getBeanCopier(Class<S> source, Class<T> target){
         String key = source.getName() + target.getName();
         BeanCopier copier = BEANCOPIER_CACHE.get(key);
         if(copier == null){
@@ -23,7 +25,10 @@ public class BeanPropertyCopy {
         return copier;
     }
     
-    public static <S, T> void copy(S source, T target) {
+    public static <S, T> void copy(final S source, final T target) {
+        if(source == null || target == null){
+            throw new DLUtilException("参数错误：参数为空");
+        }
         BeanCopier copier = getBeanCopier(source.getClass(), target.getClass());
         copier.copy(source, target, null);
     }
@@ -55,29 +60,5 @@ public class BeanPropertyCopy {
             result.add(t);
         }
         return result;
-    }
-
-    public static void main(String[] args) {
-        UserDTO dto = new UserDTO();
-        dto.setAction("login");
-        dto.setUsername("leo");
-        dto.setAge(23);
-        
-        UserEntity user1 = convert(dto, UserEntity.class);
-        System.out.println(user1);
-        
-        UserEntity user2 = new UserEntity();
-        user2.setUsername("test");
-        user2.setAge(26);
-        copy(dto, user2);
-        System.out.println(user2);
-        
-        List<UserEntity> entityList = new ArrayList<UserEntity>();
-        entityList.add(user2);
-        entityList.add(user1);
-        List<UserDTO> dtoList = convertList(entityList,UserDTO.class);
-        for(UserDTO d : dtoList){
-            System.out.println(d);
-        }
     }
 }

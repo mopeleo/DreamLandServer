@@ -48,20 +48,35 @@ public class CodeGenerator {
         return getConfig("generate_type").trim();
     }
 
+    public void addGlobalParam(Map paramMap){
+        if(paramMap == null){
+            return;
+        }
+        String constant = getConfig("constant").trim();
+        if(constant == null || "".equals(constant)){
+            return;
+        }
+        String[] paramArray = constant.split(",");
+        for(String param : paramArray){
+            String[] vals = param.split("\\|");
+            paramMap.put("param_" + vals[0], vals[1]);
+        }
+    }
+    
     public String getTemplate(String key){
-        return getConfig(key + "_template");
+        return getConfig(key + "_template").trim();
     }
     
     public String getPackage(String key){
-        return getConfig(key + "_package");
+        return getConfig(key + "_package").trim();
     }
     
     public String getOutput(String key){
-        return getConfig(key + "_output");
+        return getConfig(key + "_output").trim();
     }
     
     public String getFilesuffix(String key){
-        return getConfig(key + "_filesuffix");
+        return getConfig(key + "_filesuffix").trim();
     }
     
     public String getOutPath(String outDir, String pkgName, String fileName){
@@ -136,6 +151,7 @@ public class CodeGenerator {
         
         String outFile = null;
         Map params = new HashMap();
+        addGlobalParam(params);
 
         List<Table> tables = model.getTables();
         params.put("tables", tables);

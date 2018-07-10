@@ -34,6 +34,15 @@
 		</where>
     </select>
 
+	<insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="false">
+		insert all
+		<foreach item="item" index="index" collection="list">
+		into ${table.originCode?lower_case} (<#list table.columns as column>${column.originCode}<#if column_has_next>, </#if></#list>) 
+		values (<#list table.columns as column>#${r'{'}item.${column.code}, jdbcType=<@type datatype=column.datatype />}<#if column_has_next>, </#if></#list>)
+		</foreach>
+		select 1 from dual
+	</insert>
+	
 <#if (table.keys?size > 0)>
     <select id="selectById" resultMap="BaseResultMap">
         select <include refid="column_list" />
@@ -49,20 +58,20 @@
 	<#if (table.colsExceptKey?size > 0)>
     <update id="updateById" parameterType="${entity_package}.${table.code}">
         update ${table.originCode?lower_case} set 
-<#list table.colsExceptKey as column>
+		<#list table.colsExceptKey as column>
                ${column.originCode} = #${r'{'}${column.code}, jdbcType=<@type datatype=column.datatype />}<#if column_has_next>, </#if>
-</#list>
+		</#list>
          where 1=1<#list table.keys as column> and ${column.originCode} = #${r'{'}${column.code}, jdbcType=<@type datatype=column.datatype />}</#list>
     </update>
 
 	<update id="dynamicUpdateById" parameterType="${entity_package}.${table.code}">
 		update ${table.originCode?lower_case}
 		<set>
-<#list table.colsExceptKey as column>
+		<#list table.colsExceptKey as column>
 		    <if test="${column.code} != null">
 				${column.originCode} = #${r'{'}${column.code}, jdbcType=<@type datatype=column.datatype />},
 		    </if>
-</#list>
+		</#list>
 		</set>
 		where 1=1<#list table.keys as column> and ${column.originCode} = #${r'{'}${column.code}, jdbcType=<@type datatype=column.datatype />}</#list>
 	</update>

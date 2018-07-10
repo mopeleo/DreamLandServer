@@ -13,7 +13,6 @@ public class ExecJarGenerator extends CodeGenerator{
     public ExecJarGenerator(){
         prop = new Properties();
         try {
-//            System.out.println(System.getProperty("user.dir") + File.separator + "config.properties");
             InputStream in = new FileInputStream(new File(System.getProperty("user.dir") + File.separator + "config.properties"));
             prop.load(in);
         } catch (IOException e) {

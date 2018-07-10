@@ -13,6 +13,9 @@ import org.dom4j.io.SAXReader;
 public class PDMParser {
 
     private static final String CODE_SEP = "_";
+    private static final String DB_ORACLE = "ORACLE";
+    private static final String DB_MYSQL = "MYSQL";
+    
 	private static final String ATTR_ID = "Id";
 	private static final String ATTR_REF = "Ref";
     private static final String ELEMENT_NAME = "Name";
@@ -41,11 +44,11 @@ public class PDMParser {
 			Document document = saxReader.read(pdm);
 			//跳到c:DBMS解析数据库类型
 			Element shortcut = (Element)document.selectSingleNode(NODE_DBMS);
-			String dbms = shortcut.element(ELEMENT_CODE).getTextTrim().toUpperCase();
+			String dbType = shortcut.element(ELEMENT_CODE).getTextTrim().toUpperCase();
 			DataType.SourceType type = null;
-			if(dbms.startsWith("ORACLE")){
+			if(dbType.startsWith(DB_ORACLE)){
 			    type = DataType.SourceType.PDM_ORACLE;
-			}else if(dbms.startsWith("MYSQL")){
+			}else if(dbType.startsWith(DB_MYSQL)){
                 type = DataType.SourceType.PDM_MYSQL;
 			}
 			
@@ -57,7 +60,7 @@ public class PDMParser {
 
 			for(int i = 0; i < tables.size(); i++){
 				Table table = new Table();
-				table.setDbms(dbms);
+				table.setDbType(dbType);
 				Element elementTable=(Element)tables.get(i);
 				
 				Attribute attrId = elementTable.attribute(ATTR_ID);
