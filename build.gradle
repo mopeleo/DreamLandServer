@@ -29,11 +29,12 @@ subprojects {
   	//定义额外的jar包路径
     extLibs = new File(rootProject.rootDir, 'lib').getAbsolutePath()
     //常更新的jar包版本号
-    springVersion = '4.3.8.RELEASE'  
-    mybatisVersion='3.4.4'  
-    slf4jVersion='1.7.25'
+    springVersion = '4.3.8.RELEASE'
+    mybatisVersion='3.4.4'
+    slf4jVersion='1.7.5'
 	nettySocketioVersion='1.7.7'
     tomcatVersion = '8.0.48'
+	fastJsonVersion = '1.2.47'
   }
   
   repositories {
@@ -57,6 +58,7 @@ subprojects {
   // 通用依赖
   dependencies {
     compile(  
+        "com.alibaba:fastjson:$fastJsonVersion",
 //        "ch.qos.logback:logback-classic:1.1.3",
 //        "org.slf4j:jcl-over-slf4j:$slf4jVersion",  
 //        "org.slf4j:log4j-over-slf4j:$slf4jVersion",  
@@ -84,7 +86,7 @@ subprojects {
     options.fork = true  
     options.forkOptions.executable = 'java'  
     //jdt是eclipse的编译器  
-    options.forkOptions.jvmArgs = ['-cp','E:/eclipse/plugins/org.eclipse.jdt.core_3.11.2.v20160128-0629.jar','org.eclipse.jdt.internal.compiler.batch.Main']          
+    options.forkOptions.jvmArgs = ['-cp','E:/eclipse/plugins/org.eclipse.jdt.core_3.13.102.v20180330-0919.jar','org.eclipse.jdt.internal.compiler.batch.Main']          
   }
 	
   // 显示当前项目下所有用于 compile 的 jar.

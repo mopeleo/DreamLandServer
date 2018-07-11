@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     2017/12/6 22:00:21                           */
+/* Created on:     2018/7/9 23:06:06                            */
 /*==============================================================*/
 
 
@@ -61,17 +61,17 @@ drop table if exists sys_message;
 /*==============================================================*/
 create table game_actor_info
 (
-   actorid              varchar(16) not null comment '½ÇÉ«ID',
-   actorname            varchar(32) not null comment '½ÇÉ«Ãû³Æ',
-   aptitude             int not null default 0 comment '×ÊÖÊ',
-   attack               int not null default 0 comment '¹¥»÷Öµ',
-   defense              int not null default 0 comment 'Îï·ÀÖµ',
-   hp                   int not null default 0 comment 'ÉúÃüÖµ',
-   mp                   int not null default 0 comment 'Ä§·¨Öµ',
-   ep                   int not null default 0 comment 'ÄÜÁ¿Öµ',
-   initrank             int not null default 0 comment '³õÊ¼ĞÇ¼¶',
-   maxrank              int not null default 0 comment '×î´óĞÇ¼¶',
-   attr                 int not null default 0 comment 'ÊôĞÔ',
+   actorid              varchar(16) not null comment 'è§’è‰²ID',
+   actorname            varchar(32) not null comment 'è§’è‰²åç§°',
+   aptitude             int not null default 0 comment 'èµ„è´¨',
+   attack               int not null default 0 comment 'æ”»å‡»å€¼',
+   defense              int not null default 0 comment 'ç‰©é˜²å€¼',
+   hp                   int not null default 0 comment 'ç”Ÿå‘½å€¼',
+   mp                   int not null default 0 comment 'é­”æ³•å€¼',
+   ep                   int not null default 0 comment 'èƒ½é‡å€¼',
+   initrank             int not null default 0 comment 'åˆå§‹æ˜Ÿçº§',
+   maxrank              int not null default 0 comment 'æœ€å¤§æ˜Ÿçº§',
+   attr                 int not null default 0 comment 'å±æ€§',
    primary key (actorid)
 );
 
@@ -80,8 +80,8 @@ create table game_actor_info
 /*==============================================================*/
 create table game_actor_skill
 (
-   actorid              varchar(16) not null comment '½ÇÉ«ID',
-   skillid              varchar(16) not null comment '¼¼ÄÜID',
+   actorid              varchar(16) not null comment 'è§’è‰²ID',
+   skillid              varchar(16) not null comment 'æŠ€èƒ½ID',
    primary key (actorid, skillid)
 );
 
@@ -90,9 +90,9 @@ create table game_actor_skill
 /*==============================================================*/
 create table game_dict_index
 (
-   dictcode             int not null default 0 comment '×Öµä´úÂë',
-   dictname             varchar(32) not null comment '×ÖµäÃû³Æ',
-   dftitem              varchar(8) comment 'Ä¬ÈÏÖµ',
+   dictcode             int not null default 0 comment 'å­—å…¸ä»£ç ',
+   dictname             varchar(32) not null comment 'å­—å…¸åç§°',
+   dftitem              varchar(8) comment 'é»˜è®¤å€¼',
    primary key (dictcode)
 );
 
@@ -101,9 +101,9 @@ create table game_dict_index
 /*==============================================================*/
 create table game_dict_value
 (
-   dictcode             int not null default 0 comment '×Öµä´úÂë',
-   itemcode             varchar(8) not null comment 'Ñ¡Ïî´úÂë',
-   itemvalue            varchar(32) not null comment 'Ñ¡ÏîÖµ',
+   dictcode             int not null default 0 comment 'å­—å…¸ä»£ç ',
+   itemcode             varchar(8) not null comment 'é€‰é¡¹ä»£ç ',
+   itemvalue            varchar(32) not null comment 'é€‰é¡¹å€¼',
    primary key (dictcode, itemcode)
 );
 
@@ -112,12 +112,12 @@ create table game_dict_value
 /*==============================================================*/
 create table game_equip_info
 (
-   equipid              varchar(16) not null comment '×°±¸ID',
-   equipname            varchar(32) not null comment '×°±¸Ãû³Æ',
-   icon                 varchar(32) not null comment 'Í¼±ê',
-   remark               varchar(256) not null comment 'ÃèÊö',
-   position             char(1) not null default '0' comment '²¿Î»',
-   rank                 char(1) not null default '0' comment 'µÈ¼¶',
+   equipid              varchar(16) not null comment 'è£…å¤‡ID',
+   equipname            varchar(32) not null comment 'è£…å¤‡åç§°',
+   icon                 varchar(32) not null comment 'å›¾æ ‡',
+   remark               varchar(256) not null comment 'æè¿°',
+   position             char(1) not null default '0' comment 'éƒ¨ä½',
+   rank                 char(1) not null default '0' comment 'ç­‰çº§',
    primary key (equipid)
 );
 
@@ -136,12 +136,12 @@ create table game_equip_skill
 /*==============================================================*/
 create table game_item_info
 (
-   itemid               varchar(16) not null comment 'µÀ¾ßID',
-   itemname             varchar(32) not null comment 'µÀ¾ßÃû³Æ',
-   icon                 varchar(32) not null comment 'Í¼±ê',
-   remark               varchar(256) not null comment 'ÃèÊö',
-   type                 int not null default 0 comment 'µÀ¾ßÀàĞÍ',
-   rank                 char(1) not null default '0' comment 'µÈ¼¶',
+   itemid               varchar(16) not null comment 'é“å…·ID',
+   itemname             varchar(32) not null comment 'é“å…·åç§°',
+   icon                 varchar(32) not null comment 'å›¾æ ‡',
+   remark               varchar(256) not null comment 'æè¿°',
+   type                 int not null default 0 comment 'é“å…·ç±»å‹',
+   rank                 char(1) not null default '0' comment 'ç­‰çº§',
    primary key (itemid)
 );
 
@@ -182,15 +182,15 @@ create table game_promotion_info
    primary key (promid)
 );
 
-alter table game_promotion_info comment '´ÙÏú»î¶¯';
+alter table game_promotion_info comment 'ä¿ƒé”€æ´»åŠ¨';
 
 /*==============================================================*/
 /* Table: game_scene_info                                       */
 /*==============================================================*/
 create table game_scene_info
 (
-   sceneid              int not null default 0 comment '³¡¾°ID',
-   scenename            varchar(32) not null comment '³¡¾°Ãû³Æ',
+   sceneid              int not null default 0 comment 'åœºæ™¯ID',
+   scenename            varchar(32) not null comment 'åœºæ™¯åç§°',
    primary key (sceneid)
 );
 
@@ -209,14 +209,14 @@ create table game_scene_menu
 /*==============================================================*/
 create table game_server_info
 (
-   serverid             varchar(8) not null comment '·şÎñÆ÷ID',
-   servername           varchar(32) not null comment '·şÎñÆ÷Ãû³Æ',
-   sno                  int not null default 0 comment '¿ª·şĞòºÅ',
-   opendate             varchar(8) not null comment '¿ª·şÈÕÆÚ',
-   opentime             varchar(6) not null comment '¿ª·şÊ±¼ä',
-   maxplayer            int not null default 0 comment '×î´óÍæ¼ÒÊı',
-   regplayer            int not null default 0 comment '×¢²áÍæ¼ÒÊı',
-   onlineplayer         int not null default 0 comment 'ÔÚÏßÍæ¼ÒÊı',
+   serverid             varchar(8) not null comment 'æœåŠ¡å™¨ID',
+   servername           varchar(32) not null comment 'æœåŠ¡å™¨åç§°',
+   sno                  int not null default 0 comment 'å¼€æœåºå·',
+   opendate             varchar(8) not null comment 'å¼€æœæ—¥æœŸ',
+   opentime             varchar(6) not null comment 'å¼€æœæ—¶é—´',
+   maxplayer            int not null default 0 comment 'æœ€å¤§ç©å®¶æ•°',
+   regplayer            int not null default 0 comment 'æ³¨å†Œç©å®¶æ•°',
+   onlineplayer         int not null default 0 comment 'åœ¨çº¿ç©å®¶æ•°',
    primary key (serverid)
 );
 
@@ -225,11 +225,11 @@ create table game_server_info
 /*==============================================================*/
 create table game_skill_info
 (
-   skillid              varchar(16) not null comment '¼¼ÄÜID',
-   skillname            varchar(32) not null comment '¼¼ÄÜÃû³Æ',
-   icon                 varchar(32) not null comment '¼¼ÄÜÍ¼±ê',
-   remark               varchar(256) not null comment '¼¼ÄÜÃèÊö',
-   type                 char(1) not null default '0' comment '¼¼ÄÜÀàĞÍ£¨½ÇÉ«£¬×°±¸£©',
+   skillid              varchar(16) not null comment 'æŠ€èƒ½ID',
+   skillname            varchar(32) not null comment 'æŠ€èƒ½åç§°',
+   icon                 varchar(32) not null comment 'æŠ€èƒ½å›¾æ ‡',
+   remark               varchar(256) not null comment 'æŠ€èƒ½æè¿°',
+   type                 char(1) not null default '0' comment 'æŠ€èƒ½ç±»å‹ï¼ˆè§’è‰²ï¼Œè£…å¤‡ï¼‰',
    primary key (skillid)
 );
 
@@ -238,16 +238,16 @@ create table game_skill_info
 /*==============================================================*/
 create table server_bulletin
 (
-   serverid             varchar(8) not null comment '·şÎñÆ÷ID',
-   title                varchar(32) not null comment '¹«¸æ±êÌâ',
-   content              varchar(1024) not null comment '¹«¸æÄÚÈİ',
-   startdate            varchar(8) not null comment '¿ªÊ¼ÈÕÆÚ',
-   enddate              varchar(8) not null comment '½áÊøÈÕÆÚ',
-   issuer               varchar(32) not null comment '·¢²¼Õß',
+   serverid             varchar(8) not null comment 'æœåŠ¡å™¨ID',
+   title                varchar(32) not null comment 'å…¬å‘Šæ ‡é¢˜',
+   content              varchar(1024) not null comment 'å…¬å‘Šå†…å®¹',
+   startdate            varchar(8) not null comment 'å¼€å§‹æ—¥æœŸ',
+   enddate              varchar(8) not null comment 'ç»“æŸæ—¥æœŸ',
+   issuer               varchar(32) not null comment 'å‘å¸ƒè€…',
    primary key (title)
 );
 
-alter table server_bulletin comment '¹«¸æ°å';
+alter table server_bulletin comment 'å…¬å‘Šæ¿';
 
 /*==============================================================*/
 /* Table: server_league_info                                    */
@@ -262,17 +262,17 @@ create table server_league_info
    primary key (leagueid)
 );
 
-alter table server_league_info comment 'ÁªÃË';
+alter table server_league_info comment 'è”ç›Ÿ';
 
 /*==============================================================*/
 /* Table: server_player_actor                                   */
 /*==============================================================*/
 create table server_player_actor
 (
-   playerid             varchar(32) not null comment 'Íæ¼ÒID',
-   actorid              varchar(16) not null comment '½ÇÉ«ID',
-   rank                 int not null default 0 comment 'ĞÇ¼¶',
-   level                int not null default 0 comment 'µÈ¼¶',
+   playerid             varchar(32) not null comment 'ç©å®¶ID',
+   actorid              varchar(16) not null comment 'è§’è‰²ID',
+   rank                 int not null default 0 comment 'æ˜Ÿçº§',
+   level                int not null default 0 comment 'ç­‰çº§',
    primary key (playerid, actorid)
 );
 
@@ -281,9 +281,9 @@ create table server_player_actor
 /*==============================================================*/
 create table server_player_friend
 (
-   playerid             varchar(32) not null comment 'Íæ¼ÒID',
-   friendlist           varchar(2048) not null comment 'ºÃÓÑÁĞ±í¶ººÅ·Ö¸ô',
-   friendnum            int not null default 0 comment 'ºÃÓÑÊıÁ¿£¬ÉÏÏŞ60',
+   playerid             varchar(32) not null comment 'ç©å®¶ID',
+   friendlist           varchar(2048) not null comment 'å¥½å‹åˆ—è¡¨é€—å·åˆ†éš”',
+   friendnum            int not null default 0 comment 'å¥½å‹æ•°é‡ï¼Œä¸Šé™60',
    primary key (playerid)
 );
 
@@ -292,7 +292,7 @@ create table server_player_friend
 /*==============================================================*/
 create table server_player_info
 (
-   playerid             varchar(32) not null comment 'Íæ¼ÒID£¬serverid+custno',
+   playerid             varchar(32) not null comment 'ç©å®¶IDï¼Œserverid+custno',
    serverid             varchar(8) not null,
    custno               int not null,
    playernick           varchar(32) not null,
@@ -327,41 +327,41 @@ create table server_promotion
    primary key (serverid, promid)
 );
 
-alter table server_promotion comment '·şÎñÆ÷»î¶¯';
+alter table server_promotion comment 'æœåŠ¡å™¨æ´»åŠ¨';
 
 /*==============================================================*/
 /* Table: sys_article                                           */
 /*==============================================================*/
 create table sys_article
 (
-   artid                int not null default 0 comment 'ÎÄÕÂID',
-   title                varchar(32) not null comment '±êÌâ',
-   author               int not null comment '×÷Õß',
-   content              varchar(2048) not null comment 'ÄÚÈİ',
-   pubflag              char(1) not null default '0' comment '·¢±í±êÖ¾',
-   pubdate              varchar(8) comment '·¢±íÈÕÆÚ',
-   pubtime              varchar(6) comment '·¢±íÊ±¼ä',
-   lastreplydate        varchar(8) comment '×îĞÂ»Ø¸´ÈÕÆÚ',
-   lastreplytime        varchar(6) comment '×îĞÂ»Ø¸´Ê±¼ä',
-   readtimes            int not null default 0 comment 'ÔÄ¶Á´ÎÊı',
-   replytimes           int not null default 0 comment '»Ø¸´´ÎÊı',
-   topflag              char(1) not null default '0' comment 'ÖÃ¶¥±êÖ¾',
-   checkflag            char(1) not null default '0' comment '¸´ºË±êÖ¾',
-   checker              int not null comment '¸´ºËÈË',
-   closeflag            char(1) not null default '0' comment '¹Ø±Õ±êÖ¾',
-   closer               int not null comment '¹Ø±ÕÈË',
+   artid                numeric not null default 0 comment 'æ–‡ç« ID',
+   title                varchar(32) not null comment 'æ ‡é¢˜',
+   author               int not null comment 'ä½œè€…',
+   content              varchar(2048) not null comment 'å†…å®¹',
+   pubflag              char(1) not null default '0' comment 'å‘è¡¨æ ‡å¿—',
+   pubdate              varchar(8) comment 'å‘è¡¨æ—¥æœŸ',
+   pubtime              varchar(6) comment 'å‘è¡¨æ—¶é—´',
+   lastreplydate        varchar(8) comment 'æœ€æ–°å›å¤æ—¥æœŸ',
+   lastreplytime        varchar(6) comment 'æœ€æ–°å›å¤æ—¶é—´',
+   readtimes            decimal not null default 0 comment 'é˜…è¯»æ¬¡æ•°',
+   replytimes           int not null default 0 comment 'å›å¤æ¬¡æ•°',
+   topflag              char(1) not null default '0' comment 'ç½®é¡¶æ ‡å¿—',
+   checkflag            char(1) not null default '0' comment 'å¤æ ¸æ ‡å¿—',
+   checker              int not null comment 'å¤æ ¸äºº',
+   closeflag            char(1) not null default '0' comment 'å…³é—­æ ‡å¿—',
+   closer               int not null comment 'å…³é—­äºº',
    primary key (artid)
 );
 
-alter table sys_article comment 'ÂÛÌ³Ìû×Ó';
+alter table sys_article comment 'è®ºå›å¸–å­';
 
 /*==============================================================*/
 /* Table: sys_article_reply                                     */
 /*==============================================================*/
 create table sys_article_reply
 (
-   artid                int not null default 0,
-   replyid              int not null,
+   artid                numeric not null default 0,
+   replyid              numeric not null default 0,
    content              varchar(1024) not null,
    replyer              int not null,
    replydate            varchar(8) not null,
@@ -369,24 +369,24 @@ create table sys_article_reply
    primary key (artid, replyid)
 );
 
-alter table sys_article_reply comment 'Ìû×Ó»Ø¸´';
+alter table sys_article_reply comment 'å¸–å­å›å¤';
 
 /*==============================================================*/
 /* Table: sys_cust                                              */
 /*==============================================================*/
 create table sys_cust
 (
-   custno               int not null comment '¿Í»§ºÅ£¬×Ô¶¯Éú³É',
-   loginid              varchar(32) not null comment 'µÇÂ¼ID',
-   loginpwd             char(32) not null comment 'µÇÂ¼ÃÜÂë',
-   nickname             varchar(32) not null comment 'ÓÃ»§êÇ³Æ',
-   idtype               char(1) not null default '0' comment 'Ö¤¼şÀàĞÍ',
-   idcode               varchar(32) comment 'Ö¤¼şºÅÂë',
-   idname               varchar(32) comment 'Ö¤¼şĞÕÃû',
-   birthday             varchar(8) comment '³öÉúÈÕÆÚ',
-   email                varchar(64) comment 'µç×ÓÓÊ¼ş',
-   mobile               varchar(16) not null comment 'ÊÖ»úºÅÂë',
-   regdate              varchar(8) comment '×¢²áÈÕÆÚ',
+   custno               int not null comment 'å®¢æˆ·å·ï¼Œè‡ªåŠ¨ç”Ÿæˆ',
+   loginid              varchar(32) not null comment 'ç™»å½•ID',
+   loginpwd             char(32) not null comment 'ç™»å½•å¯†ç ',
+   nickname             varchar(32) not null comment 'ç”¨æˆ·æ˜µç§°',
+   idtype               char(1) not null default '0' comment 'è¯ä»¶ç±»å‹',
+   idcode               varchar(32) comment 'è¯ä»¶å·ç ',
+   idname               varchar(32) comment 'è¯ä»¶å§“å',
+   birthday             varchar(8) comment 'å‡ºç”Ÿæ—¥æœŸ',
+   email                varchar(64) comment 'ç”µå­é‚®ä»¶',
+   mobile               varchar(16) not null comment 'æ‰‹æœºå·ç ',
+   regdate              varchar(8) comment 'æ³¨å†Œæ—¥æœŸ',
    primary key (custno)
 );
 
@@ -395,9 +395,9 @@ create table sys_cust
 /*==============================================================*/
 create table sys_cust_message
 (
-   custno               int not null comment '¿Í»§ºÅ',
-   msgid                int not null default 0 comment 'ÏûÏ¢ID',
-   isread               char(1) not null default '0' comment 'ÒÑ¶Á±êÖ¾',
+   custno               int not null comment 'å®¢æˆ·å·',
+   msgid                numeric not null default 0 comment 'æ¶ˆæ¯ID',
+   isread               char(1) not null default '0' comment 'å·²è¯»æ ‡å¿—',
    primary key (custno, msgid)
 );
 
@@ -406,11 +406,11 @@ create table sys_cust_message
 /*==============================================================*/
 create table sys_message
 (
-   msgid                int not null default 0 comment 'ÏûÏ¢ID',
-   content              varchar(1024) not null comment 'ÏûÏ¢ÄÚÈİ',
-   author               int not null default 0 comment '×÷Õß',
-   senddate             varchar(8) comment '·¢ËÍÈÕÆÚ',
-   sendtime             varchar(6) comment '·¢ËÍÊ±¼ä',
+   msgid                numeric not null default 0 comment 'æ¶ˆæ¯ID',
+   content              varchar(1024) not null comment 'æ¶ˆæ¯å†…å®¹',
+   author               numeric not null default 0 comment 'ä½œè€…',
+   senddate             varchar(8) comment 'å‘é€æ—¥æœŸ',
+   sendtime             varchar(6) comment 'å‘é€æ—¶é—´',
    primary key (msgid)
 );
 
