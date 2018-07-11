@@ -56,6 +56,7 @@ public class CodeGenerator {
         if(constant == null || "".equals(constant)){
             return;
         }
+        //默认分隔符 param1|val1,param2|val2
         String[] paramArray = constant.split(",");
         for(String param : paramArray){
             String[] vals = param.split("\\|");
