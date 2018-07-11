@@ -37,11 +37,6 @@ subprojects {
 	fastJsonVersion = '1.2.47'
   }
   
-  repositories {
-  	mavenLocal()
-    mavenCentral()
-  }
-
   jar {
     manifest {
       attributes("Implementation-Title": "Gradle")
