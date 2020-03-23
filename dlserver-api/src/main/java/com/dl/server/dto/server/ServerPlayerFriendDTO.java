@@ -4,16 +4,25 @@ import com.dl.server.dto.BaseDTO;
 
 public class ServerPlayerFriendDTO extends BaseDTO {
 
-	private String playerid;    //玩家ID
+	private String serverid;    //serverid
+	private Long custno;    //custno
 	private String friendlist;    //好友列表逗号分隔
 	private Integer friendnum;    //好友数量，上限60
 
-	public String getPlayerid() {
-		return this.playerid;
+	public String getServerid() {
+		return this.serverid;
 	}
 
-	public void setPlayerid(String playerid) {
-		this.playerid = playerid;
+	public void setServerid(String serverid) {
+		this.serverid = serverid;
+	}
+
+	public Long getCustno() {
+		return this.custno;
+	}
+
+	public void setCustno(Long custno) {
+		this.custno = custno;
 	}
 
 	public String getFriendlist() {
@@ -34,7 +43,8 @@ public class ServerPlayerFriendDTO extends BaseDTO {
 
 
 	public void clear(){
-		this.playerid = null;
+		this.serverid = null;
+		this.custno = null;
 		this.friendlist = null;
 		this.friendnum = null;
 	}
@@ -45,7 +55,8 @@ public class ServerPlayerFriendDTO extends BaseDTO {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-		sb.append(", playerid=").append(playerid);
+		sb.append(", serverid=").append(serverid);
+		sb.append(", custno=").append(custno);
 		sb.append(", friendlist=").append(friendlist);
 		sb.append(", friendnum=").append(friendnum);
         sb.append("]");

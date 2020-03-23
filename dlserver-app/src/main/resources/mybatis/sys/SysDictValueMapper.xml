@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.sys.SysDictValueDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.sys.SysDictValue">
+        <id column="dictcode" jdbcType="INTEGER" property="dictcode" />
+        <id column="itemcode" jdbcType="VARCHAR" property="itemcode" />
+        <result column="itemvalue" jdbcType="VARCHAR" property="itemvalue" />
+    </resultMap>
+	
+	<sql id="column_list">
+        dictcode, itemcode, itemvalue
+	</sql>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.sys.SysDictValue">
+        insert into sys_dict_value (dictcode, itemcode, itemvalue)
+        values (#{dictcode, jdbcType=INTEGER}, #{itemcode, jdbcType=VARCHAR}, #{itemvalue, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.sys.SysDictValue" resultMap="BaseResultMap">
+        select <include refid="column_list" />
+          from sys_dict_value
+		<where>
+			<if test="dictcode != null ">
+				and dictcode = #{dictcode, jdbcType=INTEGER}
+			</if>
+			<if test="itemcode != null ">
+				and itemcode = #{itemcode, jdbcType=VARCHAR}
+			</if>
+			<if test="itemvalue != null ">
+				and itemvalue = #{itemvalue, jdbcType=VARCHAR}
+			</if>
+		</where>
+    </select>
+
+	<insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="false">
+		insert all
+		<foreach item="item" index="index" collection="list">
+		into sys_dict_value (dictcode, itemcode, itemvalue) 
+		values (#{item.dictcode, jdbcType=INTEGER}, #{item.itemcode, jdbcType=VARCHAR}, #{item.itemvalue, jdbcType=VARCHAR})
+		</foreach>
+		select 1 from dual
+	</insert>
+	
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
+          from sys_dict_value
+         where 1=1 and dictcode = #{0} and itemcode = #{1}
+    </select>
+
+    <delete id="deleteById">
+        delete from sys_dict_value
+         where 1=1 and dictcode = #{0} and itemcode = #{1}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.sys.SysDictValue">
+        update sys_dict_value set 
+               itemvalue = #{itemvalue, jdbcType=VARCHAR}
+         where 1=1 and dictcode = #{dictcode, jdbcType=INTEGER} and itemcode = #{itemcode, jdbcType=VARCHAR}
+    </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.sys.SysDictValue">
+		update sys_dict_value
+		<set>
+		    <if test="itemvalue != null">
+				itemvalue = #{itemvalue, jdbcType=VARCHAR},
+		    </if>
+		</set>
+		where 1=1 and dictcode = #{dictcode, jdbcType=INTEGER} and itemcode = #{itemcode, jdbcType=VARCHAR}
+	</update>
+</mapper>

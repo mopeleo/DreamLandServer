@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.cust.CustInfoExtDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.cust.CustInfoExt">
+        <result column="custno" jdbcType="DECIMAL" property="custno" />
+        <result column="birthday" jdbcType="VARCHAR" property="birthday" />
+        <result column="province" jdbcType="VARCHAR" property="province" />
+        <result column="city" jdbcType="VARCHAR" property="city" />
+        <result column="address" jdbcType="VARCHAR" property="address" />
+        <result column="profession" jdbcType="VARCHAR" property="profession" />
+    </resultMap>
+	
+	<sql id="column_list">
+        custno, birthday, province, city, address, profession
+	</sql>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.cust.CustInfoExt">
+        insert into cust_info_ext (custno, birthday, province, city, address, profession)
+        values (#{custno, jdbcType=DECIMAL}, #{birthday, jdbcType=VARCHAR}, #{province, jdbcType=VARCHAR}, #{city, jdbcType=VARCHAR}, #{address, jdbcType=VARCHAR}, #{profession, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.cust.CustInfoExt" resultMap="BaseResultMap">
+        select <include refid="column_list" />
+          from cust_info_ext
+		<where>
+			<if test="custno != null ">
+				and custno = #{custno, jdbcType=DECIMAL}
+			</if>
+			<if test="birthday != null ">
+				and birthday = #{birthday, jdbcType=VARCHAR}
+			</if>
+			<if test="province != null ">
+				and province = #{province, jdbcType=VARCHAR}
+			</if>
+			<if test="city != null ">
+				and city = #{city, jdbcType=VARCHAR}
+			</if>
+			<if test="address != null ">
+				and address = #{address, jdbcType=VARCHAR}
+			</if>
+			<if test="profession != null ">
+				and profession = #{profession, jdbcType=VARCHAR}
+			</if>
+		</where>
+    </select>
+
+	<insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="false">
+		insert all
+		<foreach item="item" index="index" collection="list">
+		into cust_info_ext (custno, birthday, province, city, address, profession) 
+		values (#{item.custno, jdbcType=DECIMAL}, #{item.birthday, jdbcType=VARCHAR}, #{item.province, jdbcType=VARCHAR}, #{item.city, jdbcType=VARCHAR}, #{item.address, jdbcType=VARCHAR}, #{item.profession, jdbcType=VARCHAR})
+		</foreach>
+		select 1 from dual
+	</insert>
+	
+</mapper>

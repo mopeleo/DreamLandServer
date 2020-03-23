@@ -4,21 +4,14 @@ import com.dl.server.entity.DLEntity;
 
 public class ServerPlayerInfo extends DLEntity{
 
-	private String playerid;    //玩家ID，serverid+custno
 	private String serverid;    //serverid
-	private Integer custno;    //custno
-	private String playernick;    //playernick
+	private Long custno;    //custno
+	private String nickname;    //nickname
 	private String logindate;    //logindate
 	private String logintime;    //logintime
-	private Integer level;    //level
-
-	public String getPlayerid() {
-		return this.playerid;
-	}
-
-	public void setPlayerid(String playerid) {
-		this.playerid = playerid;
-	}
+	private Integer playerlevel;    //玩家等级
+	private Integer viplevel;    //会员等级
+	private Integer crystal;    //水晶数量，游戏货币
 
 	public String getServerid() {
 		return this.serverid;
@@ -28,20 +21,20 @@ public class ServerPlayerInfo extends DLEntity{
 		this.serverid = serverid;
 	}
 
-	public Integer getCustno() {
+	public Long getCustno() {
 		return this.custno;
 	}
 
-	public void setCustno(Integer custno) {
+	public void setCustno(Long custno) {
 		this.custno = custno;
 	}
 
-	public String getPlayernick() {
-		return this.playernick;
+	public String getNickname() {
+		return this.nickname;
 	}
 
-	public void setPlayernick(String playernick) {
-		this.playernick = playernick;
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 
 	public String getLogindate() {
@@ -60,12 +53,28 @@ public class ServerPlayerInfo extends DLEntity{
 		this.logintime = logintime;
 	}
 
-	public Integer getLevel() {
-		return this.level;
+	public Integer getPlayerlevel() {
+		return this.playerlevel;
 	}
 
-	public void setLevel(Integer level) {
-		this.level = level;
+	public void setPlayerlevel(Integer playerlevel) {
+		this.playerlevel = playerlevel;
+	}
+
+	public Integer getViplevel() {
+		return this.viplevel;
+	}
+
+	public void setViplevel(Integer viplevel) {
+		this.viplevel = viplevel;
+	}
+
+	public Integer getCrystal() {
+		return this.crystal;
+	}
+
+	public void setCrystal(Integer crystal) {
+		this.crystal = crystal;
 	}
 
     public boolean existId(){
@@ -74,22 +83,23 @@ public class ServerPlayerInfo extends DLEntity{
     
 	public String getEntityKey(){
 		StringBuilder build = new StringBuilder("ServerPlayerInfo");
-		return build.append(this.playerid).toString();
+		return build.append(this.serverid).append(this.custno).toString();
 	}
 
-    public static String buildEntityKey(String playerid){
+    public static String buildEntityKey(String serverid, Long custno){
         StringBuilder build = new StringBuilder("ServerPlayerInfo");
-        return build.append(playerid).toString();
+        return build.append(serverid).append(custno).toString();
     }
 	
 	public void clear(){
-		this.playerid = null;
 		this.serverid = null;
 		this.custno = null;
-		this.playernick = null;
+		this.nickname = null;
 		this.logindate = null;
 		this.logintime = null;
-		this.level = null;
+		this.playerlevel = null;
+		this.viplevel = null;
+		this.crystal = null;
 	}
 
 	@Override
@@ -98,13 +108,14 @@ public class ServerPlayerInfo extends DLEntity{
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-		sb.append(", playerid=").append(playerid);
 		sb.append(", serverid=").append(serverid);
 		sb.append(", custno=").append(custno);
-		sb.append(", playernick=").append(playernick);
+		sb.append(", nickname=").append(nickname);
 		sb.append(", logindate=").append(logindate);
 		sb.append(", logintime=").append(logintime);
-		sb.append(", level=").append(level);
+		sb.append(", playerlevel=").append(playerlevel);
+		sb.append(", viplevel=").append(viplevel);
+		sb.append(", crystal=").append(crystal);
         sb.append("]");
         return sb.toString();
 	}

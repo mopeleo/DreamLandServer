@@ -9,9 +9,9 @@ public interface ServerPlayerFriendDao{
 
     List<ServerPlayerFriend> selectAll(ServerPlayerFriend where);
 
-    ServerPlayerFriend selectById(String playerid);
+    ServerPlayerFriend selectById(String serverid, Long custno);
 
-    int deleteById(String playerid);
+    int deleteById(String serverid, Long custno);
 
     int updateById(ServerPlayerFriend entity);
 	

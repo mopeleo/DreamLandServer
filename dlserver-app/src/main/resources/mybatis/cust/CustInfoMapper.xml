@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.cust.CustInfoDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.cust.CustInfo">
+        <id column="custno" jdbcType="DECIMAL" property="custno" />
+        <result column="loginpwd" jdbcType="VARCHAR" property="loginpwd" />
+        <result column="salt" jdbcType="VARCHAR" property="salt" />
+        <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+        <result column="status" jdbcType="VARCHAR" property="status" />
+        <result column="level" jdbcType="VARCHAR" property="level" />
+        <result column="idtype" jdbcType="VARCHAR" property="idtype" />
+        <result column="idcode" jdbcType="VARCHAR" property="idcode" />
+        <result column="idname" jdbcType="VARCHAR" property="idname" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+        <result column="regdate" jdbcType="VARCHAR" property="regdate" />
+        <result column="lastlogindate" jdbcType="VARCHAR" property="lastlogindate" />
+        <result column="lastlogintime" jdbcType="VARCHAR" property="lastlogintime" />
+    </resultMap>
+	
+	<sql id="column_list">
+        custno, loginpwd, salt, nickname, status, level, idtype, idcode, idname, email, mobile, regdate, lastlogindate, lastlogintime
+	</sql>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.cust.CustInfo">
+        insert into cust_info (custno, loginpwd, salt, nickname, status, level, idtype, idcode, idname, email, mobile, regdate, lastlogindate, lastlogintime)
+        values (#{custno, jdbcType=DECIMAL}, #{loginpwd, jdbcType=VARCHAR}, #{salt, jdbcType=VARCHAR}, #{nickname, jdbcType=VARCHAR}, #{status, jdbcType=VARCHAR}, #{level, jdbcType=VARCHAR}, #{idtype, jdbcType=VARCHAR}, #{idcode, jdbcType=VARCHAR}, #{idname, jdbcType=VARCHAR}, #{email, jdbcType=VARCHAR}, #{mobile, jdbcType=VARCHAR}, #{regdate, jdbcType=VARCHAR}, #{lastlogindate, jdbcType=VARCHAR}, #{lastlogintime, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.cust.CustInfo" resultMap="BaseResultMap">
+        select <include refid="column_list" />
+          from cust_info
+		<where>
+			<if test="custno != null ">
+				and custno = #{custno, jdbcType=DECIMAL}
+			</if>
+			<if test="loginpwd != null ">
+				and loginpwd = #{loginpwd, jdbcType=VARCHAR}
+			</if>
+			<if test="salt != null ">
+				and salt = #{salt, jdbcType=VARCHAR}
+			</if>
+			<if test="nickname != null ">
+				and nickname = #{nickname, jdbcType=VARCHAR}
+			</if>
+			<if test="status != null ">
+				and status = #{status, jdbcType=VARCHAR}
+			</if>
+			<if test="level != null ">
+				and level = #{level, jdbcType=VARCHAR}
+			</if>
+			<if test="idtype != null ">
+				and idtype = #{idtype, jdbcType=VARCHAR}
+			</if>
+			<if test="idcode != null ">
+				and idcode = #{idcode, jdbcType=VARCHAR}
+			</if>
+			<if test="idname != null ">
+				and idname = #{idname, jdbcType=VARCHAR}
+			</if>
+			<if test="email != null ">
+				and email = #{email, jdbcType=VARCHAR}
+			</if>
+			<if test="mobile != null ">
+				and mobile = #{mobile, jdbcType=VARCHAR}
+			</if>
+			<if test="regdate != null ">
+				and regdate = #{regdate, jdbcType=VARCHAR}
+			</if>
+			<if test="lastlogindate != null ">
+				and lastlogindate = #{lastlogindate, jdbcType=VARCHAR}
+			</if>
+			<if test="lastlogintime != null ">
+				and lastlogintime = #{lastlogintime, jdbcType=VARCHAR}
+			</if>
+		</where>
+    </select>
+
+	<insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="false">
+		insert all
+		<foreach item="item" index="index" collection="list">
+		into cust_info (custno, loginpwd, salt, nickname, status, level, idtype, idcode, idname, email, mobile, regdate, lastlogindate, lastlogintime) 
+		values (#{item.custno, jdbcType=DECIMAL}, #{item.loginpwd, jdbcType=VARCHAR}, #{item.salt, jdbcType=VARCHAR}, #{item.nickname, jdbcType=VARCHAR}, #{item.status, jdbcType=VARCHAR}, #{item.level, jdbcType=VARCHAR}, #{item.idtype, jdbcType=VARCHAR}, #{item.idcode, jdbcType=VARCHAR}, #{item.idname, jdbcType=VARCHAR}, #{item.email, jdbcType=VARCHAR}, #{item.mobile, jdbcType=VARCHAR}, #{item.regdate, jdbcType=VARCHAR}, #{item.lastlogindate, jdbcType=VARCHAR}, #{item.lastlogintime, jdbcType=VARCHAR})
+		</foreach>
+		select 1 from dual
+	</insert>
+	
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
+          from cust_info
+         where 1=1 and custno = #{0}
+    </select>
+
+    <delete id="deleteById">
+        delete from cust_info
+         where 1=1 and custno = #{0}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.cust.CustInfo">
+        update cust_info set 
+               loginpwd = #{loginpwd, jdbcType=VARCHAR}, 
+               salt = #{salt, jdbcType=VARCHAR}, 
+               nickname = #{nickname, jdbcType=VARCHAR}, 
+               status = #{status, jdbcType=VARCHAR}, 
+               level = #{level, jdbcType=VARCHAR}, 
+               idtype = #{idtype, jdbcType=VARCHAR}, 
+               idcode = #{idcode, jdbcType=VARCHAR}, 
+               idname = #{idname, jdbcType=VARCHAR}, 
+               email = #{email, jdbcType=VARCHAR}, 
+               mobile = #{mobile, jdbcType=VARCHAR}, 
+               regdate = #{regdate, jdbcType=VARCHAR}, 
+               lastlogindate = #{lastlogindate, jdbcType=VARCHAR}, 
+               lastlogintime = #{lastlogintime, jdbcType=VARCHAR}
+         where 1=1 and custno = #{custno, jdbcType=DECIMAL}
+    </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.cust.CustInfo">
+		update cust_info
+		<set>
+		    <if test="loginpwd != null">
+				loginpwd = #{loginpwd, jdbcType=VARCHAR},
+		    </if>
+		    <if test="salt != null">
+				salt = #{salt, jdbcType=VARCHAR},
+		    </if>
+		    <if test="nickname != null">
+				nickname = #{nickname, jdbcType=VARCHAR},
+		    </if>
+		    <if test="status != null">
+				status = #{status, jdbcType=VARCHAR},
+		    </if>
+		    <if test="level != null">
+				level = #{level, jdbcType=VARCHAR},
+		    </if>
+		    <if test="idtype != null">
+				idtype = #{idtype, jdbcType=VARCHAR},
+		    </if>
+		    <if test="idcode != null">
+				idcode = #{idcode, jdbcType=VARCHAR},
+		    </if>
+		    <if test="idname != null">
+				idname = #{idname, jdbcType=VARCHAR},
+		    </if>
+		    <if test="email != null">
+				email = #{email, jdbcType=VARCHAR},
+		    </if>
+		    <if test="mobile != null">
+				mobile = #{mobile, jdbcType=VARCHAR},
+		    </if>
+		    <if test="regdate != null">
+				regdate = #{regdate, jdbcType=VARCHAR},
+		    </if>
+		    <if test="lastlogindate != null">
+				lastlogindate = #{lastlogindate, jdbcType=VARCHAR},
+		    </if>
+		    <if test="lastlogintime != null">
+				lastlogintime = #{lastlogintime, jdbcType=VARCHAR},
+		    </if>
+		</set>
+		where 1=1 and custno = #{custno, jdbcType=DECIMAL}
+	</update>
+</mapper>

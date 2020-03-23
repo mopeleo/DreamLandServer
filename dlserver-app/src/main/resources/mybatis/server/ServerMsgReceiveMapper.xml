@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.server.ServerMsgReceiveDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.server.ServerMsgReceive">
+        <id column="msgid" jdbcType="DECIMAL" property="msgid" />
+        <id column="serverid" jdbcType="VARCHAR" property="serverid" />
+        <result column="custno" jdbcType="DECIMAL" property="custno" />
+        <result column="isread" jdbcType="VARCHAR" property="isread" />
+    </resultMap>
+	
+	<sql id="column_list">
+        msgid, serverid, custno, isread
+	</sql>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.server.ServerMsgReceive">
+        insert into server_msg_receive (msgid, serverid, custno, isread)
+        values (#{msgid, jdbcType=DECIMAL}, #{serverid, jdbcType=VARCHAR}, #{custno, jdbcType=DECIMAL}, #{isread, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.server.ServerMsgReceive" resultMap="BaseResultMap">
+        select <include refid="column_list" />
+          from server_msg_receive
+		<where>
+			<if test="msgid != null ">
+				and msgid = #{msgid, jdbcType=DECIMAL}
+			</if>
+			<if test="serverid != null ">
+				and serverid = #{serverid, jdbcType=VARCHAR}
+			</if>
+			<if test="custno != null ">
+				and custno = #{custno, jdbcType=DECIMAL}
+			</if>
+			<if test="isread != null ">
+				and isread = #{isread, jdbcType=VARCHAR}
+			</if>
+		</where>
+    </select>
+
+	<insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="false">
+		insert all
+		<foreach item="item" index="index" collection="list">
+		into server_msg_receive (msgid, serverid, custno, isread) 
+		values (#{item.msgid, jdbcType=DECIMAL}, #{item.serverid, jdbcType=VARCHAR}, #{item.custno, jdbcType=DECIMAL}, #{item.isread, jdbcType=VARCHAR})
+		</foreach>
+		select 1 from dual
+	</insert>
+	
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
+          from server_msg_receive
+         where 1=1 and msgid = #{0} and serverid = #{1}
+    </select>
+
+    <delete id="deleteById">
+        delete from server_msg_receive
+         where 1=1 and msgid = #{0} and serverid = #{1}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.server.ServerMsgReceive">
+        update server_msg_receive set 
+               custno = #{custno, jdbcType=DECIMAL}, 
+               isread = #{isread, jdbcType=VARCHAR}
+         where 1=1 and msgid = #{msgid, jdbcType=DECIMAL} and serverid = #{serverid, jdbcType=VARCHAR}
+    </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.server.ServerMsgReceive">
+		update server_msg_receive
+		<set>
+		    <if test="custno != null">
+				custno = #{custno, jdbcType=DECIMAL},
+		    </if>
+		    <if test="isread != null">
+				isread = #{isread, jdbcType=VARCHAR},
+		    </if>
+		</set>
+		where 1=1 and msgid = #{msgid, jdbcType=DECIMAL} and serverid = #{serverid, jdbcType=VARCHAR}
+	</update>
+</mapper>

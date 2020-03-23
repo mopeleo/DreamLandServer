@@ -4,16 +4,25 @@ import com.dl.server.dto.BaseDTO;
 
 public class ServerPlayerItemDTO extends BaseDTO {
 
-	private String playid;    //playid
+	private String serverid;    //serverid
+	private Long custno;    //custno
 	private String itemid;    //itemid
 	private Integer num;    //num
 
-	public String getPlayid() {
-		return this.playid;
+	public String getServerid() {
+		return this.serverid;
 	}
 
-	public void setPlayid(String playid) {
-		this.playid = playid;
+	public void setServerid(String serverid) {
+		this.serverid = serverid;
+	}
+
+	public Long getCustno() {
+		return this.custno;
+	}
+
+	public void setCustno(Long custno) {
+		this.custno = custno;
 	}
 
 	public String getItemid() {
@@ -34,7 +43,8 @@ public class ServerPlayerItemDTO extends BaseDTO {
 
 
 	public void clear(){
-		this.playid = null;
+		this.serverid = null;
+		this.custno = null;
 		this.itemid = null;
 		this.num = null;
 	}
@@ -45,7 +55,8 @@ public class ServerPlayerItemDTO extends BaseDTO {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-		sb.append(", playid=").append(playid);
+		sb.append(", serverid=").append(serverid);
+		sb.append(", custno=").append(custno);
 		sb.append(", itemid=").append(itemid);
 		sb.append(", num=").append(num);
         sb.append("]");

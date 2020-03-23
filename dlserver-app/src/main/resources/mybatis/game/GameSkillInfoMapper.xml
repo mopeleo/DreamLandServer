@@ -5,17 +5,17 @@
         <id column="skillid" jdbcType="VARCHAR" property="skillid" />
         <result column="skillname" jdbcType="VARCHAR" property="skillname" />
         <result column="icon" jdbcType="VARCHAR" property="icon" />
-        <result column="remark" jdbcType="VARCHAR" property="remark" />
         <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
     </resultMap>
 	
 	<sql id="column_list">
-        skillid, skillname, icon, remark, type
+        skillid, skillname, icon, type, remark
 	</sql>
   
     <insert id="insert" parameterType="com.dl.server.entity.game.GameSkillInfo">
-        insert into game_skill_info (skillid, skillname, icon, remark, type)
-        values (#{skillid, jdbcType=VARCHAR}, #{skillname, jdbcType=VARCHAR}, #{icon, jdbcType=VARCHAR}, #{remark, jdbcType=VARCHAR}, #{type, jdbcType=VARCHAR})
+        insert into game_skill_info (skillid, skillname, icon, type, remark)
+        values (#{skillid, jdbcType=VARCHAR}, #{skillname, jdbcType=VARCHAR}, #{icon, jdbcType=VARCHAR}, #{type, jdbcType=VARCHAR}, #{remark, jdbcType=VARCHAR})
     </insert>
   
     <select id="selectAll" parameterType="com.dl.server.entity.game.GameSkillInfo" resultMap="BaseResultMap">
@@ -31,15 +31,24 @@
 			<if test="icon != null ">
 				and icon = #{icon, jdbcType=VARCHAR}
 			</if>
-			<if test="remark != null ">
-				and remark = #{remark, jdbcType=VARCHAR}
-			</if>
 			<if test="type != null ">
 				and type = #{type, jdbcType=VARCHAR}
+			</if>
+			<if test="remark != null ">
+				and remark = #{remark, jdbcType=VARCHAR}
 			</if>
 		</where>
     </select>
 
+	<insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="false">
+		insert all
+		<foreach item="item" index="index" collection="list">
+		into game_skill_info (skillid, skillname, icon, type, remark) 
+		values (#{item.skillid, jdbcType=VARCHAR}, #{item.skillname, jdbcType=VARCHAR}, #{item.icon, jdbcType=VARCHAR}, #{item.type, jdbcType=VARCHAR}, #{item.remark, jdbcType=VARCHAR})
+		</foreach>
+		select 1 from dual
+	</insert>
+	
     <select id="selectById" resultMap="BaseResultMap">
         select <include refid="column_list" />
           from game_skill_info
@@ -55,8 +64,8 @@
         update game_skill_info set 
                skillname = #{skillname, jdbcType=VARCHAR}, 
                icon = #{icon, jdbcType=VARCHAR}, 
-               remark = #{remark, jdbcType=VARCHAR}, 
-               type = #{type, jdbcType=VARCHAR}
+               type = #{type, jdbcType=VARCHAR}, 
+               remark = #{remark, jdbcType=VARCHAR}
          where 1=1 and skillid = #{skillid, jdbcType=VARCHAR}
     </update>
 
@@ -69,11 +78,11 @@
 		    <if test="icon != null">
 				icon = #{icon, jdbcType=VARCHAR},
 		    </if>
-		    <if test="remark != null">
-				remark = #{remark, jdbcType=VARCHAR},
-		    </if>
 		    <if test="type != null">
 				type = #{type, jdbcType=VARCHAR},
+		    </if>
+		    <if test="remark != null">
+				remark = #{remark, jdbcType=VARCHAR},
 		    </if>
 		</set>
 		where 1=1 and skillid = #{skillid, jdbcType=VARCHAR}

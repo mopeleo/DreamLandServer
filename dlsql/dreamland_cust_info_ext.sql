@@ -1,0 +1,3 @@
+INSERT INTO dreamland.cust_info_ext (custno, birthday, province, city, address, profession) VALUES (1, '19870203', null, null, null, null);
+INSERT INTO dreamland.cust_info_ext (custno, birthday, province, city, address, profession) VALUES (2, '19900824', null, null, null, null);
+INSERT INTO dreamland.cust_info_ext (custno, birthday, province, city, address, profession) VALUES (3, '19920321', null, null, null, null);

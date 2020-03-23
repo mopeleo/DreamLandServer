@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.server.ServerMsgSendDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.server.ServerMsgSend">
+        <id column="msgid" jdbcType="DECIMAL" property="msgid" />
+        <result column="serverid" jdbcType="VARCHAR" property="serverid" />
+        <result column="custno" jdbcType="DECIMAL" property="custno" />
+        <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="receiver" jdbcType="DECIMAL" property="receiver" />
+        <result column="senddate" jdbcType="VARCHAR" property="senddate" />
+        <result column="sendtime" jdbcType="VARCHAR" property="sendtime" />
+    </resultMap>
+	
+	<sql id="column_list">
+        msgid, serverid, custno, content, type, receiver, senddate, sendtime
+	</sql>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.server.ServerMsgSend">
+        insert into server_msg_send (msgid, serverid, custno, content, type, receiver, senddate, sendtime)
+        values (#{msgid, jdbcType=DECIMAL}, #{serverid, jdbcType=VARCHAR}, #{custno, jdbcType=DECIMAL}, #{content, jdbcType=VARCHAR}, #{type, jdbcType=VARCHAR}, #{receiver, jdbcType=DECIMAL}, #{senddate, jdbcType=VARCHAR}, #{sendtime, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.server.ServerMsgSend" resultMap="BaseResultMap">
+        select <include refid="column_list" />
+          from server_msg_send
+		<where>
+			<if test="msgid != null ">
+				and msgid = #{msgid, jdbcType=DECIMAL}
+			</if>
+			<if test="serverid != null ">
+				and serverid = #{serverid, jdbcType=VARCHAR}
+			</if>
+			<if test="custno != null ">
+				and custno = #{custno, jdbcType=DECIMAL}
+			</if>
+			<if test="content != null ">
+				and content = #{content, jdbcType=VARCHAR}
+			</if>
+			<if test="type != null ">
+				and type = #{type, jdbcType=VARCHAR}
+			</if>
+			<if test="receiver != null ">
+				and receiver = #{receiver, jdbcType=DECIMAL}
+			</if>
+			<if test="senddate != null ">
+				and senddate = #{senddate, jdbcType=VARCHAR}
+			</if>
+			<if test="sendtime != null ">
+				and sendtime = #{sendtime, jdbcType=VARCHAR}
+			</if>
+		</where>
+    </select>
+
+	<insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="false">
+		insert all
+		<foreach item="item" index="index" collection="list">
+		into server_msg_send (msgid, serverid, custno, content, type, receiver, senddate, sendtime) 
+		values (#{item.msgid, jdbcType=DECIMAL}, #{item.serverid, jdbcType=VARCHAR}, #{item.custno, jdbcType=DECIMAL}, #{item.content, jdbcType=VARCHAR}, #{item.type, jdbcType=VARCHAR}, #{item.receiver, jdbcType=DECIMAL}, #{item.senddate, jdbcType=VARCHAR}, #{item.sendtime, jdbcType=VARCHAR})
+		</foreach>
+		select 1 from dual
+	</insert>
+	
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
+          from server_msg_send
+         where 1=1 and msgid = #{0}
+    </select>
+
+    <delete id="deleteById">
+        delete from server_msg_send
+         where 1=1 and msgid = #{0}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.server.ServerMsgSend">
+        update server_msg_send set 
+               serverid = #{serverid, jdbcType=VARCHAR}, 
+               custno = #{custno, jdbcType=DECIMAL}, 
+               content = #{content, jdbcType=VARCHAR}, 
+               type = #{type, jdbcType=VARCHAR}, 
+               receiver = #{receiver, jdbcType=DECIMAL}, 
+               senddate = #{senddate, jdbcType=VARCHAR}, 
+               sendtime = #{sendtime, jdbcType=VARCHAR}
+         where 1=1 and msgid = #{msgid, jdbcType=DECIMAL}
+    </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.server.ServerMsgSend">
+		update server_msg_send
+		<set>
+		    <if test="serverid != null">
+				serverid = #{serverid, jdbcType=VARCHAR},
+		    </if>
+		    <if test="custno != null">
+				custno = #{custno, jdbcType=DECIMAL},
+		    </if>
+		    <if test="content != null">
+				content = #{content, jdbcType=VARCHAR},
+		    </if>
+		    <if test="type != null">
+				type = #{type, jdbcType=VARCHAR},
+		    </if>
+		    <if test="receiver != null">
+				receiver = #{receiver, jdbcType=DECIMAL},
+		    </if>
+		    <if test="senddate != null">
+				senddate = #{senddate, jdbcType=VARCHAR},
+		    </if>
+		    <if test="sendtime != null">
+				sendtime = #{sendtime, jdbcType=VARCHAR},
+		    </if>
+		</set>
+		where 1=1 and msgid = #{msgid, jdbcType=DECIMAL}
+	</update>
+</mapper>

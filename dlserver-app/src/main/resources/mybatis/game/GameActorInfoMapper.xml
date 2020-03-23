@@ -64,6 +64,15 @@
 		</where>
     </select>
 
+	<insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="false">
+		insert all
+		<foreach item="item" index="index" collection="list">
+		into game_actor_info (actorid, actorname, aptitude, attack, defense, hp, mp, ep, initrank, maxrank, attr) 
+		values (#{item.actorid, jdbcType=VARCHAR}, #{item.actorname, jdbcType=VARCHAR}, #{item.aptitude, jdbcType=INTEGER}, #{item.attack, jdbcType=INTEGER}, #{item.defense, jdbcType=INTEGER}, #{item.hp, jdbcType=INTEGER}, #{item.mp, jdbcType=INTEGER}, #{item.ep, jdbcType=INTEGER}, #{item.initrank, jdbcType=INTEGER}, #{item.maxrank, jdbcType=INTEGER}, #{item.attr, jdbcType=INTEGER})
+		</foreach>
+		select 1 from dual
+	</insert>
+	
     <select id="selectById" resultMap="BaseResultMap">
         select <include refid="column_list" />
           from game_actor_info

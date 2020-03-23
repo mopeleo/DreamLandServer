@@ -9,9 +9,9 @@ public interface ServerPlayerItemDao{
 
     List<ServerPlayerItem> selectAll(ServerPlayerItem where);
 
-    ServerPlayerItem selectById(String playid, String itemid);
+    ServerPlayerItem selectById(String serverid, Long custno, String itemid);
 
-    int deleteById(String playid, String itemid);
+    int deleteById(String serverid, Long custno, String itemid);
 
     int updateById(ServerPlayerItem entity);
 	

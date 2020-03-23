@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.cust.CustPayLogDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.cust.CustPayLog">
+        <id column="logid" jdbcType="VARCHAR" property="logid" />
+        <result column="custno" jdbcType="DECIMAL" property="custno" />
+        <result column="acctno" jdbcType="DECIMAL" property="acctno" />
+        <result column="serverid" jdbcType="VARCHAR" property="serverid" />
+        <result column="direction" jdbcType="VARCHAR" property="direction" />
+        <result column="amt" jdbcType="DOUBLE" property="amt" />
+        <result column="otheracct" jdbcType="VARCHAR" property="otheracct" />
+        <result column="paytype" jdbcType="VARCHAR" property="paytype" />
+        <result column="status" jdbcType="VARCHAR" property="status" />
+        <result column="paydate" jdbcType="VARCHAR" property="paydate" />
+        <result column="paytime" jdbcType="VARCHAR" property="paytime" />
+        <result column="summary" jdbcType="VARCHAR" property="summary" />
+    </resultMap>
+	
+	<sql id="column_list">
+        logid, custno, acctno, serverid, direction, amt, otheracct, paytype, status, paydate, paytime, summary
+	</sql>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.cust.CustPayLog">
+        insert into cust_pay_log (logid, custno, acctno, serverid, direction, amt, otheracct, paytype, status, paydate, paytime, summary)
+        values (#{logid, jdbcType=VARCHAR}, #{custno, jdbcType=DECIMAL}, #{acctno, jdbcType=DECIMAL}, #{serverid, jdbcType=VARCHAR}, #{direction, jdbcType=VARCHAR}, #{amt, jdbcType=DOUBLE}, #{otheracct, jdbcType=VARCHAR}, #{paytype, jdbcType=VARCHAR}, #{status, jdbcType=VARCHAR}, #{paydate, jdbcType=VARCHAR}, #{paytime, jdbcType=VARCHAR}, #{summary, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.cust.CustPayLog" resultMap="BaseResultMap">
+        select <include refid="column_list" />
+          from cust_pay_log
+		<where>
+			<if test="logid != null ">
+				and logid = #{logid, jdbcType=VARCHAR}
+			</if>
+			<if test="custno != null ">
+				and custno = #{custno, jdbcType=DECIMAL}
+			</if>
+			<if test="acctno != null ">
+				and acctno = #{acctno, jdbcType=DECIMAL}
+			</if>
+			<if test="serverid != null ">
+				and serverid = #{serverid, jdbcType=VARCHAR}
+			</if>
+			<if test="direction != null ">
+				and direction = #{direction, jdbcType=VARCHAR}
+			</if>
+			<if test="amt != null ">
+				and amt = #{amt, jdbcType=DOUBLE}
+			</if>
+			<if test="otheracct != null ">
+				and otheracct = #{otheracct, jdbcType=VARCHAR}
+			</if>
+			<if test="paytype != null ">
+				and paytype = #{paytype, jdbcType=VARCHAR}
+			</if>
+			<if test="status != null ">
+				and status = #{status, jdbcType=VARCHAR}
+			</if>
+			<if test="paydate != null ">
+				and paydate = #{paydate, jdbcType=VARCHAR}
+			</if>
+			<if test="paytime != null ">
+				and paytime = #{paytime, jdbcType=VARCHAR}
+			</if>
+			<if test="summary != null ">
+				and summary = #{summary, jdbcType=VARCHAR}
+			</if>
+		</where>
+    </select>
+
+	<insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="false">
+		insert all
+		<foreach item="item" index="index" collection="list">
+		into cust_pay_log (logid, custno, acctno, serverid, direction, amt, otheracct, paytype, status, paydate, paytime, summary) 
+		values (#{item.logid, jdbcType=VARCHAR}, #{item.custno, jdbcType=DECIMAL}, #{item.acctno, jdbcType=DECIMAL}, #{item.serverid, jdbcType=VARCHAR}, #{item.direction, jdbcType=VARCHAR}, #{item.amt, jdbcType=DOUBLE}, #{item.otheracct, jdbcType=VARCHAR}, #{item.paytype, jdbcType=VARCHAR}, #{item.status, jdbcType=VARCHAR}, #{item.paydate, jdbcType=VARCHAR}, #{item.paytime, jdbcType=VARCHAR}, #{item.summary, jdbcType=VARCHAR})
+		</foreach>
+		select 1 from dual
+	</insert>
+	
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
+          from cust_pay_log
+         where 1=1 and logid = #{0}
+    </select>
+
+    <delete id="deleteById">
+        delete from cust_pay_log
+         where 1=1 and logid = #{0}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.cust.CustPayLog">
+        update cust_pay_log set 
+               custno = #{custno, jdbcType=DECIMAL}, 
+               acctno = #{acctno, jdbcType=DECIMAL}, 
+               serverid = #{serverid, jdbcType=VARCHAR}, 
+               direction = #{direction, jdbcType=VARCHAR}, 
+               amt = #{amt, jdbcType=DOUBLE}, 
+               otheracct = #{otheracct, jdbcType=VARCHAR}, 
+               paytype = #{paytype, jdbcType=VARCHAR}, 
+               status = #{status, jdbcType=VARCHAR}, 
+               paydate = #{paydate, jdbcType=VARCHAR}, 
+               paytime = #{paytime, jdbcType=VARCHAR}, 
+               summary = #{summary, jdbcType=VARCHAR}
+         where 1=1 and logid = #{logid, jdbcType=VARCHAR}
+    </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.cust.CustPayLog">
+		update cust_pay_log
+		<set>
+		    <if test="custno != null">
+				custno = #{custno, jdbcType=DECIMAL},
+		    </if>
+		    <if test="acctno != null">
+				acctno = #{acctno, jdbcType=DECIMAL},
+		    </if>
+		    <if test="serverid != null">
+				serverid = #{serverid, jdbcType=VARCHAR},
+		    </if>
+		    <if test="direction != null">
+				direction = #{direction, jdbcType=VARCHAR},
+		    </if>
+		    <if test="amt != null">
+				amt = #{amt, jdbcType=DOUBLE},
+		    </if>
+		    <if test="otheracct != null">
+				otheracct = #{otheracct, jdbcType=VARCHAR},
+		    </if>
+		    <if test="paytype != null">
+				paytype = #{paytype, jdbcType=VARCHAR},
+		    </if>
+		    <if test="status != null">
+				status = #{status, jdbcType=VARCHAR},
+		    </if>
+		    <if test="paydate != null">
+				paydate = #{paydate, jdbcType=VARCHAR},
+		    </if>
+		    <if test="paytime != null">
+				paytime = #{paytime, jdbcType=VARCHAR},
+		    </if>
+		    <if test="summary != null">
+				summary = #{summary, jdbcType=VARCHAR},
+		    </if>
+		</set>
+		where 1=1 and logid = #{logid, jdbcType=VARCHAR}
+	</update>
+</mapper>

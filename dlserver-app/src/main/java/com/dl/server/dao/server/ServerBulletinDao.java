@@ -9,9 +9,9 @@ public interface ServerBulletinDao{
 
     List<ServerBulletin> selectAll(ServerBulletin where);
 
-    ServerBulletin selectById(String title);
+    ServerBulletin selectById(Long id);
 
-    int deleteById(String title);
+    int deleteById(Long id);
 
     int updateById(ServerBulletin entity);
 	

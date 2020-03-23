@@ -4,19 +4,21 @@
     <resultMap id="BaseResultMap" type="com.dl.server.entity.game.GameLevelInfo">
         <id column="levelid" jdbcType="INTEGER" property="levelid" />
         <result column="levelname" jdbcType="VARCHAR" property="levelname" />
+        <result column="nextlevel" jdbcType="INTEGER" property="nextlevel" />
         <result column="icon" jdbcType="VARCHAR" property="icon" />
         <result column="minpoint" jdbcType="INTEGER" property="minpoint" />
         <result column="maxpoint" jdbcType="INTEGER" property="maxpoint" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
         <result column="remark" jdbcType="VARCHAR" property="remark" />
     </resultMap>
 	
 	<sql id="column_list">
-        levelid, levelname, icon, minpoint, maxpoint, remark
+        levelid, levelname, nextlevel, icon, minpoint, maxpoint, type, remark
 	</sql>
   
     <insert id="insert" parameterType="com.dl.server.entity.game.GameLevelInfo">
-        insert into game_level_info (levelid, levelname, icon, minpoint, maxpoint, remark)
-        values (#{levelid, jdbcType=INTEGER}, #{levelname, jdbcType=VARCHAR}, #{icon, jdbcType=VARCHAR}, #{minpoint, jdbcType=INTEGER}, #{maxpoint, jdbcType=INTEGER}, #{remark, jdbcType=VARCHAR})
+        insert into game_level_info (levelid, levelname, nextlevel, icon, minpoint, maxpoint, type, remark)
+        values (#{levelid, jdbcType=INTEGER}, #{levelname, jdbcType=VARCHAR}, #{nextlevel, jdbcType=INTEGER}, #{icon, jdbcType=VARCHAR}, #{minpoint, jdbcType=INTEGER}, #{maxpoint, jdbcType=INTEGER}, #{type, jdbcType=VARCHAR}, #{remark, jdbcType=VARCHAR})
     </insert>
   
     <select id="selectAll" parameterType="com.dl.server.entity.game.GameLevelInfo" resultMap="BaseResultMap">
@@ -29,6 +31,9 @@
 			<if test="levelname != null ">
 				and levelname = #{levelname, jdbcType=VARCHAR}
 			</if>
+			<if test="nextlevel != null ">
+				and nextlevel = #{nextlevel, jdbcType=INTEGER}
+			</if>
 			<if test="icon != null ">
 				and icon = #{icon, jdbcType=VARCHAR}
 			</if>
@@ -38,12 +43,24 @@
 			<if test="maxpoint != null ">
 				and maxpoint = #{maxpoint, jdbcType=INTEGER}
 			</if>
+			<if test="type != null ">
+				and type = #{type, jdbcType=VARCHAR}
+			</if>
 			<if test="remark != null ">
 				and remark = #{remark, jdbcType=VARCHAR}
 			</if>
 		</where>
     </select>
 
+	<insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="false">
+		insert all
+		<foreach item="item" index="index" collection="list">
+		into game_level_info (levelid, levelname, nextlevel, icon, minpoint, maxpoint, type, remark) 
+		values (#{item.levelid, jdbcType=INTEGER}, #{item.levelname, jdbcType=VARCHAR}, #{item.nextlevel, jdbcType=INTEGER}, #{item.icon, jdbcType=VARCHAR}, #{item.minpoint, jdbcType=INTEGER}, #{item.maxpoint, jdbcType=INTEGER}, #{item.type, jdbcType=VARCHAR}, #{item.remark, jdbcType=VARCHAR})
+		</foreach>
+		select 1 from dual
+	</insert>
+	
     <select id="selectById" resultMap="BaseResultMap">
         select <include refid="column_list" />
           from game_level_info
@@ -58,9 +75,11 @@
     <update id="updateById" parameterType="com.dl.server.entity.game.GameLevelInfo">
         update game_level_info set 
                levelname = #{levelname, jdbcType=VARCHAR}, 
+               nextlevel = #{nextlevel, jdbcType=INTEGER}, 
                icon = #{icon, jdbcType=VARCHAR}, 
                minpoint = #{minpoint, jdbcType=INTEGER}, 
                maxpoint = #{maxpoint, jdbcType=INTEGER}, 
+               type = #{type, jdbcType=VARCHAR}, 
                remark = #{remark, jdbcType=VARCHAR}
          where 1=1 and levelid = #{levelid, jdbcType=INTEGER}
     </update>
@@ -71,6 +90,9 @@
 		    <if test="levelname != null">
 				levelname = #{levelname, jdbcType=VARCHAR},
 		    </if>
+		    <if test="nextlevel != null">
+				nextlevel = #{nextlevel, jdbcType=INTEGER},
+		    </if>
 		    <if test="icon != null">
 				icon = #{icon, jdbcType=VARCHAR},
 		    </if>
@@ -79,6 +101,9 @@
 		    </if>
 		    <if test="maxpoint != null">
 				maxpoint = #{maxpoint, jdbcType=INTEGER},
+		    </if>
+		    <if test="type != null">
+				type = #{type, jdbcType=VARCHAR},
 		    </if>
 		    <if test="remark != null">
 				remark = #{remark, jdbcType=VARCHAR},

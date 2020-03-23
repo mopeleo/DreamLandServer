@@ -28,6 +28,15 @@
 		</where>
     </select>
 
+	<insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="false">
+		insert all
+		<foreach item="item" index="index" collection="list">
+		into game_equip_skill (equipid, skillid) 
+		values (#{item.equipid, jdbcType=VARCHAR}, #{item.skillid, jdbcType=VARCHAR})
+		</foreach>
+		select 1 from dual
+	</insert>
+	
     <select id="selectById" resultMap="BaseResultMap">
         select <include refid="column_list" />
           from game_equip_skill

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.forum.ForumArticleDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.forum.ForumArticle">
+        <id column="artid" jdbcType="VARCHAR" property="artid" />
+        <result column="title" jdbcType="VARCHAR" property="title" />
+        <result column="author" jdbcType="DECIMAL" property="author" />
+        <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="pubflag" jdbcType="VARCHAR" property="pubflag" />
+        <result column="pubdate" jdbcType="VARCHAR" property="pubdate" />
+        <result column="pubtime" jdbcType="VARCHAR" property="pubtime" />
+        <result column="lastreplydate" jdbcType="VARCHAR" property="lastreplydate" />
+        <result column="lastreplytime" jdbcType="VARCHAR" property="lastreplytime" />
+        <result column="readtimes" jdbcType="DECIMAL" property="readtimes" />
+        <result column="replytimes" jdbcType="INTEGER" property="replytimes" />
+        <result column="topflag" jdbcType="VARCHAR" property="topflag" />
+        <result column="checkflag" jdbcType="VARCHAR" property="checkflag" />
+        <result column="checker" jdbcType="DECIMAL" property="checker" />
+        <result column="closeflag" jdbcType="VARCHAR" property="closeflag" />
+        <result column="closer" jdbcType="DECIMAL" property="closer" />
+    </resultMap>
+	
+	<sql id="column_list">
+        artid, title, author, content, pubflag, pubdate, pubtime, lastreplydate, lastreplytime, readtimes, replytimes, topflag, checkflag, checker, closeflag, closer
+	</sql>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.forum.ForumArticle">
+        insert into forum_article (artid, title, author, content, pubflag, pubdate, pubtime, lastreplydate, lastreplytime, readtimes, replytimes, topflag, checkflag, checker, closeflag, closer)
+        values (#{artid, jdbcType=VARCHAR}, #{title, jdbcType=VARCHAR}, #{author, jdbcType=DECIMAL}, #{content, jdbcType=VARCHAR}, #{pubflag, jdbcType=VARCHAR}, #{pubdate, jdbcType=VARCHAR}, #{pubtime, jdbcType=VARCHAR}, #{lastreplydate, jdbcType=VARCHAR}, #{lastreplytime, jdbcType=VARCHAR}, #{readtimes, jdbcType=DECIMAL}, #{replytimes, jdbcType=INTEGER}, #{topflag, jdbcType=VARCHAR}, #{checkflag, jdbcType=VARCHAR}, #{checker, jdbcType=DECIMAL}, #{closeflag, jdbcType=VARCHAR}, #{closer, jdbcType=DECIMAL})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.forum.ForumArticle" resultMap="BaseResultMap">
+        select <include refid="column_list" />
+          from forum_article
+		<where>
+			<if test="artid != null ">
+				and artid = #{artid, jdbcType=VARCHAR}
+			</if>
+			<if test="title != null ">
+				and title = #{title, jdbcType=VARCHAR}
+			</if>
+			<if test="author != null ">
+				and author = #{author, jdbcType=DECIMAL}
+			</if>
+			<if test="content != null ">
+				and content = #{content, jdbcType=VARCHAR}
+			</if>
+			<if test="pubflag != null ">
+				and pubflag = #{pubflag, jdbcType=VARCHAR}
+			</if>
+			<if test="pubdate != null ">
+				and pubdate = #{pubdate, jdbcType=VARCHAR}
+			</if>
+			<if test="pubtime != null ">
+				and pubtime = #{pubtime, jdbcType=VARCHAR}
+			</if>
+			<if test="lastreplydate != null ">
+				and lastreplydate = #{lastreplydate, jdbcType=VARCHAR}
+			</if>
+			<if test="lastreplytime != null ">
+				and lastreplytime = #{lastreplytime, jdbcType=VARCHAR}
+			</if>
+			<if test="readtimes != null ">
+				and readtimes = #{readtimes, jdbcType=DECIMAL}
+			</if>
+			<if test="replytimes != null ">
+				and replytimes = #{replytimes, jdbcType=INTEGER}
+			</if>
+			<if test="topflag != null ">
+				and topflag = #{topflag, jdbcType=VARCHAR}
+			</if>
+			<if test="checkflag != null ">
+				and checkflag = #{checkflag, jdbcType=VARCHAR}
+			</if>
+			<if test="checker != null ">
+				and checker = #{checker, jdbcType=DECIMAL}
+			</if>
+			<if test="closeflag != null ">
+				and closeflag = #{closeflag, jdbcType=VARCHAR}
+			</if>
+			<if test="closer != null ">
+				and closer = #{closer, jdbcType=DECIMAL}
+			</if>
+		</where>
+    </select>
+
+	<insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="false">
+		insert all
+		<foreach item="item" index="index" collection="list">
+		into forum_article (artid, title, author, content, pubflag, pubdate, pubtime, lastreplydate, lastreplytime, readtimes, replytimes, topflag, checkflag, checker, closeflag, closer) 
+		values (#{item.artid, jdbcType=VARCHAR}, #{item.title, jdbcType=VARCHAR}, #{item.author, jdbcType=DECIMAL}, #{item.content, jdbcType=VARCHAR}, #{item.pubflag, jdbcType=VARCHAR}, #{item.pubdate, jdbcType=VARCHAR}, #{item.pubtime, jdbcType=VARCHAR}, #{item.lastreplydate, jdbcType=VARCHAR}, #{item.lastreplytime, jdbcType=VARCHAR}, #{item.readtimes, jdbcType=DECIMAL}, #{item.replytimes, jdbcType=INTEGER}, #{item.topflag, jdbcType=VARCHAR}, #{item.checkflag, jdbcType=VARCHAR}, #{item.checker, jdbcType=DECIMAL}, #{item.closeflag, jdbcType=VARCHAR}, #{item.closer, jdbcType=DECIMAL})
+		</foreach>
+		select 1 from dual
+	</insert>
+	
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
+          from forum_article
+         where 1=1 and artid = #{0}
+    </select>
+
+    <delete id="deleteById">
+        delete from forum_article
+         where 1=1 and artid = #{0}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.forum.ForumArticle">
+        update forum_article set 
+               title = #{title, jdbcType=VARCHAR}, 
+               author = #{author, jdbcType=DECIMAL}, 
+               content = #{content, jdbcType=VARCHAR}, 
+               pubflag = #{pubflag, jdbcType=VARCHAR}, 
+               pubdate = #{pubdate, jdbcType=VARCHAR}, 
+               pubtime = #{pubtime, jdbcType=VARCHAR}, 
+               lastreplydate = #{lastreplydate, jdbcType=VARCHAR}, 
+               lastreplytime = #{lastreplytime, jdbcType=VARCHAR}, 
+               readtimes = #{readtimes, jdbcType=DECIMAL}, 
+               replytimes = #{replytimes, jdbcType=INTEGER}, 
+               topflag = #{topflag, jdbcType=VARCHAR}, 
+               checkflag = #{checkflag, jdbcType=VARCHAR}, 
+               checker = #{checker, jdbcType=DECIMAL}, 
+               closeflag = #{closeflag, jdbcType=VARCHAR}, 
+               closer = #{closer, jdbcType=DECIMAL}
+         where 1=1 and artid = #{artid, jdbcType=VARCHAR}
+    </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.forum.ForumArticle">
+		update forum_article
+		<set>
+		    <if test="title != null">
+				title = #{title, jdbcType=VARCHAR},
+		    </if>
+		    <if test="author != null">
+				author = #{author, jdbcType=DECIMAL},
+		    </if>
+		    <if test="content != null">
+				content = #{content, jdbcType=VARCHAR},
+		    </if>
+		    <if test="pubflag != null">
+				pubflag = #{pubflag, jdbcType=VARCHAR},
+		    </if>
+		    <if test="pubdate != null">
+				pubdate = #{pubdate, jdbcType=VARCHAR},
+		    </if>
+		    <if test="pubtime != null">
+				pubtime = #{pubtime, jdbcType=VARCHAR},
+		    </if>
+		    <if test="lastreplydate != null">
+				lastreplydate = #{lastreplydate, jdbcType=VARCHAR},
+		    </if>
+		    <if test="lastreplytime != null">
+				lastreplytime = #{lastreplytime, jdbcType=VARCHAR},
+		    </if>
+		    <if test="readtimes != null">
+				readtimes = #{readtimes, jdbcType=DECIMAL},
+		    </if>
+		    <if test="replytimes != null">
+				replytimes = #{replytimes, jdbcType=INTEGER},
+		    </if>
+		    <if test="topflag != null">
+				topflag = #{topflag, jdbcType=VARCHAR},
+		    </if>
+		    <if test="checkflag != null">
+				checkflag = #{checkflag, jdbcType=VARCHAR},
+		    </if>
+		    <if test="checker != null">
+				checker = #{checker, jdbcType=DECIMAL},
+		    </if>
+		    <if test="closeflag != null">
+				closeflag = #{closeflag, jdbcType=VARCHAR},
+		    </if>
+		    <if test="closer != null">
+				closer = #{closer, jdbcType=DECIMAL},
+		    </if>
+		</set>
+		where 1=1 and artid = #{artid, jdbcType=VARCHAR}
+	</update>
+</mapper>

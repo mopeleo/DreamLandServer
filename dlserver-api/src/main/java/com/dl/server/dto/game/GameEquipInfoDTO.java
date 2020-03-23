@@ -7,9 +7,9 @@ public class GameEquipInfoDTO extends BaseDTO {
 	private String equipid;    //装备ID
 	private String equipname;    //装备名称
 	private String icon;    //图标
-	private String remark;    //描述
 	private String position;    //部位
 	private String rank;    //等级
+	private String remark;    //描述
 
 	public String getEquipid() {
 		return this.equipid;
@@ -35,14 +35,6 @@ public class GameEquipInfoDTO extends BaseDTO {
 		this.icon = icon;
 	}
 
-	public String getRemark() {
-		return this.remark;
-	}
-
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
-
 	public String getPosition() {
 		return this.position;
 	}
@@ -59,14 +51,22 @@ public class GameEquipInfoDTO extends BaseDTO {
 		this.rank = rank;
 	}
 
+	public String getRemark() {
+		return this.remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
 
 	public void clear(){
 		this.equipid = null;
 		this.equipname = null;
 		this.icon = null;
-		this.remark = null;
 		this.position = null;
 		this.rank = null;
+		this.remark = null;
 	}
 
     @Override
@@ -78,9 +78,9 @@ public class GameEquipInfoDTO extends BaseDTO {
 		sb.append(", equipid=").append(equipid);
 		sb.append(", equipname=").append(equipname);
 		sb.append(", icon=").append(icon);
-		sb.append(", remark=").append(remark);
 		sb.append(", position=").append(position);
 		sb.append(", rank=").append(rank);
+		sb.append(", remark=").append(remark);
         sb.append("]");
         return sb.toString();
 	}

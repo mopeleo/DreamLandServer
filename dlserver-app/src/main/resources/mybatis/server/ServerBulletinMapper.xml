@@ -2,8 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dl.server.dao.server.ServerBulletinDao">
     <resultMap id="BaseResultMap" type="com.dl.server.entity.server.ServerBulletin">
-        <id column="title" jdbcType="VARCHAR" property="title" />
+        <id column="id" jdbcType="DECIMAL" property="id" />
         <result column="serverid" jdbcType="VARCHAR" property="serverid" />
+        <result column="title" jdbcType="VARCHAR" property="title" />
         <result column="content" jdbcType="VARCHAR" property="content" />
         <result column="startdate" jdbcType="VARCHAR" property="startdate" />
         <result column="enddate" jdbcType="VARCHAR" property="enddate" />
@@ -11,18 +12,21 @@
     </resultMap>
 	
 	<sql id="column_list">
-        serverid, title, content, startdate, enddate, issuer
+        id, serverid, title, content, startdate, enddate, issuer
 	</sql>
   
     <insert id="insert" parameterType="com.dl.server.entity.server.ServerBulletin">
-        insert into server_bulletin (serverid, title, content, startdate, enddate, issuer)
-        values (#{serverid, jdbcType=VARCHAR}, #{title, jdbcType=VARCHAR}, #{content, jdbcType=VARCHAR}, #{startdate, jdbcType=VARCHAR}, #{enddate, jdbcType=VARCHAR}, #{issuer, jdbcType=VARCHAR})
+        insert into server_bulletin (id, serverid, title, content, startdate, enddate, issuer)
+        values (#{id, jdbcType=DECIMAL}, #{serverid, jdbcType=VARCHAR}, #{title, jdbcType=VARCHAR}, #{content, jdbcType=VARCHAR}, #{startdate, jdbcType=VARCHAR}, #{enddate, jdbcType=VARCHAR}, #{issuer, jdbcType=VARCHAR})
     </insert>
   
     <select id="selectAll" parameterType="com.dl.server.entity.server.ServerBulletin" resultMap="BaseResultMap">
         select <include refid="column_list" />
           from server_bulletin
 		<where>
+			<if test="id != null ">
+				and id = #{id, jdbcType=DECIMAL}
+			</if>
 			<if test="serverid != null ">
 				and serverid = #{serverid, jdbcType=VARCHAR}
 			</if>
@@ -44,25 +48,35 @@
 		</where>
     </select>
 
+	<insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="false">
+		insert all
+		<foreach item="item" index="index" collection="list">
+		into server_bulletin (id, serverid, title, content, startdate, enddate, issuer) 
+		values (#{item.id, jdbcType=DECIMAL}, #{item.serverid, jdbcType=VARCHAR}, #{item.title, jdbcType=VARCHAR}, #{item.content, jdbcType=VARCHAR}, #{item.startdate, jdbcType=VARCHAR}, #{item.enddate, jdbcType=VARCHAR}, #{item.issuer, jdbcType=VARCHAR})
+		</foreach>
+		select 1 from dual
+	</insert>
+	
     <select id="selectById" resultMap="BaseResultMap">
         select <include refid="column_list" />
           from server_bulletin
-         where 1=1 and title = #{0}
+         where 1=1 and id = #{0}
     </select>
 
     <delete id="deleteById">
         delete from server_bulletin
-         where 1=1 and title = #{0}
+         where 1=1 and id = #{0}
     </delete>
   
     <update id="updateById" parameterType="com.dl.server.entity.server.ServerBulletin">
         update server_bulletin set 
                serverid = #{serverid, jdbcType=VARCHAR}, 
+               title = #{title, jdbcType=VARCHAR}, 
                content = #{content, jdbcType=VARCHAR}, 
                startdate = #{startdate, jdbcType=VARCHAR}, 
                enddate = #{enddate, jdbcType=VARCHAR}, 
                issuer = #{issuer, jdbcType=VARCHAR}
-         where 1=1 and title = #{title, jdbcType=VARCHAR}
+         where 1=1 and id = #{id, jdbcType=DECIMAL}
     </update>
 
 	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.server.ServerBulletin">
@@ -70,6 +84,9 @@
 		<set>
 		    <if test="serverid != null">
 				serverid = #{serverid, jdbcType=VARCHAR},
+		    </if>
+		    <if test="title != null">
+				title = #{title, jdbcType=VARCHAR},
 		    </if>
 		    <if test="content != null">
 				content = #{content, jdbcType=VARCHAR},
@@ -84,6 +101,6 @@
 				issuer = #{issuer, jdbcType=VARCHAR},
 		    </if>
 		</set>
-		where 1=1 and title = #{title, jdbcType=VARCHAR}
+		where 1=1 and id = #{id, jdbcType=DECIMAL}
 	</update>
 </mapper>

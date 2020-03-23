@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.forum.ForumArticleReplyDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.forum.ForumArticleReply">
+        <id column="artid" jdbcType="VARCHAR" property="artid" />
+        <id column="replyid" jdbcType="DECIMAL" property="replyid" />
+        <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="replyer" jdbcType="DECIMAL" property="replyer" />
+        <result column="replydate" jdbcType="VARCHAR" property="replydate" />
+        <result column="replytime" jdbcType="VARCHAR" property="replytime" />
+    </resultMap>
+	
+	<sql id="column_list">
+        artid, replyid, content, replyer, replydate, replytime
+	</sql>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.forum.ForumArticleReply">
+        insert into forum_article_reply (artid, replyid, content, replyer, replydate, replytime)
+        values (#{artid, jdbcType=VARCHAR}, #{replyid, jdbcType=DECIMAL}, #{content, jdbcType=VARCHAR}, #{replyer, jdbcType=DECIMAL}, #{replydate, jdbcType=VARCHAR}, #{replytime, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.forum.ForumArticleReply" resultMap="BaseResultMap">
+        select <include refid="column_list" />
+          from forum_article_reply
+		<where>
+			<if test="artid != null ">
+				and artid = #{artid, jdbcType=VARCHAR}
+			</if>
+			<if test="replyid != null ">
+				and replyid = #{replyid, jdbcType=DECIMAL}
+			</if>
+			<if test="content != null ">
+				and content = #{content, jdbcType=VARCHAR}
+			</if>
+			<if test="replyer != null ">
+				and replyer = #{replyer, jdbcType=DECIMAL}
+			</if>
+			<if test="replydate != null ">
+				and replydate = #{replydate, jdbcType=VARCHAR}
+			</if>
+			<if test="replytime != null ">
+				and replytime = #{replytime, jdbcType=VARCHAR}
+			</if>
+		</where>
+    </select>
+
+	<insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="false">
+		insert all
+		<foreach item="item" index="index" collection="list">
+		into forum_article_reply (artid, replyid, content, replyer, replydate, replytime) 
+		values (#{item.artid, jdbcType=VARCHAR}, #{item.replyid, jdbcType=DECIMAL}, #{item.content, jdbcType=VARCHAR}, #{item.replyer, jdbcType=DECIMAL}, #{item.replydate, jdbcType=VARCHAR}, #{item.replytime, jdbcType=VARCHAR})
+		</foreach>
+		select 1 from dual
+	</insert>
+	
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
+          from forum_article_reply
+         where 1=1 and artid = #{0} and replyid = #{1}
+    </select>
+
+    <delete id="deleteById">
+        delete from forum_article_reply
+         where 1=1 and artid = #{0} and replyid = #{1}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.forum.ForumArticleReply">
+        update forum_article_reply set 
+               content = #{content, jdbcType=VARCHAR}, 
+               replyer = #{replyer, jdbcType=DECIMAL}, 
+               replydate = #{replydate, jdbcType=VARCHAR}, 
+               replytime = #{replytime, jdbcType=VARCHAR}
+         where 1=1 and artid = #{artid, jdbcType=VARCHAR} and replyid = #{replyid, jdbcType=DECIMAL}
+    </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.forum.ForumArticleReply">
+		update forum_article_reply
+		<set>
+		    <if test="content != null">
+				content = #{content, jdbcType=VARCHAR},
+		    </if>
+		    <if test="replyer != null">
+				replyer = #{replyer, jdbcType=DECIMAL},
+		    </if>
+		    <if test="replydate != null">
+				replydate = #{replydate, jdbcType=VARCHAR},
+		    </if>
+		    <if test="replytime != null">
+				replytime = #{replytime, jdbcType=VARCHAR},
+		    </if>
+		</set>
+		where 1=1 and artid = #{artid, jdbcType=VARCHAR} and replyid = #{replyid, jdbcType=DECIMAL}
+	</update>
+</mapper>

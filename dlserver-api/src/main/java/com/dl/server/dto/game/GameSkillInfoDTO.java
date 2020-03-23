@@ -7,8 +7,8 @@ public class GameSkillInfoDTO extends BaseDTO {
 	private String skillid;    //技能ID
 	private String skillname;    //技能名称
 	private String icon;    //技能图标
-	private String remark;    //技能描述
 	private String type;    //技能类型（角色，装备）
+	private String remark;    //技能描述
 
 	public String getSkillid() {
 		return this.skillid;
@@ -34,14 +34,6 @@ public class GameSkillInfoDTO extends BaseDTO {
 		this.icon = icon;
 	}
 
-	public String getRemark() {
-		return this.remark;
-	}
-
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
-
 	public String getType() {
 		return this.type;
 	}
@@ -50,13 +42,21 @@ public class GameSkillInfoDTO extends BaseDTO {
 		this.type = type;
 	}
 
+	public String getRemark() {
+		return this.remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
 
 	public void clear(){
 		this.skillid = null;
 		this.skillname = null;
 		this.icon = null;
-		this.remark = null;
 		this.type = null;
+		this.remark = null;
 	}
 
     @Override
@@ -68,8 +68,8 @@ public class GameSkillInfoDTO extends BaseDTO {
 		sb.append(", skillid=").append(skillid);
 		sb.append(", skillname=").append(skillname);
 		sb.append(", icon=").append(icon);
-		sb.append(", remark=").append(remark);
 		sb.append(", type=").append(type);
+		sb.append(", remark=").append(remark);
         sb.append("]");
         return sb.toString();
 	}

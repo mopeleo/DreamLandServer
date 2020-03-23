@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.game.GameMeunInfoDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.game.GameMeunInfo">
+        <id column="menuid" jdbcType="VARCHAR" property="menuid" />
+        <result column="menuname" jdbcType="VARCHAR" property="menuname" />
+        <result column="icon" jdbcType="VARCHAR" property="icon" />
+        <result column="url" jdbcType="VARCHAR" property="url" />
+    </resultMap>
+	
+	<sql id="column_list">
+        menuid, menuname, icon, url
+	</sql>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.game.GameMeunInfo">
+        insert into game_meun_info (menuid, menuname, icon, url)
+        values (#{menuid, jdbcType=VARCHAR}, #{menuname, jdbcType=VARCHAR}, #{icon, jdbcType=VARCHAR}, #{url, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.game.GameMeunInfo" resultMap="BaseResultMap">
+        select <include refid="column_list" />
+          from game_meun_info
+		<where>
+			<if test="menuid != null ">
+				and menuid = #{menuid, jdbcType=VARCHAR}
+			</if>
+			<if test="menuname != null ">
+				and menuname = #{menuname, jdbcType=VARCHAR}
+			</if>
+			<if test="icon != null ">
+				and icon = #{icon, jdbcType=VARCHAR}
+			</if>
+			<if test="url != null ">
+				and url = #{url, jdbcType=VARCHAR}
+			</if>
+		</where>
+    </select>
+
+	<insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="false">
+		insert all
+		<foreach item="item" index="index" collection="list">
+		into game_meun_info (menuid, menuname, icon, url) 
+		values (#{item.menuid, jdbcType=VARCHAR}, #{item.menuname, jdbcType=VARCHAR}, #{item.icon, jdbcType=VARCHAR}, #{item.url, jdbcType=VARCHAR})
+		</foreach>
+		select 1 from dual
+	</insert>
+	
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
+          from game_meun_info
+         where 1=1 and menuid = #{0}
+    </select>
+
+    <delete id="deleteById">
+        delete from game_meun_info
+         where 1=1 and menuid = #{0}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.game.GameMeunInfo">
+        update game_meun_info set 
+               menuname = #{menuname, jdbcType=VARCHAR}, 
+               icon = #{icon, jdbcType=VARCHAR}, 
+               url = #{url, jdbcType=VARCHAR}
+         where 1=1 and menuid = #{menuid, jdbcType=VARCHAR}
+    </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.game.GameMeunInfo">
+		update game_meun_info
+		<set>
+		    <if test="menuname != null">
+				menuname = #{menuname, jdbcType=VARCHAR},
+		    </if>
+		    <if test="icon != null">
+				icon = #{icon, jdbcType=VARCHAR},
+		    </if>
+		    <if test="url != null">
+				url = #{url, jdbcType=VARCHAR},
+		    </if>
+		</set>
+		where 1=1 and menuid = #{menuid, jdbcType=VARCHAR}
+	</update>
+</mapper>

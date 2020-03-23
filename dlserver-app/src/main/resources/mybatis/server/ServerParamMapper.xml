@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.server.ServerParamDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.server.ServerParam">
+        <id column="serverid" jdbcType="VARCHAR" property="serverid" />
+        <id column="paramid" jdbcType="VARCHAR" property="paramid" />
+        <result column="paramvalue" jdbcType="VARCHAR" property="paramvalue" />
+    </resultMap>
+	
+	<sql id="column_list">
+        serverid, paramid, paramvalue
+	</sql>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.server.ServerParam">
+        insert into server_param (serverid, paramid, paramvalue)
+        values (#{serverid, jdbcType=VARCHAR}, #{paramid, jdbcType=VARCHAR}, #{paramvalue, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.server.ServerParam" resultMap="BaseResultMap">
+        select <include refid="column_list" />
+          from server_param
+		<where>
+			<if test="serverid != null ">
+				and serverid = #{serverid, jdbcType=VARCHAR}
+			</if>
+			<if test="paramid != null ">
+				and paramid = #{paramid, jdbcType=VARCHAR}
+			</if>
+			<if test="paramvalue != null ">
+				and paramvalue = #{paramvalue, jdbcType=VARCHAR}
+			</if>
+		</where>
+    </select>
+
+	<insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="false">
+		insert all
+		<foreach item="item" index="index" collection="list">
+		into server_param (serverid, paramid, paramvalue) 
+		values (#{item.serverid, jdbcType=VARCHAR}, #{item.paramid, jdbcType=VARCHAR}, #{item.paramvalue, jdbcType=VARCHAR})
+		</foreach>
+		select 1 from dual
+	</insert>
+	
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
+          from server_param
+         where 1=1 and serverid = #{0} and paramid = #{1}
+    </select>
+
+    <delete id="deleteById">
+        delete from server_param
+         where 1=1 and serverid = #{0} and paramid = #{1}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.server.ServerParam">
+        update server_param set 
+               paramvalue = #{paramvalue, jdbcType=VARCHAR}
+         where 1=1 and serverid = #{serverid, jdbcType=VARCHAR} and paramid = #{paramid, jdbcType=VARCHAR}
+    </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.server.ServerParam">
+		update server_param
+		<set>
+		    <if test="paramvalue != null">
+				paramvalue = #{paramvalue, jdbcType=VARCHAR},
+		    </if>
+		</set>
+		where 1=1 and serverid = #{serverid, jdbcType=VARCHAR} and paramid = #{paramid, jdbcType=VARCHAR}
+	</update>
+</mapper>

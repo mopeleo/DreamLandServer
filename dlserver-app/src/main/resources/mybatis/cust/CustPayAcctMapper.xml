@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dl.server.dao.cust.CustPayAcctDao">
+    <resultMap id="BaseResultMap" type="com.dl.server.entity.cust.CustPayAcct">
+        <id column="acctno" jdbcType="DECIMAL" property="acctno" />
+        <result column="custno" jdbcType="DECIMAL" property="custno" />
+        <result column="paytype" jdbcType="VARCHAR" property="paytype" />
+        <result column="payno" jdbcType="VARCHAR" property="payno" />
+    </resultMap>
+	
+	<sql id="column_list">
+        acctno, custno, paytype, payno
+	</sql>
+  
+    <insert id="insert" parameterType="com.dl.server.entity.cust.CustPayAcct">
+        insert into cust_pay_acct (acctno, custno, paytype, payno)
+        values (#{acctno, jdbcType=DECIMAL}, #{custno, jdbcType=DECIMAL}, #{paytype, jdbcType=VARCHAR}, #{payno, jdbcType=VARCHAR})
+    </insert>
+  
+    <select id="selectAll" parameterType="com.dl.server.entity.cust.CustPayAcct" resultMap="BaseResultMap">
+        select <include refid="column_list" />
+          from cust_pay_acct
+		<where>
+			<if test="acctno != null ">
+				and acctno = #{acctno, jdbcType=DECIMAL}
+			</if>
+			<if test="custno != null ">
+				and custno = #{custno, jdbcType=DECIMAL}
+			</if>
+			<if test="paytype != null ">
+				and paytype = #{paytype, jdbcType=VARCHAR}
+			</if>
+			<if test="payno != null ">
+				and payno = #{payno, jdbcType=VARCHAR}
+			</if>
+		</where>
+    </select>
+
+	<insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="false">
+		insert all
+		<foreach item="item" index="index" collection="list">
+		into cust_pay_acct (acctno, custno, paytype, payno) 
+		values (#{item.acctno, jdbcType=DECIMAL}, #{item.custno, jdbcType=DECIMAL}, #{item.paytype, jdbcType=VARCHAR}, #{item.payno, jdbcType=VARCHAR})
+		</foreach>
+		select 1 from dual
+	</insert>
+	
+    <select id="selectById" resultMap="BaseResultMap">
+        select <include refid="column_list" />
+          from cust_pay_acct
+         where 1=1 and acctno = #{0}
+    </select>
+
+    <delete id="deleteById">
+        delete from cust_pay_acct
+         where 1=1 and acctno = #{0}
+    </delete>
+  
+    <update id="updateById" parameterType="com.dl.server.entity.cust.CustPayAcct">
+        update cust_pay_acct set 
+               custno = #{custno, jdbcType=DECIMAL}, 
+               paytype = #{paytype, jdbcType=VARCHAR}, 
+               payno = #{payno, jdbcType=VARCHAR}
+         where 1=1 and acctno = #{acctno, jdbcType=DECIMAL}
+    </update>
+
+	<update id="dynamicUpdateById" parameterType="com.dl.server.entity.cust.CustPayAcct">
+		update cust_pay_acct
+		<set>
+		    <if test="custno != null">
+				custno = #{custno, jdbcType=DECIMAL},
+		    </if>
+		    <if test="paytype != null">
+				paytype = #{paytype, jdbcType=VARCHAR},
+		    </if>
+		    <if test="payno != null">
+				payno = #{payno, jdbcType=VARCHAR},
+		    </if>
+		</set>
+		where 1=1 and acctno = #{acctno, jdbcType=DECIMAL}
+	</update>
+</mapper>
