@@ -23,3 +23,11 @@
 /dlserver-app/logs/
 /dlserver-app/.classpath
 /dlserver-app/.project
+
+build/
+*/build/
+*/temp/
+*/library/
+*/local/
+*/packages/
+
