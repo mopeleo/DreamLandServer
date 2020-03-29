@@ -1,5 +1,6 @@
 module.exports = {
     player:{
+        isBattle:false,
         floor: 0,
         lastFloor:-1,
         hp:1000,

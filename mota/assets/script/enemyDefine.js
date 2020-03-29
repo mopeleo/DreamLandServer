@@ -1,5 +1,4 @@
 module.exports = {
-    enemyType : [1,2,3,4,5,6,7,8,9],
     existEnemy:function(enemyId, userData){
         var floorKey = "floor_" + userData.floor;
         var killedEnemys = userData.disappearEnemys[floorKey];
@@ -17,101 +16,89 @@ module.exports = {
         }
         killedEnemys.push(enemyId);
     },
-    enemy1:{
-        type  : 1,
+    canKill:function(enemyType, userData){
+        var enemyData = this.getEnemy(enemyType);
+        if(!enemyData){
+            return false;
+        }
+        if(enemyData.def >= userData.atk){
+            return false;
+        }
+        var playerHit = Math.ceil(enemyData.hp/(userData.atk-enemyData.def));
+        var enemyHit = (enemyData.ack == userData.def ? -1 : Math.ceil(userData.hp/(enemyData.atk-userData.def)));
+        if(enemyHit < 0 || enemyHit > playerHit){
+            return true;
+        }else{
+            return false;
+        }
+    },
+    getEnemy:function(enemyType){
+        var key = "enemy" + enemyType;
+        var enemy = this[key];
+        return enemy;
+    },
+    enemy100:{
+        type  : 100,
         hp    : 30,    //血量
         atk   : 18,
         def   : 8,
         exp   : 1,   //经验值
         money : 1
     },
-    enemy2:{
-        type  : 2,
+    enemy101:{
+        type  : 101,
         hp    : 100,    //血量
         atk   : 20,
         def   : 10,
         exp   : 2,   //经验值
         money : 2
     },
-    enemy3:{
-        type  : 3,
+    enemy102:{
+        type  : 102,
         hp    : 200,    //血量
         atk   : 32,
         def   : 12,
         exp   : 4,   //经验值
         money : 4
     },
-    enemy4:{
-        type  : 4,
+    enemy103:{
+        type  : 103,
         hp    : 350,    //血量
         atk   : 50,
         def   : 10,
         exp   : 8,   //经验值
         money : 8
     },
-    enemy5:{
-        type  : 5,
+    enemy104:{
+        type  : 104,
         hp    : 250,    //血量
         atk   : 30,
         def   : 20,
         exp   : 12,   //经验值
         money : 12
     },
-    enemy6:{
-        type  : 6,
+    enemy105:{
+        type  : 105,
         hp    : 360,    //血量
         atk   : 32,
         def   : 30,
         exp   : 20,   //经验值
         money : 20
     },
-    enemy7:{
-        type  : 7,
+    enemy106:{
+        type  : 106,
         hp    : 500,    //血量
         atk   : 50,
         def   : 30,
         exp   : 32,   //经验值
         money : 32
     },
-    enemy8:{
-        type  : 8,
+    enemy107:{
+        type  : 107,
         hp    : 800,    //血量
         atk   : 60,
         def   : 60,
         exp   : 50,   //经验值
         money : 50
-    },
-    getEnemy:function(enemyType){
-        var enemy = null;
-        switch(enemyType){
-            case 1:
-                enemy = this.enemy1;
-                break;
-            case 2:
-                enemy = this.enemy2;
-                break;
-            case 3:
-                enemy = this.enemy3;
-                break;
-            case 4:
-                enemy = this.enemy4;
-                break;
-            case 5:
-                enemy = this.enemy5;
-                break;
-            case 6:
-                enemy = this.enemy6;
-                break;
-            case 7:
-                enemy = this.enemy7;
-                break;
-            case 8:
-                enemy = this.enemy8;
-                break;
-            default:
-                break;
-        }
-        return enemy;
-    },
-    data : null
+    }
 };

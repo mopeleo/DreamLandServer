@@ -70,6 +70,9 @@ cc.Class({
 
 
     tryMoveToNewTile: function(newTile) {
+        if(pub.player.isBattle){
+            return;
+        }
         var mapSize = this.tiledMap.getMapSize();
         if (newTile.x < 0 || newTile.x >= mapSize.width) return;
         if (newTile.y < 0 || newTile.y >= mapSize.height) return;
@@ -77,17 +80,17 @@ cc.Class({
         if (this.wall.getTileGIDAt(newTile)) {//GID=0,则该Tile为空
             cc.log('This way is blocked!');
             // cc.log('pub = ' + JSON.stringify(PUB.getEnemy(1)));
-            return false;
+            return;
         }
 
         if(!this.killEnemy(newTile)){
             cc.log('This enemy is blocked!');
-            return false;
+            return;
         }
 
         if(!itemData.pickItem(this.tiledMap, newTile, pub.player)){
             cc.log('not enough key!');
-            return false;
+            return;
         }else{
             pub.refreshTitle(this.title);
         }
@@ -117,20 +120,21 @@ cc.Class({
 
     killEnemy:function(newTile){
         var enemys = this.enemyObject;
+        var that = this;
         // cc.log('player x = ' + newTile.x + ", player y = " + newTile.y);
         for(var i = 0; i < enemys.length; i++){
             if(newTile.x == enemys[i].tiledX && newTile.y == enemys[i].tiledY){
-                var enemyData = PUB.getEnemy(enemys[i].enemytype);
-                if(!gameData.canBattle(enemyData)){
+                if(!enemyData.canKill(enemys[i].enemytype, pub.player)){
                     cc.log(' cant battle ');
                     return false;
                 }
-                cc.log('battle ');
+                battle.show(pub.player, enemyData.getEnemy(enemys[i].enemytype), function(){
+                    pub.refreshTitle(that.title);
+                });
+                enemyData.killEnemy(enemys[i].id, pub.player);
                 if(enemys[i].cocosNode){
                     enemys[i].cocosNode.destroy();
                 }
-                battle.show(gameData.player, enemyData);
-                gameData.enemyDie(enemys[i].id);
                 enemys.splice(i,1);
                 break;
             }
