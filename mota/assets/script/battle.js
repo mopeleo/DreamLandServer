@@ -126,3 +126,5 @@ battle.show = function (playerData, enemyData, callBack) {
         battle._animSpeed = 0.3;
     };
 };
+
+window.battle=battle;
