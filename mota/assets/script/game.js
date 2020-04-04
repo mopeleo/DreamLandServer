@@ -124,11 +124,12 @@ cc.Class({
         // cc.log('player x = ' + newTile.x + ", player y = " + newTile.y);
         for(var i = 0; i < enemys.length; i++){
             if(newTile.x == enemys[i].tiledX && newTile.y == enemys[i].tiledY){
-                if(!enemyData.canKill(enemys[i].enemytype, pub.player)){
+                var hits = enemyData.canKill(enemys[i].enemytype, pub.player);
+                if(hits == 0){
                     cc.log(' cant battle ');
                     return false;
                 }
-                battle.show(pub.player, enemyData.getEnemy(enemys[i].enemytype), function(){
+                battle.show(pub.player, enemyData.getEnemy(enemys[i].enemytype), hits, function(){
                     pub.refreshTitle(that.title);
                 });
                 enemyData.killEnemy(enemys[i].id, pub.player);
@@ -192,7 +193,6 @@ cc.Class({
             this.playerTile = this.endTile;
         }
 
-        // battle.show(gameData.player, PUB.enemy1);
         //更新player位置
         this.updatePlayerPos();
 

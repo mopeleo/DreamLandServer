@@ -1,20 +1,13 @@
 var battle = {
-    _battle: null,           // prefab
-    _animSpeed:     0.3,    // 动画速度
+    _battle: null,      // prefab
+    _animSpeed: 0.3,    // 动画速度
 };
 
 
-battle.show = function (playerData, enemyData, callBack) {
-    var hits = 0;
-    var playerHit = Math.ceil(enemyData.hp/(playerData.atk-enemyData.def));
-    var enemyHit = (enemyData.atk == playerData.def ? -1 : Math.ceil(playerData.hp/(enemyData.atk-playerData.def)));
-    // cc.log("playerHit :" + playerHit + " ,enemyHit: " + enemyHit);
-    if(enemyHit < 0 || enemyHit > playerHit){
-        hits = playerHit - 1;
-    }else{
+battle.show = function (playerData, enemyData, hits, callBack) {
+    if(hits <= 0){
         return;
     }
-
     playerData.isBattle = true;
 
     // 引用
@@ -82,12 +75,14 @@ battle.show = function (playerData, enemyData, callBack) {
             if(enemyHp <= 0){
                 playerData.hp = playerHp;
                 playerData.isBattle = false;
+                playerData.money += enemyData.money;
+                playerData.exp += enemyData.exp;
                 if(callBack){
                     callBack();
                 }
                 self.onDestory();
             }
-         }, 0.5, hits);
+         }, 0.5, hits-1);  //实际循环次数要 - 1
 
     });
 

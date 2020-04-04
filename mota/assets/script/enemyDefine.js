@@ -16,21 +16,26 @@ module.exports = {
         }
         killedEnemys.push(enemyId);
     },
+    /**
+     *  判断是否能杀死敌人，返回0表示无法杀死敌人，大于0则表示攻击次数可以杀死敌人
+     *  enemyType 敌人类型
+     *  userData 玩家数据
+    */
     canKill:function(enemyType, userData){
         var enemyData = this.getEnemy(enemyType);
         if(!enemyData){
-            return false;
+            return 0;
         }
         if(enemyData.def >= userData.atk){
-            return false;
+            return 0;
         }
         var playerHit = Math.ceil(enemyData.hp/(userData.atk-enemyData.def));
         var enemyHit = (enemyData.ack == userData.def ? -1 : Math.ceil(userData.hp/(enemyData.atk-userData.def)));
         if(enemyHit < 0 || enemyHit > playerHit){
-            return true;
-        }else{
-            return false;
+            return playerHit;
         }
+
+        return 0;
     },
     getEnemy:function(enemyType){
         var key = "enemy" + enemyType;
