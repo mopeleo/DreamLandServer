@@ -17,7 +17,7 @@
         "__id__": 2
       }
     ],
-    "_active": true,
+    "_active": false,
     "_components": [],
     "_prefab": null,
     "_opacity": 255,
@@ -945,7 +945,7 @@
     "_is3DNode": false,
     "_groupIndex": 0,
     "groupIndex": 0,
-    "_id": "8eyf5j9S5C0IitYAl7ZFAK"
+    "_id": "4anyxn2w9CGa+VZb5uAU6a"
   },
   {
     "__type__": "cc.Node",
@@ -1009,7 +1009,7 @@
     "_is3DNode": false,
     "_groupIndex": 0,
     "groupIndex": 0,
-    "_id": "3bwbq3l19NV6vJskXfdfri"
+    "_id": "1af2Gwni5Jb7Ah8uGNkxaz"
   },
   {
     "__type__": "cc.Sprite",
@@ -1041,7 +1041,7 @@
     "_fillRange": 0,
     "_isTrimmedMode": true,
     "_atlas": null,
-    "_id": "d0S0P6MFpPDbkxvbBwfbbV"
+    "_id": "bfD3mYzQJEOZnKaPbqaafr"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -1116,7 +1116,7 @@
     "_is3DNode": false,
     "_groupIndex": 0,
     "groupIndex": 0,
-    "_id": "1fh1gl6UVNdabwKKqtOLlc"
+    "_id": "0eMpgIdVJIlJC5JZSedFOP"
   },
   {
     "__type__": "cc.Sprite",
@@ -1148,7 +1148,7 @@
     "_fillRange": 0,
     "_isTrimmedMode": true,
     "_atlas": null,
-    "_id": "d1NwFrrS9ANInym76eiCto"
+    "_id": "e6z82cZ6NFGaDDk69mdGz4"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -1223,7 +1223,7 @@
     "_is3DNode": false,
     "_groupIndex": 0,
     "groupIndex": 0,
-    "_id": "abjPPOqlRPSqo8M+UqWdcT"
+    "_id": "64PGrDCuFKZpWH4AYPQvLq"
   },
   {
     "__type__": "cc.Sprite",
@@ -1255,7 +1255,7 @@
     "_fillRange": 0,
     "_isTrimmedMode": true,
     "_atlas": null,
-    "_id": "02Yl+xWl1CnIcD3Lvc5cfb"
+    "_id": "86KBdAnClNTrUY/GOfQswQ"
   },
   {
     "__type__": "cc.PrefabInfo",
@@ -1330,7 +1330,7 @@
     "_is3DNode": false,
     "_groupIndex": 0,
     "groupIndex": 0,
-    "_id": "bfpQwUB25I5aTo/+j7PBIg"
+    "_id": "a9+i6mW81Hc7nooAAb66Eb"
   },
   {
     "__type__": "cc.Sprite",
@@ -1362,7 +1362,7 @@
     "_fillRange": 0,
     "_isTrimmedMode": true,
     "_atlas": null,
-    "_id": "e8La+1uUhJc7ZRfU9143RR"
+    "_id": "92PP+0XspOUqDaifymnLa9"
   },
   {
     "__type__": "cc.PrefabInfo",
