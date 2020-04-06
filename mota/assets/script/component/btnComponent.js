@@ -20,7 +20,7 @@ cc.Class({
     },
 
     exitApp:function(){
-        cc.director.end();
+        cc.game.end();
     },
 
     autoSave:function(){
