@@ -211,6 +211,5 @@ cc.Class({
         var pos = this.wall.getPositionAt(this.playerTile);
         this.player.setPosition(pos);
     },
-
     // update (dt) {},
 });

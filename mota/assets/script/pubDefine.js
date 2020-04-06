@@ -15,6 +15,27 @@ module.exports = {
         disappearItems:{},
         disappearEnemys:{}
     },
+    initGame:function(){
+        this.player.isBattle = false;
+        this.player.floor = 0;
+        this.player.lastFloor = -1;
+        this.player.hp = 1000;
+        this.player.level = 1;
+        this.player.atk = 10;
+        this.player.def = 10;
+        this.player.exp = 0;
+        this.player.money = 0;
+        this.player.yellowKey = 0;
+        this.player.blueKey = 0;
+        this.player.redKey = 0;
+        this.player.disappearItems = {};
+        this.player.disappearEnemys = {};
+
+        cc.sys.localStorage.removeItem("autodata");
+        for(var i = 0; i < 3; i++){
+            cc.sys.localStorage.removeItem("userdata_" + i);
+        }
+    },
     save:function(type){
         if(type){
             cc.sys.localStorage.setItem("userdata_" + type, JSON.stringify(this.player));
@@ -31,7 +52,10 @@ module.exports = {
         }
         if(datastring && datastring != null){
             this.player = JSON.parse(datastring);
+            return true;
         }
+
+        return false;
     },
     clear:function(){
         cc.sys.localStorage.removeItem("autodata");
