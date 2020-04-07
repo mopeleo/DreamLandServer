@@ -857,9 +857,7 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_spriteFrame": {
-      "__uuid__": "902d4dff-2216-4106-aac5-3e17c2365777"
-    },
+    "_spriteFrame": null,
     "_type": 0,
     "_sizeMode": 1,
     "_fillType": 0,
@@ -1407,6 +1405,12 @@
       "__id__": 5
     },
     "_enabled": true,
+    "player": {
+      "__id__": 18
+    },
+    "playerAltas": {
+      "__uuid__": "c4e1fccf-7754-4286-be71-9cc89875127f"
+    },
     "_id": "853vsJmh1N9aHHvSH2LX7q"
   },
   {
@@ -4114,7 +4118,6 @@
     "menu": {
       "__uuid__": "efd3fd38-70e5-4dc0-bd8d-019c910b81b8"
     },
-    "isOpen": false,
     "_id": "25wtQERcVCl5TpCDGY9elf"
   },
   {
@@ -4128,7 +4131,6 @@
     "menu": {
       "__uuid__": "efd3fd38-70e5-4dc0-bd8d-019c910b81b8"
     },
-    "isOpen": false,
     "_id": "3dXMFe3tFH+qKu9V4oekS1"
   },
   {

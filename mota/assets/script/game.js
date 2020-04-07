@@ -6,6 +6,8 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        player: cc.Node,
+        playerAltas: cc.SpriteAtlas
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -17,7 +19,7 @@ cc.Class({
         // this.node.setPosition(cc.visibleRect.bottomLeft);
         //地图
         this.tiledMap = this.node.getComponent(cc.TiledMap);
-        this.player = this.node.getChildByName('player');
+        this.player.getComponent(cc.Sprite).spriteFrame = this.playerAltas.getSpriteFrame("player_0");
         this.title = this.node.parent.getChildByName("title");
         this.direction = this.node.getChildByName('direction');
         // pub.initFloor(this.tiledMap);
@@ -26,22 +28,26 @@ cc.Class({
         this.direction.getChildByName('up').on(cc.Node.EventType.TOUCH_END, event=>{
             var newTile = cc.v2(this.playerTile.x, this.playerTile.y);
             newTile.y -= 1;
+            this.player.getComponent(cc.Sprite).spriteFrame = this.playerAltas.getSpriteFrame("player_5");
             this.tryMoveToNewTile(newTile);
         }, this);
         this.direction.getChildByName('down').on(cc.Node.EventType.TOUCH_END, event=>{
             var newTile = cc.v2(this.playerTile.x, this.playerTile.y);
             newTile.y += 1;
+            this.player.getComponent(cc.Sprite).spriteFrame = this.playerAltas.getSpriteFrame("player_0");
             this.tryMoveToNewTile(newTile);
         }, this);
         this.direction.getChildByName('left').on(cc.Node.EventType.TOUCH_END, event=>{
             var newTile = cc.v2(this.playerTile.x, this.playerTile.y);
             newTile.x -= 1;
             this.tryMoveToNewTile(newTile);
+            this.player.getComponent(cc.Sprite).spriteFrame = this.playerAltas.getSpriteFrame("player_1");
         });
         this.direction.getChildByName('right').on(cc.Node.EventType.TOUCH_END, event=>{
             var newTile = cc.v2(this.playerTile.x, this.playerTile.y);
             newTile.x += 1;
             this.tryMoveToNewTile(newTile);
+            this.player.getComponent(cc.Sprite).spriteFrame = this.playerAltas.getSpriteFrame("player_3");
         });
 
     },

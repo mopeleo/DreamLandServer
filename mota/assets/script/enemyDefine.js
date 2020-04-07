@@ -45,47 +45,47 @@ module.exports = {
     enemy100:{
         type  : 100,
         hp    : 30,    //血量
-        atk   : 18,
+        atk   : 12,
         def   : 8,
         exp   : 1,   //经验值
         money : 1
     },
     enemy101:{
         type  : 101,
-        hp    : 100,    //血量
-        atk   : 20,
+        hp    : 50,    //血量
+        atk   : 16,
         def   : 10,
         exp   : 2,   //经验值
         money : 2
     },
     enemy102:{
         type  : 102,
-        hp    : 200,    //血量
-        atk   : 32,
+        hp    : 120,    //血量
+        atk   : 26,
         def   : 12,
         exp   : 4,   //经验值
         money : 4
     },
     enemy103:{
         type  : 103,
-        hp    : 350,    //血量
-        atk   : 50,
+        hp    : 300,    //血量
+        atk   : 40,
         def   : 10,
         exp   : 8,   //经验值
         money : 8
     },
     enemy104:{
         type  : 104,
-        hp    : 250,    //血量
-        atk   : 30,
+        hp    : 350,    //血量
+        atk   : 35,
         def   : 20,
         exp   : 12,   //经验值
         money : 12
     },
     enemy105:{
         type  : 105,
-        hp    : 360,    //血量
-        atk   : 32,
+        hp    : 460,    //血量
+        atk   : 35,
         def   : 30,
         exp   : 20,   //经验值
         money : 20
