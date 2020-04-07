@@ -4,6 +4,7 @@ module.exports = {
     //20-黄门，21-蓝门，22-红门，
     //30-红血，31-蓝血，
     //40-防御宝石，41-攻击宝石
+    //50-建筑金钱交易，51-建筑经验交易
     //90-守门精灵
     itemType : [10,11,12,20,21,22,30,31,40,41,90],
     pickItem:function(tiledMap, position, userData){

@@ -60,8 +60,8 @@ module.exports = {
     },
     enemy102:{
         type  : 102,
-        hp    : 120,    //血量
-        atk   : 26,
+        hp    : 100,    //血量
+        atk   : 25,
         def   : 12,
         exp   : 4,   //经验值
         money : 4

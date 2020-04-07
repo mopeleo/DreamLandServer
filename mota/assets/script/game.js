@@ -21,29 +21,28 @@ cc.Class({
         this.tiledMap = this.node.getComponent(cc.TiledMap);
         this.player.getComponent(cc.Sprite).spriteFrame = this.playerAltas.getSpriteFrame("player_0");
         this.title = this.node.parent.getChildByName("title");
-        this.direction = this.node.getChildByName('direction');
         // pub.initFloor(this.tiledMap);
         this.loadMap();
         // cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
-        this.direction.getChildByName('up').on(cc.Node.EventType.TOUCH_END, event=>{
+        this.title.getChildByName('up').on(cc.Node.EventType.TOUCH_END, event=>{
             var newTile = cc.v2(this.playerTile.x, this.playerTile.y);
             newTile.y -= 1;
             this.player.getComponent(cc.Sprite).spriteFrame = this.playerAltas.getSpriteFrame("player_5");
             this.tryMoveToNewTile(newTile);
         }, this);
-        this.direction.getChildByName('down').on(cc.Node.EventType.TOUCH_END, event=>{
+        this.title.getChildByName('down').on(cc.Node.EventType.TOUCH_END, event=>{
             var newTile = cc.v2(this.playerTile.x, this.playerTile.y);
             newTile.y += 1;
             this.player.getComponent(cc.Sprite).spriteFrame = this.playerAltas.getSpriteFrame("player_0");
             this.tryMoveToNewTile(newTile);
         }, this);
-        this.direction.getChildByName('left').on(cc.Node.EventType.TOUCH_END, event=>{
+        this.title.getChildByName('left').on(cc.Node.EventType.TOUCH_END, event=>{
             var newTile = cc.v2(this.playerTile.x, this.playerTile.y);
             newTile.x -= 1;
             this.tryMoveToNewTile(newTile);
             this.player.getComponent(cc.Sprite).spriteFrame = this.playerAltas.getSpriteFrame("player_1");
         });
-        this.direction.getChildByName('right').on(cc.Node.EventType.TOUCH_END, event=>{
+        this.title.getChildByName('right').on(cc.Node.EventType.TOUCH_END, event=>{
             var newTile = cc.v2(this.playerTile.x, this.playerTile.y);
             newTile.x += 1;
             this.tryMoveToNewTile(newTile);
