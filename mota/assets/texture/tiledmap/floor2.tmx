@@ -37,7 +37,7 @@
 88,88,88,88,88,88,88,88,88,88,88,88,88
 </data>
  </layer>
- <layer id="15" name="layer50" width="13" height="13">
+ <layer id="15" name="moneyBuy" width="13" height="13">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,726,727,728,0,0,0,0,0,0,0,0,0,
@@ -54,7 +54,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="16" name="layer51" width="13" height="13">
+ <layer id="16" name="expBuy" width="13" height="13">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,729,730,731,0,

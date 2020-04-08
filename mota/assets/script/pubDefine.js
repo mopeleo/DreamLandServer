@@ -1,5 +1,7 @@
 module.exports = {
     player:{
+        x:0,
+        y:0,
         isBattle:false,
         floor: 0,
         lastFloor:-1,
@@ -16,6 +18,8 @@ module.exports = {
         disappearEnemys:{}
     },
     initGame:function(){
+        this.player.x = 0;
+        this.player.y = 0;
         this.player.isBattle = false;
         this.player.floor = 0;
         this.player.lastFloor = -1;

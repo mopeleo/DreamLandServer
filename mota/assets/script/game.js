@@ -19,9 +19,14 @@ cc.Class({
         // this.node.setPosition(cc.visibleRect.bottomLeft);
         //地图
         this.tiledMap = this.node.getComponent(cc.TiledMap);
+        //障碍物图层和星星图层
+        // this.ground = this.tiledMap.getLayer('ground');
+        this.wall = this.tiledMap.getLayer('wall');
+        this.moneyBuy = this.tiledMap.getLayer("moneyBuy");
+        this.expBuy = this.tiledMap.getLayer("expBuy");
         this.player.getComponent(cc.Sprite).spriteFrame = this.playerAltas.getSpriteFrame("player_0");
         this.title = this.node.parent.getChildByName("title");
-        // pub.initFloor(this.tiledMap);
+
         this.loadMap();
         // cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this);
         this.title.getChildByName('up').on(cc.Node.EventType.TOUCH_END, event=>{
@@ -29,24 +34,32 @@ cc.Class({
             newTile.y -= 1;
             this.player.getComponent(cc.Sprite).spriteFrame = this.playerAltas.getSpriteFrame("player_5");
             this.tryMoveToNewTile(newTile);
+            pub.player.y = this.playerTile.y;
+            pub.player.x = this.playerTile.x;
         }, this);
         this.title.getChildByName('down').on(cc.Node.EventType.TOUCH_END, event=>{
             var newTile = cc.v2(this.playerTile.x, this.playerTile.y);
             newTile.y += 1;
             this.player.getComponent(cc.Sprite).spriteFrame = this.playerAltas.getSpriteFrame("player_0");
             this.tryMoveToNewTile(newTile);
+            pub.player.y = this.playerTile.y;
+            pub.player.x = this.playerTile.x;
         }, this);
         this.title.getChildByName('left').on(cc.Node.EventType.TOUCH_END, event=>{
             var newTile = cc.v2(this.playerTile.x, this.playerTile.y);
             newTile.x -= 1;
             this.tryMoveToNewTile(newTile);
             this.player.getComponent(cc.Sprite).spriteFrame = this.playerAltas.getSpriteFrame("player_1");
+            pub.player.y = this.playerTile.y;
+            pub.player.x = this.playerTile.x;
         });
         this.title.getChildByName('right').on(cc.Node.EventType.TOUCH_END, event=>{
             var newTile = cc.v2(this.playerTile.x, this.playerTile.y);
             newTile.x += 1;
             this.tryMoveToNewTile(newTile);
             this.player.getComponent(cc.Sprite).spriteFrame = this.playerAltas.getSpriteFrame("player_3");
+            pub.player.y = this.playerTile.y;
+            pub.player.x = this.playerTile.x;
         });
 
     },
@@ -76,7 +89,7 @@ cc.Class({
 
     tryMoveToNewTile: function(newTile) {
         if(pub.player.isBattle){
-            return;
+            return false;
         }
         var mapSize = this.tiledMap.getMapSize();
         if (newTile.x < 0 || newTile.x >= mapSize.width) return;
@@ -84,18 +97,17 @@ cc.Class({
 
         if (this.wall.getTileGIDAt(newTile)) {//GID=0,则该Tile为空
             cc.log('This way is blocked!');
-            // cc.log('pub = ' + JSON.stringify(PUB.getEnemy(1)));
-            return;
+            return false;
         }
 
         if(!this.killEnemy(newTile)){
             cc.log('This enemy is blocked!');
-            return;
+            return false;
         }
 
         if(!itemData.pickItem(this.tiledMap, newTile, pub.player)){
             cc.log('not enough key!');
-            return;
+            return false;
         }else{
             pub.refreshTitle(this.title);
         }
@@ -108,6 +120,8 @@ cc.Class({
             floorNum = floorNum + 1;
             pub.player.lastFloor = pub.player.floor;
             pub.player.floor = floorNum;
+            pub.player.x = 0;
+            pub.player.y = 0;
             pub.save();
             cc.director.loadScene("floor" + floorNum);
         }
@@ -116,17 +130,20 @@ cc.Class({
             pub.player.lastFloor = pub.player.floor;
             if(floorNum >= 0){
                 pub.player.floor = floorNum;
+                pub.player.x = 0;
+                pub.player.y = 0;
                 pub.save();
                 cc.director.loadScene("floor" + floorNum);
             }
         }
+
+        return true;
     },
 
 
     killEnemy:function(newTile){
         var enemys = this.enemyObject;
         var that = this;
-        // cc.log('player x = ' + newTile.x + ", player y = " + newTile.y);
         for(var i = 0; i < enemys.length; i++){
             if(newTile.x == enemys[i].tiledX && newTile.y == enemys[i].tiledY){
                 var hits = enemyData.canKill(enemys[i].enemytype, pub.player);
@@ -181,9 +198,6 @@ cc.Class({
         //计数器
         pub.refreshTitle(this.title);
         itemData.initItem(this.tiledMap, pub.player);
-        //障碍物图层和星星图层
-        // this.ground = this.tiledMap.getLayer('ground');
-        this.wall = this.tiledMap.getLayer('wall');
         //出生Tile和结束Tile
         //startPoint和endPoint对象
         var updown = this.tiledMap.getObjectGroup('updown');
@@ -192,10 +206,15 @@ cc.Class({
         this.startTile = this.getTilePos(startPoint);
         this.endTile = this.getTilePos(endPoint);
 
-        if(pub.player.lastFloor < pub.player.floor){
-            this.playerTile = this.startTile;
+        //若读取存档，更新玩家位置
+        if(pub.player.x !=0 && pub.player.y != 0){
+            this.playerTile = cc.v2(pub.player.x, pub.player.y);
         }else{
-            this.playerTile = this.endTile;
+            if(pub.player.lastFloor < pub.player.floor){
+                this.playerTile = this.startTile;
+            }else{
+                this.playerTile = this.endTile;
+            }
         }
 
         //更新player位置
