@@ -34,32 +34,24 @@ cc.Class({
             newTile.y -= 1;
             this.player.getComponent(cc.Sprite).spriteFrame = this.playerAltas.getSpriteFrame("player_5");
             this.tryMoveToNewTile(newTile);
-            pub.player.y = this.playerTile.y;
-            pub.player.x = this.playerTile.x;
         }, this);
         this.title.getChildByName('down').on(cc.Node.EventType.TOUCH_END, event=>{
             var newTile = cc.v2(this.playerTile.x, this.playerTile.y);
             newTile.y += 1;
             this.player.getComponent(cc.Sprite).spriteFrame = this.playerAltas.getSpriteFrame("player_0");
             this.tryMoveToNewTile(newTile);
-            pub.player.y = this.playerTile.y;
-            pub.player.x = this.playerTile.x;
         }, this);
         this.title.getChildByName('left').on(cc.Node.EventType.TOUCH_END, event=>{
             var newTile = cc.v2(this.playerTile.x, this.playerTile.y);
             newTile.x -= 1;
             this.tryMoveToNewTile(newTile);
             this.player.getComponent(cc.Sprite).spriteFrame = this.playerAltas.getSpriteFrame("player_1");
-            pub.player.y = this.playerTile.y;
-            pub.player.x = this.playerTile.x;
         });
         this.title.getChildByName('right').on(cc.Node.EventType.TOUCH_END, event=>{
             var newTile = cc.v2(this.playerTile.x, this.playerTile.y);
             newTile.x += 1;
             this.tryMoveToNewTile(newTile);
             this.player.getComponent(cc.Sprite).spriteFrame = this.playerAltas.getSpriteFrame("player_3");
-            pub.player.y = this.playerTile.y;
-            pub.player.x = this.playerTile.x;
         });
 
     },
@@ -100,6 +92,16 @@ cc.Class({
             return false;
         }
 
+        if (this.moneyBuy && this.moneyBuy.getTileGIDAt(newTile)) {//GID=0,则该Tile为空
+            cc.log('This is moneyBuy!');
+            return false;
+        }
+
+        if (this.expBuy && this.expBuy.getTileGIDAt(newTile)) {//GID=0,则该Tile为空
+            cc.log('This is expBuy!');
+            return false;
+        }
+
         if(!this.killEnemy(newTile)){
             cc.log('This enemy is blocked!');
             return false;
@@ -114,6 +116,8 @@ cc.Class({
 
         this.playerTile = newTile;
         this.updatePlayerPos();
+        pub.player.y = this.playerTile.y;
+        pub.player.x = this.playerTile.x;
 
         var floorNum = parseInt(pub.player.floor);
         if (this.playerTile.x == this.endTile.x && this.playerTile.y == this.endTile.y) {
@@ -207,6 +211,7 @@ cc.Class({
         this.endTile = this.getTilePos(endPoint);
 
         //若读取存档，更新玩家位置
+        cc.log("init pub.player.x = " + pub.player.x + " , pub.player.y = " + pub.player.y);
         if(pub.player.x !=0 && pub.player.y != 0){
             this.playerTile = cc.v2(pub.player.x, pub.player.y);
         }else{
