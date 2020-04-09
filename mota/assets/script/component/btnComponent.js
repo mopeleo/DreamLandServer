@@ -45,6 +45,7 @@ cc.Class({
             var sceneName = "floor" + pub.player.floor;
             cc.director.loadScene(sceneName);
         }
-    }
+    },
+
     // update (dt) {},
 });

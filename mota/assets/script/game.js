@@ -80,9 +80,6 @@ cc.Class({
 
 
     tryMoveToNewTile: function(newTile) {
-        if(pub.player.isBattle){
-            return false;
-        }
         var mapSize = this.tiledMap.getMapSize();
         if (newTile.x < 0 || newTile.x >= mapSize.width) return;
         if (newTile.y < 0 || newTile.y >= mapSize.height) return;
@@ -92,13 +89,19 @@ cc.Class({
             return false;
         }
 
-        if (this.moneyBuy && this.moneyBuy.getTileGIDAt(newTile)) {//GID=0,则该Tile为空
-            cc.log('This is moneyBuy!');
+        var gid = this.moneyBuy? this.moneyBuy.getTileGIDAt(newTile) : 0;
+        if (gid != 0) {//GID=0,则该Tile为空
+            var prop = this.moneyBuy.getProperty("shoptype");
+            cc.log('gid=' + gid + ',This is moneyBuy! prop = ' + prop);
+            battle.shop();
             return false;
         }
 
-        if (this.expBuy && this.expBuy.getTileGIDAt(newTile)) {//GID=0,则该Tile为空
-            cc.log('This is expBuy!');
+        gid = this.expBuy? this.expBuy.getTileGIDAt(newTile) : 0;
+        if (gid != 0) {//GID=0,则该Tile为空
+            var prop = this.expBuy.getProperty("shoptype");
+            cc.log('gid=' + gid + ',This is expBuy! prop = ' + prop);
+            battle.shop();
             return false;
         }
 

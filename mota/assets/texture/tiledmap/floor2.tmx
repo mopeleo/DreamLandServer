@@ -38,6 +38,9 @@
 </data>
  </layer>
  <layer id="15" name="moneyBuy" width="13" height="13">
+  <properties>
+   <property name="shoptype" type="int" value="1"/>
+  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,726,727,728,0,0,0,0,0,0,0,0,0,
@@ -55,6 +58,9 @@
 </data>
  </layer>
  <layer id="16" name="expBuy" width="13" height="13">
+  <properties>
+   <property name="shoptype" type="int" value="2"/>
+  </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,729,730,731,0,

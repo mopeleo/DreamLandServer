@@ -2,7 +2,6 @@ module.exports = {
     player:{
         x:0,
         y:0,
-        isBattle:false,
         floor: 0,
         lastFloor:-1,
         hp:1000,
@@ -14,13 +13,13 @@ module.exports = {
         yellowKey:0,
         blueKey:0,
         redKey:0,
+        buyTimes:{},    //记录各种商店的购买次数 shop_type:times
         disappearItems:{},
         disappearEnemys:{}
     },
     initGame:function(){
         this.player.x = 0;
         this.player.y = 0;
-        this.player.isBattle = false;
         this.player.floor = 0;
         this.player.lastFloor = -1;
         this.player.hp = 1000;
@@ -32,6 +31,7 @@ module.exports = {
         this.player.yellowKey = 0;
         this.player.blueKey = 0;
         this.player.redKey = 0;
+        this.player.buyTimes = {};
         this.player.disappearItems = {};
         this.player.disappearEnemys = {};
 
