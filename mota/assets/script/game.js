@@ -89,19 +89,9 @@ cc.Class({
             return false;
         }
 
-        var gid = this.moneyBuy? this.moneyBuy.getTileGIDAt(newTile) : 0;
-        if (gid != 0) {//GID=0,则该Tile为空
-            var prop = this.moneyBuy.getProperty("shoptype");
-            cc.log('gid=' + gid + ',This is moneyBuy! prop = ' + prop);
-            battle.shop();
-            return false;
-        }
 
-        gid = this.expBuy? this.expBuy.getTileGIDAt(newTile) : 0;
-        if (gid != 0) {//GID=0,则该Tile为空
-            var prop = this.expBuy.getProperty("shoptype");
-            cc.log('gid=' + gid + ',This is expBuy! prop = ' + prop);
-            battle.shop();
+        if(!this.goShop(newTile)){
+            cc.log('This is shop!');
             return false;
         }
 
@@ -147,6 +137,28 @@ cc.Class({
         return true;
     },
 
+    goShop:function(newTile){
+        var gid = this.moneyBuy? this.moneyBuy.getTileGIDAt(newTile) : 0;
+        if (gid != 0) {//GID=0,则该Tile为空
+            var shoptype = this.moneyBuy.getProperty("shoptype");
+            // cc.log('gid=' + gid + ',This is moneyBuy! shoptype = ' + shoptype);
+            battle.shop(pub.player, pub.shop, shoptype, ()=>{
+                pub.refreshTitle(this.title);
+            });
+            return false;
+        }
+
+        gid = this.expBuy? this.expBuy.getTileGIDAt(newTile) : 0;
+        if (gid != 0) {//GID=0,则该Tile为空
+            var shoptype = this.expBuy.getProperty("shoptype");
+            battle.shop(pub.player, pub.shop, shoptype, ()=>{
+                pub.refreshTitle(this.title);
+            });
+            return false;
+        }
+
+        return true;
+    },
 
     killEnemy:function(newTile){
         var enemys = this.enemyObject;

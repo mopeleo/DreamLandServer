@@ -6,16 +6,36 @@ module.exports = {
         lastFloor:-1,
         hp:1000,
         level:1,
-        atk:10,
+        atk:15,
         def:10,
-        exp: 0,
-        money: 0,
+        exp: 100,
+        money: 100,
         yellowKey:0,
         blueKey:0,
         redKey:0,
         buyTimes:{},    //记录各种商店的购买次数 shop_type:times
         disappearItems:{},
         disappearEnemys:{}
+    },
+    shop:{
+        shop1:{
+            type:1,
+            name:'金币',
+            init:20,
+            increment:1,
+            hp:500,
+            atk:3,
+            def:3
+        },
+        shop2:{
+            type:2,
+            name:'经验',
+            init:20,
+            increment:1,
+            hp:500,
+            atk:3,
+            def:3
+        }
     },
     initGame:function(){
         this.player.x = 0;

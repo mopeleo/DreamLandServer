@@ -1,6 +1,6 @@
 var battle = {
     _battle: null,      // prefab
-    _animSpeed: 0.3,    // 动画速度
+    _animSpeed: 0.1,    // 动画速度
 };
 
 
@@ -47,7 +47,10 @@ battle.show = function (playerData, enemyData, hits, callBack) {
 
 
         // 展现 battle
-        self.startFadeIn();
+        // self.startFadeIn();
+        // battle._battle.setPosition(0,0);
+        cc.show();
+
         var playerHpLab = mask.getChildByName("phpValue").getComponent(cc.Label);
         playerHpLab.string = playerData.hp;
         var playerHp = playerData.hp;
@@ -129,9 +132,11 @@ battle.show = function (playerData, enemyData, hits, callBack) {
     };
 };
 
-battle.shop = function (playerData, shoptype, callBack) {
+battle.shop = function (playerData, shopData, shoptype, callBack) {
     // 引用
     var self = this;
+    var shopKey = "shop" + shoptype;
+    var shop = shopData[shopKey];
 
     // 加载 prefab 创建
     cc.loader.loadRes("prefab/shop", cc.Prefab, function (error, prefab) {
@@ -152,8 +157,88 @@ battle.shop = function (playerData, shoptype, callBack) {
             event.stopPropagation();
         });
 
+        var buyTimes = playerData[shopKey];
+        if(!buyTimes){
+            buyTimes = 0;
+            playerData[shopKey] = buyTimes;
+        }
         mask.getChildByName("btnReturn").on('touchend', function (event) {
             self.onDestory();
+        });
+        mask.getChildByName("addHp").getChildByName('Background').getChildByName('hpValue').getComponent(cc.Label).string = shop.hp;
+        mask.getChildByName("addHp").on('touchend', function (event) {
+            var subNumber = shop.init + buyTimes*shop.increment;
+            if(shoptype == 1){
+                if(playerData.money < subNumber){
+                    mask.getChildByName("txtTips").getComponent(cc.Label).string = shop.name + "不足";
+                    return;
+                }
+                playerData.money = playerData.money - subNumber;
+            }else if(shoptype == 2){
+                if(playerData.exp < subNumber){
+                    mask.getChildByName("txtTips").getComponent(cc.Label).string = shop.name + "不足";
+                    return;
+                }
+                playerData.exp = playerData.exp - subNumber;
+            }
+            playerData.hp += shop.hp;
+            buyTimes++;
+            subNumber += shop.increment;
+            playerData[shopKey] = buyTimes;
+            mask.getChildByName("number").getComponent(cc.Label).string = subNumber;
+            if(callBack){
+                callBack();
+            }
+        });
+        mask.getChildByName("addAtk").getChildByName('Background').getChildByName('atkValue').getComponent(cc.Label).string = shop.atk;
+        mask.getChildByName("addAtk").on('touchend', function (event) {
+            var subNumber = shop.init + buyTimes*shop.increment;
+            if(shoptype == 1){
+                if(playerData.money < subNumber){
+                    mask.getChildByName("txtTips").getComponent(cc.Label).string = shop.name + "不足";
+                    return;
+                }
+                playerData.money = playerData.money - subNumber;
+            }else if(shoptype == 2){
+                if(playerData.exp < subNumber){
+                    mask.getChildByName("txtTips").getComponent(cc.Label).string = shop.name + "不足";
+                    return;
+                }
+                playerData.exp = playerData.exp - subNumber;
+            }
+            playerData.atk += shop.atk;
+            buyTimes++;
+            subNumber += shop.increment;
+            playerData[shopKey] = buyTimes;
+            mask.getChildByName("number").getComponent(cc.Label).string = subNumber;
+            if(callBack){
+                callBack();
+            }
+        });
+        mask.getChildByName("addDef").getChildByName('Background').getChildByName('defValue').getComponent(cc.Label).string = shop.def;
+        mask.getChildByName("addDef").on('touchend', function (event) {
+            var subNumber = shop.init + buyTimes*shop.increment;
+            if(shoptype == 1){
+                if(playerData.money < subNumber){
+                    mask.getChildByName("txtTips").getComponent(cc.Label).string = shop.name + "不足";
+                    return;
+                }
+                playerData.money = playerData.money - subNumber;
+            }else if(shoptype == 2){
+                if(playerData.exp < subNumber){
+                    mask.getChildByName("txtTips").getComponent(cc.Label).string = shop.name + "不足";
+                    return;
+                }
+                playerData.exp = playerData.exp - subNumber;
+            }
+            playerData.def += shop.def;
+            buyTimes++;
+            subNumber += shop.increment;
+            playerData[shopKey] = buyTimes;
+            mask.getChildByName("number").getComponent(cc.Label).string = subNumber;
+            if(callBack){
+                callBack();
+            }
         });
 
         // battle 持有
@@ -168,8 +253,11 @@ battle.shop = function (playerData, shoptype, callBack) {
         // 父视图
         battle._battle.parent = cc.find("Canvas");
 
-        // 展现 battle
+        // 展现 shop
         self.startFadeIn();
+
+        mask.getChildByName("number").getComponent(cc.Label).string = shop.init + buyTimes*shop.increment;
+        mask.getChildByName("txtType").getComponent(cc.Label).string = shop.name;
 
     });
 
