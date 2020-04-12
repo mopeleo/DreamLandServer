@@ -12,6 +12,7 @@ cc.Class({
         bg1: cc.Node,
         bg2: cc.Node,
         txtBlood: cc.Node,
+        btnBlast: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -22,8 +23,8 @@ cc.Class({
         //手动播放动画
         var blastNode = this.node.getChildByName("blast").getComponent(cc.Animation);
         this.txtBlood.active = false;
+        var fadeIn = cc.fadeIn(0);
         var fadeOut = cc.fadeOut(0.5);
-        var fadeIn = cc.fadeIn(0.1);
         var seq = cc.sequence(fadeIn, fadeOut);
         blastNode.subBlood = function(){
             if(!this.txtBlood.active){
@@ -34,6 +35,11 @@ cc.Class({
         }.bind(this);
         var playAnim = blastNode.play("blasting");
         playAnim.repeatCount = 1;
+
+        this.btnBlast.on("touchend", ()=>{
+            var tmp = blastNode.play("blasting");
+            tmp.repeatCount = 1;
+        });
     },
 
     update (dt) {
