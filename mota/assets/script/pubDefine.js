@@ -1,3 +1,6 @@
+var encrypt = require("./encrypt/encryptjs");
+var secretkey= 'mota_leo'; // 加密密钥
+
 module.exports = {
     player:{
         x:0,
@@ -61,10 +64,11 @@ module.exports = {
         }
     },
     save:function(type){
+        var encrypted = encrypt.encrypt(JSON.stringify(this.player), secretkey, 256);
         if(type){
-            cc.sys.localStorage.setItem("userdata_" + type, JSON.stringify(this.player));
+            cc.sys.localStorage.setItem("userdata_" + type, encrypted);
         }else{
-            cc.sys.localStorage.setItem("autodata", JSON.stringify(this.player));
+            cc.sys.localStorage.setItem("autodata", encrypted);
         }
     },
     load:function(type){
@@ -75,7 +79,7 @@ module.exports = {
             datastring = cc.sys.localStorage.getItem("autodata");
         }
         if(datastring && datastring != null){
-            this.player = JSON.parse(datastring);
+            this.player = JSON.parse(encrypt.decrypt(datastring, secretkey, 256));
             return true;
         }
 
