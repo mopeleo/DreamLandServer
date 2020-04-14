@@ -63,8 +63,10 @@ cc.Class({
             (completedCount, totalCount) => {
                 // 还是做假进度条吧，缓存之后太快了，一闪而过的体验不好
                 // this.loadingProgress.progress = completedCount / totalCount;
+                // this.loadingProgress.node.getChildByName("per").getComponent(cc.Label).string = Math.round(this.loadingProgress.progress*100)+"%";
             },
             (error, asset) => {
+                // 假进度条
                 if (!error) {
                     this.finishLoadFlag = true;
                 } else {
@@ -72,21 +74,27 @@ cc.Class({
                     this.beginLoad = false;
                     this.loadTime = 0;
                 }
+
+                //正常进度条
+                // cc.director.getScene().getChildByName('btn_back_home').active = true;
+                // cc.director.loadScene(this.loadSceneName);
+
             }
         );
     },
 
+    //假进度条
     update (dt) {
         if (!this.beginLoad) return;
 
         if (this.loadTime >= LOAD_SCENE_MIN_SEC && this.finishLoadFlag) {
             this.loadingProgress.progress = 1;
             cc.director.getScene().getChildByName('btn_back_home').active = true;
-            // BackHomeBtn.instance.toggleActive(true);
             cc.director.loadScene(this.loadSceneName);
         } else {
             this.loadTime += dt;
             this.loadingProgress.progress = Math.min(this.loadTime / LOAD_SCENE_MIN_SEC, this.finishLoadFlag ? 1 : 0.9);
+            this.loadingProgress.node.getChildByName("per").getComponent(cc.Label).string = Math.round(this.loadingProgress.progress*100)+"%";
         }
     },
 });

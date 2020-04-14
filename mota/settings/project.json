@@ -1,9 +1,14 @@
 {
   "group-list": [
-    "default"
+    "default",
+    "magnifying_glass"
   ],
   "collision-matrix": [
     [
+      true
+    ],
+    [
+      false,
       true
     ]
   ],
@@ -32,6 +37,5 @@
     "live": {
       "enable": false
     }
-  },
-  "start-scene": "current"
+  }
 }
