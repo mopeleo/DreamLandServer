@@ -1,13 +1,19 @@
 {
   "group-list": [
     "default",
-    "magnifying_glass"
+    "magnifying_glass",
+    "shadow"
   ],
   "collision-matrix": [
     [
       true
     ],
     [
+      false,
+      true
+    ],
+    [
+      false,
       false,
       true
     ]
