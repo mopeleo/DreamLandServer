@@ -21,25 +21,34 @@ cc.Class({
 
     start () {
         //手动播放动画
-        var blastNode = this.node.getChildByName("blast").getComponent(cc.Animation);
-        this.txtBlood.active = false;
+        this.blast();
+
+        this.btnBlast.on("touchend", ()=>{
+            this.blast();
+        });
+    },
+
+    blast(){
+        var blastNode = this.node.getChildByName("blast");
+        blastNode.active = true;
+        var blastAnim = blastNode.getComponent(cc.Animation);
         var fadeIn = cc.fadeIn(0);
         var fadeOut = cc.fadeOut(0.5);
         var seq = cc.sequence(fadeIn, fadeOut);
-        blastNode.subBlood = function(){
-            if(!this.txtBlood.active){
-                this.txtBlood.active = true;
-            }
+        blastAnim.subBlood = function(){
+            this.txtBlood.active = true;
             this.txtBlood.runAction(seq);
-            cc.log("test");
         }.bind(this);
-        var playAnim = blastNode.play("blasting");
+        blastAnim.on('finished', ()=>{
+            blastNode.active = false;
+            this.txtBlood.active = false;
+            blastAnim.setCurrentTime(0);
+            blastAnim.stop();
+        });
+
+        var playAnim = blastAnim.play();
         playAnim.repeatCount = 1;
 
-        this.btnBlast.on("touchend", ()=>{
-            var tmp = blastNode.play("blasting");
-            tmp.repeatCount = 1;
-        });
     },
 
     update (dt) {

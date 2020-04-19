@@ -18,7 +18,7 @@ cc.Class({
 
     onLoad () {
         var texture = new cc.RenderTexture();
-        texture.initWithSize(this.node_shows[0].node.width, this.node_shows[0].node.height);
+        texture.initWithSize(this.node.width, this.node.height);
         var spriteFrame = new cc.SpriteFrame();
         spriteFrame.setTexture(texture);
         this.camera.targetTexture = texture;
@@ -26,36 +26,29 @@ cc.Class({
             v.spriteFrame = spriteFrame;
         });
 
+        this.schedule(this.ghostFollow, 0.1, cc.macro.REPEAT_FOREVER);
+
         this.node.on(cc.Node.EventType.TOUCH_MOVE, (event)=>{
             this.icon.x += event.getDeltaX();
             this.icon.y += event.getDeltaY();
-            this.node_shows.forEach((v, i) => {
-                const dis = this.node.position.sub(v.node.position).mag();
-                if (dis > 0) {
-                    v.node.stopAllActions();
-                    v.node.runAction(cc.moveTo(i * 0.05 + 0.02, this.icon.x, this.icon.y));
-                }
-            })
         }, this);
-
-        // this.schedule(this.shadowFollow, 0.1, cc.macro.REPEAT_FOREVER);
 
     },
 
+    beforeDestroy() {
+        this.unschedule(this.ghostFollow);
+    },
 
-    shadowFollow() {
+    ghostFollow() {
         this.node_shows.forEach((v, i) => {
             const dis = this.node.position.sub(v.node.position).mag();
-            if (dis > 0) {
-                v.node.stopAllActions();
-                v.node.runAction(cc.moveTo(i * 0.05 + 0.02, this.icon.x, this.icon.y));
-            }
+            if (dis < 0.5) return;
+            v.node.stopAllActions();
+            v.node.runAction(cc.moveTo(i * 0.05 + 0.02, this.icon.x, this.icon.y));
+
         })
     },
 
-    start () {
-
-    },
 
     // update (dt) {},
 });
