@@ -37,7 +37,9 @@ cc.Class({
         var seq = cc.sequence(fadeIn, fadeOut);
         blastAnim.subBlood = function(){
             this.txtBlood.active = true;
-            this.txtBlood.runAction(seq);
+            this.txtBlood.opacity = 255;
+            cc.tween(this.txtBlood).to(0.5, {opacity: 0}).start();
+            // this.txtBlood.runAction(fadeOut);
         }.bind(this);
         blastAnim.on('finished', ()=>{
             blastNode.active = false;
