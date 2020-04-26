@@ -2,13 +2,15 @@ let sceneList = {
   'scroll' : '背景无限滚动',
   'joystick' : '遥控杆',
   'index' : '魔塔',
-  'Scratch_ticket' : '刮刮卡实现',
-  'Coin_fly_to_wallet' : '金币落袋效果',
-  'Magnifying_mirror' : '局部缩放效果',
+  'scratch' : '刮刮卡实现',
+  'coinfly' : '金币落袋效果',
+  'glass' : '局部缩放效果',
   'Change_clothes' : '换装',
-  'Typer' : '打字机效果',
-  'Moving_ghost' : '移动残影效果',
-  'Screen_vibrating' : '震屏效果+动画恢复第一帧'
+  'typer' : '打字机效果',
+  'render' : '移动残影效果',
+  'blood' : '血条',
+  // 'follow' : '光影跟随',
+  'bullet' : '跟踪子弹'
 };
 const LOAD_SCENE_MIN_SEC = 1.2;
 

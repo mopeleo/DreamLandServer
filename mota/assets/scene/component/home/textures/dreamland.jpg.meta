@@ -1,6 +1,6 @@
 {
   "ver": "2.3.4",
-  "uuid": "554d799d-b2f5-41de-aab4-fd066f9900f0",
+  "uuid": "2464f695-d2fb-4a3c-a4fc-33af9f5ffdb4",
   "type": "sprite",
   "wrapMode": "clamp",
   "filterMode": "bilinear",
@@ -11,10 +11,10 @@
   "height": 258,
   "platformSettings": {},
   "subMetas": {
-    "ewm": {
+    "dreamland": {
       "ver": "1.0.4",
-      "uuid": "c260336b-3845-41a7-ad41-965360cab783",
-      "rawTextureUuid": "554d799d-b2f5-41de-aab4-fd066f9900f0",
+      "uuid": "9dca5f0a-9dc0-4e33-a518-169f5b5297a1",
+      "rawTextureUuid": "2464f695-d2fb-4a3c-a4fc-33af9f5ffdb4",
       "trimType": "auto",
       "trimThreshold": 1,
       "rotated": false,
