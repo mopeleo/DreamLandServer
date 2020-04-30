@@ -66,16 +66,21 @@ cc.Class({
 
         // 执行金币落袋的动画
         coinNodeList.forEach((item, idx) => {
-            item.node.runAction(
-                cc.sequence(
-                    cc.moveTo(0.3, item.mdPos),
-                    cc.delayTime(idx * 0.01),
-                    cc.moveTo(0.5, item.edPos),
-                    cc.callFunc(() => {
-                        this.coinPool.put(item.node);
-                    })
-                )
-            );
+            // item.node.runAction(
+            //     cc.sequence(
+            //         cc.moveTo(0.3, item.mdPos),
+            //         cc.delayTime(idx * 0.01),
+            //         cc.moveTo(0.5, item.edPos),
+            //         cc.callFunc(() => {
+            //             this.coinPool.put(item.node);
+            //         })
+            //     )
+            // );
+
+            cc.tween(item.node).to(0.3,{position:item.mdPos})
+                .delay(idx*0.01).to(0.5, {position: item.edPos})
+                .call(()=>{this.coinPool.put(item.node);})
+                .start();
         });
     },
 
