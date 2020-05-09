@@ -7,11 +7,12 @@
 
 var sudoku = require("sudoku");
 
-var color = cc.Color.BLACK;
 var BOARD_INIT_COLOR = cc.Color.WHITE;
-// var BOARD_CLICK_CELL_COLOR = color.fromHEX("#1A6936");
-var BOARD_CLICK_CELL_COLOR = cc.Color.RED;
-var NUMBERKEY_INIT_COLOR = color.fromHEX("#1B262E");
+// var BOARD_CLICK_CELL_SAMENUMBER_COLOR = cc.Color.BLACK.fromHEX("#1A6936");
+var BOARD_CLICK_CELL_SAMENUMBER_COLOR = cc.Color.BLACK.fromHEX("#23774B");
+var BOARD_CLICK_CELL_BLOCK_COLOR = cc.Color.BLACK.fromHEX("#8BBBA2");
+var NUMBERKEY_INIT_COLOR = cc.Color.BLACK.fromHEX("#1B262E");
+
 
 cc.Class({
     extends: cc.Component,
@@ -27,6 +28,7 @@ cc.Class({
 
     onLoad () {
         this.lastClickNumber = 0;
+        this.lastClickCell = null;
         this.blockArray = new Array(9);
         this.rowArray = new Array(9);
         this.colArray = new Array(9);
@@ -113,24 +115,88 @@ cc.Class({
     },
 
     numberCellClick(event){
-        var num = event.target.getChildByName("number").getComponent(cc.Label).string;
+        var clickCell = event.target;
+        var num = clickCell.getChildByName("number").getComponent(cc.Label).string;
         if(!num || num == "" || num == "0"){
             return;
         }
 
-        this.numberKeyClick(event);
+        if(clickCell == this.lastClickCell){
+            return;
+        }
+
+        //先清除之前的颜色
+        this.clearLastColor();
+
+        //再重新改变颜色
+        var clickCellBlockArray = this.blockArray[clickCell._block];
+        for(var i = 0; i < clickCellBlockArray.length; i++){
+            clickCellBlockArray[i].color = BOARD_CLICK_CELL_BLOCK_COLOR;
+        }
+
+        var clickCellRowArray = this.rowArray[clickCell._row];
+        for(var i = 0; i < clickCellRowArray.length; i++){
+            clickCellRowArray[i].color = BOARD_CLICK_CELL_BLOCK_COLOR;
+        }
+
+        var clickCellColArray = this.colArray[clickCell._col];
+        for(var i = 0; i < clickCellColArray.length; i++){
+            clickCellColArray[i].color = BOARD_CLICK_CELL_BLOCK_COLOR;
+        }
+
+        var clickCellNumberArray = this.numberArray[clickCell._value];
+        for(var i = 0; i < clickCellNumberArray.length; i++){
+            clickCellNumberArray[i].color = BOARD_CLICK_CELL_SAMENUMBER_COLOR;
+        }
+
+        this.lastClickCell = clickCell;
+        this.lastClickNumber = clickCell._value;
     },
 
     numberKeyClick(event){
         var clickNode = event.target;
         var number = parseInt(clickNode.getChildByName("number").getComponent(cc.Label).string);
-        // cc.log("number = " + number);
         if(this.lastClickNumber == number){
             return;
         }
+
+        //先清除之前的颜色
+        this.clearLastColor();
+
         var clickNumberArray = this.numberArray[number];
         for(var i = 0; i < clickNumberArray.length; i++){
-            clickNumberArray[i].color = BOARD_CLICK_CELL_COLOR;
+            clickNumberArray[i].color = BOARD_CLICK_CELL_SAMENUMBER_COLOR;
+        }
+
+        this.lastClickNumber = number;
+    },
+
+    //清除之前的颜色
+    clearLastColor(){
+        if(this.lastClickCell != null){
+            var clickCellBlockArray = this.blockArray[this.lastClickCell._block];
+            for(var i = 0; i < clickCellBlockArray.length; i++){
+                clickCellBlockArray[i].color = BOARD_INIT_COLOR;
+                clickCellBlockArray[i].opacity = 180;
+            }
+
+            var clickCellRowArray = this.rowArray[this.lastClickCell._row];
+            for(var i = 0; i < clickCellRowArray.length; i++){
+                clickCellRowArray[i].color = BOARD_INIT_COLOR;
+                clickCellRowArray[i].opacity = 180;
+            }
+
+            var clickCellColArray = this.colArray[this.lastClickCell._col];
+            for(var i = 0; i < clickCellColArray.length; i++){
+                clickCellColArray[i].color = BOARD_INIT_COLOR;
+                clickCellColArray[i].opacity = 180;
+            }
+
+            var clickCellNumberArray = this.numberArray[this.lastClickCell._value];
+            for(var i = 0; i < clickCellNumberArray.length; i++){
+                clickCellNumberArray[i].color = BOARD_INIT_COLOR;
+                clickCellNumberArray[i].opacity = 180;
+            }
         }
 
         if(this.lastClickNumber != 0){
@@ -141,7 +207,6 @@ cc.Class({
             }
         }
 
-        this.lastClickNumber = number;
     },
     // update (dt) {},
 });
