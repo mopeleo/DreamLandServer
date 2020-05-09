@@ -189,7 +189,7 @@
       "array": [
         0,
         0,
-        531.7395979236453,
+        521.1788370658821,
         0,
         0,
         0,
@@ -613,7 +613,7 @@
     },
     "_angularVelocity": 0,
     "_fixedRotation": false,
-    "enabledContactListener": false,
+    "enabledContactListener": true,
     "bullet": false,
     "awakeOnLoad": true,
     "_id": "1cDwHy1AJFoadwagqZe7Gm"
@@ -764,7 +764,7 @@
     },
     "_angularVelocity": 0,
     "_fixedRotation": false,
-    "enabledContactListener": false,
+    "enabledContactListener": true,
     "bullet": false,
     "awakeOnLoad": true,
     "_id": "57XiVVRWZLFb4FhrOmS6IP"
@@ -915,7 +915,7 @@
     },
     "_angularVelocity": 0,
     "_fixedRotation": false,
-    "enabledContactListener": false,
+    "enabledContactListener": true,
     "bullet": false,
     "awakeOnLoad": true,
     "_id": "c0yJCJT+lLm7el6uZ+jwL7"
@@ -1385,6 +1385,8 @@
     "sheep": {
       "__id__": 11
     },
+    "moveLeft": false,
+    "moveRight": false,
     "_id": "d51jem8WpJfq5h6FIR4I2Q"
   }
 ]
