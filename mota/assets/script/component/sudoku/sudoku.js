@@ -1,6 +1,6 @@
 var sudoku = new Object();
 
-sudoku.level = 1;
+sudoku.level = 3;
 sudoku.block = 9;
 sudoku.game = null;
 sudoku.rowExistNumber = null;

@@ -27,7 +27,7 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        this.lastClickNumber = 0;
+        this.lastClickKey = 0;
         this.lastClickCell = null;
         this.blockArray = new Array(9);
         this.rowArray = new Array(9);
@@ -44,7 +44,7 @@ cc.Class({
 
     initChessboard(){
         sudoku.init();
-        // sudoku.create();
+        sudoku.create();
 
         for(var i = 0; i < sudoku.game.length; i++){
             for(var j = 0; j < sudoku.game[i].length; j++){
@@ -54,9 +54,11 @@ cc.Class({
                 cell.setPosition(cc.v2(px, py));
                 if(sudoku.game[i][j] == 0){
                     cell.getChildByName("number").getComponent(cc.Label).string = "";
+                    cell._edit = false;
                 }else{
                     cell.getChildByName("number").color = cc.Color.BLACK;
                     cell.getChildByName("number").getComponent(cc.Label).string = sudoku.game[i][j];
+                    cell._edit = true;
                 }
                 cell.on(cc.Node.EventType.TOUCH_END, this.numberCellClick, this);
 
@@ -116,10 +118,10 @@ cc.Class({
 
     numberCellClick(event){
         var clickCell = event.target;
-        var num = clickCell.getChildByName("number").getComponent(cc.Label).string;
-        if(!num || num == "" || num == "0"){
-            return;
-        }
+        // var num = clickCell.getChildByName("number").getComponent(cc.Label).string;
+        // if(!num || num == "" || num == "0"){
+        //     return;
+        // }
 
         if(clickCell == this.lastClickCell){
             return;
@@ -144,19 +146,21 @@ cc.Class({
             clickCellColArray[i].color = BOARD_CLICK_CELL_BLOCK_COLOR;
         }
 
-        var clickCellNumberArray = this.numberArray[clickCell._value];
-        for(var i = 0; i < clickCellNumberArray.length; i++){
-            clickCellNumberArray[i].color = BOARD_CLICK_CELL_SAMENUMBER_COLOR;
+        if(clickCell._value != 0){
+            var clickCellNumberArray = this.numberArray[clickCell._value];
+            for(var i = 0; i < clickCellNumberArray.length; i++){
+                clickCellNumberArray[i].color = BOARD_CLICK_CELL_SAMENUMBER_COLOR;
+            }
         }
 
         this.lastClickCell = clickCell;
-        this.lastClickNumber = clickCell._value;
+        this.lastClickKey = clickCell._value;
     },
 
     numberKeyClick(event){
         var clickNode = event.target;
         var number = parseInt(clickNode.getChildByName("number").getComponent(cc.Label).string);
-        if(this.lastClickNumber == number){
+        if(this.lastClickKey == number){
             return;
         }
 
@@ -164,11 +168,16 @@ cc.Class({
         this.clearLastColor();
 
         var clickNumberArray = this.numberArray[number];
-        for(var i = 0; i < clickNumberArray.length; i++){
-            clickNumberArray[i].color = BOARD_CLICK_CELL_SAMENUMBER_COLOR;
+        if(clickNumberArray){
+            for(var i = 0; i < clickNumberArray.length; i++){
+                clickNumberArray[i].color = BOARD_CLICK_CELL_SAMENUMBER_COLOR;
+            }
+        }else{
+            this.numberArray[number] = [];
         }
 
-        this.lastClickNumber = number;
+        this.lastClickKey = number;
+        this.lastClickCell = null;
     },
 
     //清除之前的颜色
@@ -199,8 +208,8 @@ cc.Class({
             }
         }
 
-        if(this.lastClickNumber != 0){
-            var lastClickNumberArray = this.numberArray[this.lastClickNumber];
+        if(this.lastClickKey != 0){
+            var lastClickNumberArray = this.numberArray[this.lastClickKey];
             for(var i = 0; i < lastClickNumberArray.length; i++){
                 lastClickNumberArray[i].color = BOARD_INIT_COLOR;
                 lastClickNumberArray[i].opacity = 180;
