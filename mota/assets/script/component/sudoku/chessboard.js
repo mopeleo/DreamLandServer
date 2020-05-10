@@ -127,30 +127,16 @@ cc.Class({
         this.clearLastColor();
 
         //再重新改变颜色
-        var clickCellBlockArray = this.blockArray[clickCell._block];
-        for(var i = 0; i < clickCellBlockArray.length; i++){
-            clickCellBlockArray[i].color = BOARD_CELL_COLOR_BLOCK;
-        }
-
-        var clickCellRowArray = this.rowArray[clickCell._row];
-        for(var i = 0; i < clickCellRowArray.length; i++){
-            clickCellRowArray[i].color = BOARD_CELL_COLOR_BLOCK;
-        }
-
-        var clickCellColArray = this.colArray[clickCell._col];
-        for(var i = 0; i < clickCellColArray.length; i++){
-            clickCellColArray[i].color = BOARD_CELL_COLOR_BLOCK;
-        }
+        this.setBlockCellColor(clickCell);
 
         if(clickCell._value != 0){
             var clickCellNumberArray = this.numberArray[clickCell._value];
             for(var i = 0; i < clickCellNumberArray.length; i++){
                 clickCellNumberArray[i].color = BOARD_CELL_COLOR_SAMENUMBER;
             }
-        }
-
-        if(clickCell._edit){
-            clickCell.color = BOARD_CELL_COLOR_EDIT;
+            if(clickCell._edit){
+                clickCell.color = BOARD_CELL_COLOR_EDIT;
+            }
         }
 
         this.lastClickCell = clickCell;
@@ -174,15 +160,22 @@ cc.Class({
                     lastNumberArray[i].opacity = 180;
                 }
             }
-            //从之前的数组删除
+            //恢复宫内颜色
+            this.setBlockCellColor(this.lastClickCell);
+
+            //从之前的数字的数组删除
             var lastIndex = lastNumberArray.indexOf(this.lastClickCell);
             if( lastIndex != -1){
                 lastNumberArray.splice(lastIndex, 1);
             }
             this.lastClickCell._value = number;
             this.lastClickCell.getChildByName("number").getComponent(cc.Label).string = number;
-            //添加
+            //添加到新数字的数组
             var currentNumberArray = this.numberArray[number];
+            if(!currentNumberArray){
+                currentNumberArray = [];
+                this.numberArray[number] = currentNumberArray;
+            }
             currentNumberArray.push(this.lastClickCell);
         }else{
             //先清除之前的颜色
@@ -193,6 +186,9 @@ cc.Class({
         var clickNumberArray = this.numberArray[number];
         if(clickNumberArray){
             for(var i = 0; i < clickNumberArray.length; i++){
+                if(clickNumberArray[i] == this.lastClickCell){
+                    continue;
+                }
                 clickNumberArray[i].color = BOARD_CELL_COLOR_SAMENUMBER;
             }
         }else{
@@ -238,6 +234,27 @@ cc.Class({
             }
         }
 
+    },
+
+    setBlockCellColor(clickCell){
+        var clickCellBlockArray = this.blockArray[clickCell._block];
+        for(var i = 0; i < clickCellBlockArray.length; i++){
+            clickCellBlockArray[i].color = BOARD_CELL_COLOR_BLOCK;
+        }
+
+        var clickCellRowArray = this.rowArray[clickCell._row];
+        for(var i = 0; i < clickCellRowArray.length; i++){
+            clickCellRowArray[i].color = BOARD_CELL_COLOR_BLOCK;
+        }
+
+        var clickCellColArray = this.colArray[clickCell._col];
+        for(var i = 0; i < clickCellColArray.length; i++){
+            clickCellColArray[i].color = BOARD_CELL_COLOR_BLOCK;
+        }
+
+        if(clickCell._edit){
+            clickCell.color = BOARD_CELL_COLOR_EDIT;
+        }
     },
     // update (dt) {},
 });
