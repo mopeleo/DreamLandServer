@@ -7,12 +7,13 @@
 
 var sudoku = require("sudoku");
 
-var BOARD_INIT_COLOR = cc.Color.WHITE;
-// var BOARD_CLICK_CELL_SAMENUMBER_COLOR = cc.Color.BLACK.fromHEX("#1A6936");
-var BOARD_CLICK_CELL_SAMENUMBER_COLOR = cc.Color.BLACK.fromHEX("#23774B");
-var BOARD_CLICK_CELL_BLOCK_COLOR = cc.Color.BLACK.fromHEX("#8BBBA2");
-var NUMBERKEY_INIT_COLOR = cc.Color.BLACK.fromHEX("#1B262E");
+var BOARD_CELL_COLOR_INIT = cc.Color.WHITE;                             //单元格初始颜色
+var BOARD_CELL_COLOR_SAMENUMBER = cc.Color.BLACK.fromHEX("#23774B");    //单元格相同数字颜色
+var BOARD_CELL_COLOR_BLOCK = cc.Color.BLACK.fromHEX("#8BBBA2");         //单元格同宫同列同行颜色
+var BOARD_CELL_COLOR_EDIT = cc.Color.BLACK.fromHEX("#F09559");          //单元格编辑颜色
+var BOARD_CELL_COLOR_ERROR = cc.Color.RED;                              //单元格错误颜色
 
+var KEY_COLOR_INIT = cc.Color.BLACK.fromHEX("#1B262E");
 
 cc.Class({
     extends: cc.Component,
@@ -38,10 +39,6 @@ cc.Class({
         this.initNumberKey();
     },
 
-    start () {
-
-    },
-
     initChessboard(){
         sudoku.init();
         sudoku.create();
@@ -53,14 +50,13 @@ cc.Class({
                 var py = 31*(4 - i);
                 cell.setPosition(cc.v2(px, py));
                 if(sudoku.game[i][j] == 0){
-                    cell.getChildByName("number").getComponent(cc.Label).string = "";
-                    cell._edit = false;
+                    cell._edit = true;
                 }else{
                     cell.getChildByName("number").color = cc.Color.BLACK;
                     cell.getChildByName("number").getComponent(cc.Label).string = sudoku.game[i][j];
-                    cell._edit = true;
+                    cell._edit = false;
                 }
-                cell.on(cc.Node.EventType.TOUCH_END, this.numberCellClick, this);
+                cell.on(cc.Node.EventType.TOUCH_END, this.boardCellClick, this);
 
                 //额外添加属性
                 cell._row = i;
@@ -98,7 +94,7 @@ cc.Class({
             var px = 31*(i - 4);
             var py = 0;
             cell.setPosition(cc.v2(px, py));
-            cell.color = NUMBERKEY_INIT_COLOR;
+            cell.color = KEY_COLOR_INIT;
             var cellLab = cell.getChildByName("number").getComponent(cc.Label);
             cellLab.string = i+1;
             cellLab.fontSize = 30;
@@ -108,7 +104,7 @@ cc.Class({
 
             var cellCount = cc.instantiate(this.cellPrefab);
             cellCount.setPosition(cc.v2(px, py));
-            cellCount.color = NUMBERKEY_INIT_COLOR;
+            cellCount.color = KEY_COLOR_INIT;
             var celllCountLab = cellCount.getChildByName("number").getComponent(cc.Label);
             celllCountLab.string = 0;
             celllCountLab.fontSize = 15;
@@ -116,7 +112,7 @@ cc.Class({
         }
     },
 
-    numberCellClick(event){
+    boardCellClick(event){
         var clickCell = event.target;
         // var num = clickCell.getChildByName("number").getComponent(cc.Label).string;
         // if(!num || num == "" || num == "0"){
@@ -133,24 +129,28 @@ cc.Class({
         //再重新改变颜色
         var clickCellBlockArray = this.blockArray[clickCell._block];
         for(var i = 0; i < clickCellBlockArray.length; i++){
-            clickCellBlockArray[i].color = BOARD_CLICK_CELL_BLOCK_COLOR;
+            clickCellBlockArray[i].color = BOARD_CELL_COLOR_BLOCK;
         }
 
         var clickCellRowArray = this.rowArray[clickCell._row];
         for(var i = 0; i < clickCellRowArray.length; i++){
-            clickCellRowArray[i].color = BOARD_CLICK_CELL_BLOCK_COLOR;
+            clickCellRowArray[i].color = BOARD_CELL_COLOR_BLOCK;
         }
 
         var clickCellColArray = this.colArray[clickCell._col];
         for(var i = 0; i < clickCellColArray.length; i++){
-            clickCellColArray[i].color = BOARD_CLICK_CELL_BLOCK_COLOR;
+            clickCellColArray[i].color = BOARD_CELL_COLOR_BLOCK;
         }
 
         if(clickCell._value != 0){
             var clickCellNumberArray = this.numberArray[clickCell._value];
             for(var i = 0; i < clickCellNumberArray.length; i++){
-                clickCellNumberArray[i].color = BOARD_CLICK_CELL_SAMENUMBER_COLOR;
+                clickCellNumberArray[i].color = BOARD_CELL_COLOR_SAMENUMBER;
             }
+        }
+
+        if(clickCell._edit){
+            clickCell.color = BOARD_CELL_COLOR_EDIT;
         }
 
         this.lastClickCell = clickCell;
@@ -164,20 +164,42 @@ cc.Class({
             return;
         }
 
-        //先清除之前的颜色
-        this.clearLastColor();
+        //TODO 1、可以加技能判断，技能如果填的数字正确，此格变为不能更改
+        if(this.lastClickCell != null && this.lastClickCell._edit == true){
+            var lastNumberArray = this.numberArray[this.lastClickCell._value];
+            //删除颜色
+            if(this.lastClickCell._value != 0){
+                for(var i = 0; i < lastNumberArray.length; i++){
+                    lastNumberArray[i].color = BOARD_CELL_COLOR_INIT;
+                    lastNumberArray[i].opacity = 180;
+                }
+            }
+            //从之前的数组删除
+            var lastIndex = lastNumberArray.indexOf(this.lastClickCell);
+            if( lastIndex != -1){
+                lastNumberArray.splice(lastIndex, 1);
+            }
+            this.lastClickCell._value = number;
+            this.lastClickCell.getChildByName("number").getComponent(cc.Label).string = number;
+            //添加
+            var currentNumberArray = this.numberArray[number];
+            currentNumberArray.push(this.lastClickCell);
+        }else{
+            //先清除之前的颜色
+            this.clearLastColor();
+            this.lastClickCell = null;
+        }
 
         var clickNumberArray = this.numberArray[number];
         if(clickNumberArray){
             for(var i = 0; i < clickNumberArray.length; i++){
-                clickNumberArray[i].color = BOARD_CLICK_CELL_SAMENUMBER_COLOR;
+                clickNumberArray[i].color = BOARD_CELL_COLOR_SAMENUMBER;
             }
         }else{
             this.numberArray[number] = [];
         }
 
         this.lastClickKey = number;
-        this.lastClickCell = null;
     },
 
     //清除之前的颜色
@@ -185,25 +207,25 @@ cc.Class({
         if(this.lastClickCell != null){
             var clickCellBlockArray = this.blockArray[this.lastClickCell._block];
             for(var i = 0; i < clickCellBlockArray.length; i++){
-                clickCellBlockArray[i].color = BOARD_INIT_COLOR;
+                clickCellBlockArray[i].color = BOARD_CELL_COLOR_INIT;
                 clickCellBlockArray[i].opacity = 180;
             }
 
             var clickCellRowArray = this.rowArray[this.lastClickCell._row];
             for(var i = 0; i < clickCellRowArray.length; i++){
-                clickCellRowArray[i].color = BOARD_INIT_COLOR;
+                clickCellRowArray[i].color = BOARD_CELL_COLOR_INIT;
                 clickCellRowArray[i].opacity = 180;
             }
 
             var clickCellColArray = this.colArray[this.lastClickCell._col];
             for(var i = 0; i < clickCellColArray.length; i++){
-                clickCellColArray[i].color = BOARD_INIT_COLOR;
+                clickCellColArray[i].color = BOARD_CELL_COLOR_INIT;
                 clickCellColArray[i].opacity = 180;
             }
 
             var clickCellNumberArray = this.numberArray[this.lastClickCell._value];
             for(var i = 0; i < clickCellNumberArray.length; i++){
-                clickCellNumberArray[i].color = BOARD_INIT_COLOR;
+                clickCellNumberArray[i].color = BOARD_CELL_COLOR_INIT;
                 clickCellNumberArray[i].opacity = 180;
             }
         }
@@ -211,7 +233,7 @@ cc.Class({
         if(this.lastClickKey != 0){
             var lastClickNumberArray = this.numberArray[this.lastClickKey];
             for(var i = 0; i < lastClickNumberArray.length; i++){
-                lastClickNumberArray[i].color = BOARD_INIT_COLOR;
+                lastClickNumberArray[i].color = BOARD_CELL_COLOR_INIT;
                 lastClickNumberArray[i].opacity = 180;
             }
         }
