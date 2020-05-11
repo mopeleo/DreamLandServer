@@ -3,37 +3,46 @@ var sudoku = new Object();
 sudoku.level = 3;
 sudoku.block = 9;
 sudoku.game = null;
+sudoku.fullGame = null;
 sudoku.rowExistNumber = null;
 sudoku.colExistNumber = null;
 sudoku.blockExistNumber = null;
 sudoku.fixedNumber = null;
+sudoku.beginNumber = 1;
 
 sudoku.again = function(){
     sudoku.game = null;
+    sudoku.fullGame = null;
     sudoku.rowExistNumber = null;
     sudoku.colExistNumber = null;
     sudoku.blockExistNumber = null;
     sudoku.fixedNumber = null;
+    sudoku.beginNumber = 1;
 };
 
-sudoku.init = function() {
+sudoku.randomInit = function() {
     if(this.game != null){
         return;
     }
 
+    this.beginNumber = this.getRandomBetween(1, this.block);
+
     this.game = new Array();
+    this.fullGame = new Array();
     this.rowExistNumber = new Array();
     this.colExistNumber = new Array();
     this.blockExistNumber = new Array();
     this.fixedNumber = new Array();
     for(var i = 0; i < this.block; i++){
         this.game[i] = new Array();
+        this.fullGame[i] = new Array();
         this.rowExistNumber[i] = new Array();
         this.colExistNumber[i] = new Array();
         this.blockExistNumber[i] = new Array();
         this.fixedNumber[i] = new Array();
         for(var j = 0; j < this.block; j++){
             this.game[i][j] = 0;
+            this.fullGame[i][j] = 0;
             this.rowExistNumber[i][j] = false;
             this.colExistNumber[i][j] = false;
             this.blockExistNumber[i][j] = false;
@@ -55,7 +64,23 @@ sudoku.init = function() {
         this.blockExistNumber[_block][i] = true;
     }
 
-    while(!this.fillNumber(this.game, this.rowExistNumber, this.colExistNumber, this.blockExistNumber)){}
+    while(!this.fillNumber(this.game, this.rowExistNumber, this.colExistNumber, this.blockExistNumber)){
+        console.log("init error!");
+    }
+
+    //备份原始的完整数字
+    for(var i = 0; i < this.game; i++){
+        for(var j = 0; j < this.game[i]; j++){
+            this.fullGame[i][j] = this.game[i][j];
+        }
+    }
+
+};
+
+//从定制文件初始化数独
+sudoku.fixedInit = function(index){
+    this.game = null;
+    this.fullGame = null;
 };
 
 sudoku.create = function() {
@@ -190,22 +215,27 @@ sudoku.fillNumber = function(full, rows, cols, blocks){
         for(var j = 0; j < this.block; j++){ //循环每个单元格
             var _block = this.getBlock(i, j);
             if(full[i][j] == 0){
-                for(var k = 1; k < (this.block + 1); k++ ){     //从数字1开始填数
-                    var num = k - 1;
-                    if(rows[i][num] == true || cols[j][num] == true || blocks[_block][num] == true){
+                for(var k = this.beginNumber; k < (this.block + this.beginNumber); k++ ){     //从随机数字开始填数
+                    var numIndex = 0;
+                    if(k > this.block){
+                        numIndex = k - this.block -1;
+                    }else{
+                        numIndex = k - 1;
+                    }
+                    if(rows[i][numIndex] == true || cols[j][numIndex] == true || blocks[_block][numIndex] == true){
                         continue;
                     }else{
-                        full[i][j] = k;
-                        rows[i][num] = true;
-                        cols[j][num] = true;
-                        blocks[_block][num] = true;
+                        full[i][j] = numIndex + 1;
+                        rows[i][numIndex] = true;
+                        cols[j][numIndex] = true;
+                        blocks[_block][numIndex] = true;
                         if(this.fillNumber(full, rows, cols, blocks)){
                             return true;
                         }else{
                             full[i][j] = 0;
-                            rows[i][num] = false;
-                            cols[j][num] = false;
-                            blocks[_block][num] = false;
+                            rows[i][numIndex] = false;
+                            cols[j][numIndex] = false;
+                            blocks[_block][numIndex] = false;
                         }
                     }
                 }
