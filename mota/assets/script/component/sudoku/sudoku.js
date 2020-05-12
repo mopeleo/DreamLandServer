@@ -69,8 +69,8 @@ sudoku.randomInit = function() {
     }
 
     //备份原始的完整数字
-    for(var i = 0; i < this.game; i++){
-        for(var j = 0; j < this.game[i]; j++){
+    for(var i = 0; i < this.game.length; i++){
+        for(var j = 0; j < this.game[i].length; j++){
             this.fullGame[i][j] = this.game[i][j];
         }
     }

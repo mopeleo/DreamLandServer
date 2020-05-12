@@ -15,6 +15,7 @@ var BOARD_CELL_COLOR_ERROR = cc.Color.RED;                              //单元
 var BOARD_CELL_OPACITY_INIT = 180;                                      //单元格初始透明度
 
 var KEY_COLOR_INIT = cc.Color.BLACK.fromHEX("#1B262E");
+var COUNT_TYPE = 1;         //计数器显示类型，1显示数字存在的个数，0显示数字缺失的个数
 
 var BOARD_CELL_SIZE = 30 + 1;                       //单元格大小，+1是每个格子之间的距离为1；
 var BOARD_RADIUS = Math.floor(sudoku.block/2);      //棋盘半径，即边到中心（0，0）有多少个格子
@@ -39,6 +40,7 @@ cc.Class({
         this.rowArray = new Array(sudoku.block);
         this.colArray = new Array(sudoku.block);
         this.numberArray = new Array(sudoku.block + 1);
+        this.numberCountArray = new Array(sudoku.block);
         this.errorArray = new Array(sudoku.block);
 
         this.initChessboard();
@@ -69,7 +71,7 @@ cc.Class({
                 cell._col = j;
                 cell._block = sudoku.getBlock(i, j);
                 cell._value = sudoku.game[i][j];
-                this.chessboard.addChild(cell);          //添加到场景
+                this.chessboard.addChild(cell);
 
                 if(!this.blockArray[cell._block]){
                     this.blockArray[cell._block] = [];
@@ -100,31 +102,41 @@ cc.Class({
             var px = BOARD_CELL_SIZE*(i - BOARD_RADIUS);
             var py = 0;
             cell.setPosition(cc.v2(px, py));
+            cell._value = i + 1;
             cell.color = KEY_COLOR_INIT;
             var cellLab = cell.getChildByName("number").getComponent(cc.Label);
-            cellLab.string = i+1;
+            cellLab.string = cell._value;
             cellLab.fontSize = 30;
             this.numberKey.addChild(cell);
             cell.on(cc.Node.EventType.TOUCH_END, this.numberKeyClick, this);
-
 
             var cellCount = cc.instantiate(this.cellPrefab);
             cellCount.setPosition(cc.v2(px, py));
             cellCount.color = KEY_COLOR_INIT;
             var celllCountLab = cellCount.getChildByName("number").getComponent(cc.Label);
-            celllCountLab.string = 0;
+            celllCountLab.string = COUNT_TYPE == 1 ? 0 : 9;
             celllCountLab.fontSize = 15;
             this.numberCount.addChild(cellCount);
+
+            this.numberCountArray[i] = cellCount;
+        }
+
+        for(var i = 0; i < sudoku.block; i++){
+            for(var j = 0; j < sudoku.block; j++){
+                var n = sudoku.game[i][j];
+                if(n == 0){
+                    continue;
+                }
+
+                var countNode = this.numberCountArray[n - 1];
+                var count = parseInt(countNode.getChildByName("number").getComponent(cc.Label).string);
+                countNode.getChildByName("number").getComponent(cc.Label).string = (COUNT_TYPE == 1 ? count + 1 : count -1);
+            }
         }
     },
 
     boardCellClick(event){
         var clickCell = event.target;
-        // var num = clickCell.getChildByName("number").getComponent(cc.Label).string;
-        // if(!num || num == "" || num == "0"){
-        //     return;
-        // }
-
         if(clickCell == this.lastClickCell){
             return;
         }
@@ -146,6 +158,7 @@ cc.Class({
             }
         }
 
+        this.checkCellError(clickCell);
 
         this.lastClickCell = clickCell;
         this.lastClickKey = clickCell._value;
@@ -164,9 +177,11 @@ cc.Class({
             this.numberArray[keyNumber] = currentNumberArray;
         }
 
+        //在棋盘填入数字
         //TODO 1、可以加技能判断，技能如果填的数字正确，此格变为不能更改
         if(this.lastClickCell != null && this.lastClickCell._edit == true){
             var lastNumberArray = this.numberArray[this.lastClickCell._value];
+            var lastValue = this.lastClickCell._value;
             //删除颜色
             if(this.lastClickCell._value != 0){
                 for(var i = 0; i < lastNumberArray.length; i++){
@@ -187,6 +202,19 @@ cc.Class({
             this.lastClickCell._value = keyNumber;
             this.lastClickCell.getChildByName("number").getComponent(cc.Label).string = keyNumber;
             currentNumberArray.push(this.lastClickCell);
+
+            //填入数字正确后，更新数字出现的次数
+            if(keyNumber == sudoku.fullGame[this.lastClickCell._row][this.lastClickCell._col]){
+                var countNode = this.numberCountArray[keyNumber -1];
+                var count = parseInt(countNode.getChildByName("number").getComponent(cc.Label).string);
+                countNode.getChildByName("number").getComponent(cc.Label).string = COUNT_TYPE == 1 ? count + 1: count - 1;
+            }
+            //之前是正确的，改错误之后，之前的个数要加回去
+            if(lastValue == sudoku.fullGame[this.lastClickCell._row][this.lastClickCell._col]){
+                var countNode = this.numberCountArray[lastValue -1];
+                var count = parseInt(countNode.getChildByName("number").getComponent(cc.Label).string);
+                countNode.getChildByName("number").getComponent(cc.Label).string = COUNT_TYPE == 1 ? count -1: count + 1;
+            }
         }else{
             //先清除之前的颜色
             this.clearLastColor();
@@ -201,11 +229,9 @@ cc.Class({
             currentNumberArray[i].color = BOARD_CELL_COLOR_SAMENUMBER;
         }
 
-        if(this.lastClickCell != null && this.lastClickCell._edit == true){
-            this.checkCellError(this.lastClickCell);
-        }
-
+        this.checkCellError(clickNode);
         this.lastClickKey = keyNumber;
+
     },
 
     //清除之前的颜色
@@ -267,35 +293,40 @@ cc.Class({
         }
     },
 
-    checkCellError(clickCell){
-        var clickCellBlockArray = this.blockArray[clickCell._block];
-        for(var i = 0; i < clickCellBlockArray.length; i++){
-            if(clickCell._value == clickCellBlockArray[i]._value){
-                clickCellBlockArray[i].color = BOARD_CELL_COLOR_ERROR;
+    checkCellError(clickNumber){
+        if(clickNumber == null || clickNumber._value == 0){
+            return;
+        }
+
+        var t = this.numberArray[clickNumber._value];
+        for(var n = 0; n < t.length; n++){
+            var clickCell = t[n];
+            var clickCellBlockArray = this.blockArray[clickCell._block];
+            for(var i = 0; i < clickCellBlockArray.length; i++){
+                if(clickCell != clickCellBlockArray[i] && clickCell._value == clickCellBlockArray[i]._value){
+                    clickCellBlockArray[i].color = BOARD_CELL_COLOR_ERROR;
+                }
+            }
+
+            var clickCellRowArray = this.rowArray[clickCell._row];
+            for(var i = 0; i < clickCellRowArray.length; i++){
+                if(clickCell != clickCellRowArray[i] && clickCell._value == clickCellRowArray[i]._value){
+                    clickCellRowArray[i].color = BOARD_CELL_COLOR_ERROR;
+                }
+            }
+
+            var clickCellColArray = this.colArray[clickCell._col];
+            for(var i = 0; i < clickCellColArray.length; i++){
+                if(clickCell != clickCellColArray[i] && clickCell._value == clickCellColArray[i]._value){
+                    clickCellColArray[i].color = BOARD_CELL_COLOR_ERROR;
+                }
             }
         }
 
-        var clickCellRowArray = this.rowArray[clickCell._row];
-        for(var i = 0; i < clickCellRowArray.length; i++){
-            if(clickCell._value == clickCellRowArray[i]._value){
-                clickCellRowArray[i].color = BOARD_CELL_COLOR_ERROR;
-            }
-        }
-
-        var clickCellColArray = this.colArray[clickCell._col];
-        for(var i = 0; i < clickCellColArray.length; i++){
-            if(clickCell._value == clickCellColArray[i]._value){
-                clickCellColArray[i].color = BOARD_CELL_COLOR_ERROR;
-            }
-        }
-
-        if(clickCell._edit){
-            clickCell.color = BOARD_CELL_COLOR_EDIT;
+        if(clickNumber._edit){
+            clickNumber.color = BOARD_CELL_COLOR_EDIT;
         }
     },
 
-    updateNumberCount(){
-
-    }
     // update (dt) {},
 });
