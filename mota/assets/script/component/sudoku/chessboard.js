@@ -48,9 +48,10 @@ cc.Class({
     },
 
     initChessboard(){
-        sudoku.randomInit();
-        sudoku.create();
+        // sudoku.randomInit();
+        // sudoku.create();
 
+        sudoku.fixedInit(0);
         for(var i = 0; i < sudoku.game.length; i++){
             for(var j = 0; j < sudoku.game[i].length; j++){
                 var cell = cc.instantiate(this.cellPrefab);
@@ -166,7 +167,7 @@ cc.Class({
 
     numberKeyClick(event){
         var clickNode = event.target;
-        var keyNumber = parseInt(clickNode.getChildByName("number").getComponent(cc.Label).string);
+        var keyNumber = clickNode._value;
         if(this.lastClickKey == keyNumber){
             return;
         }
@@ -201,20 +202,14 @@ cc.Class({
             //添加到新数字的数组
             this.lastClickCell._value = keyNumber;
             this.lastClickCell.getChildByName("number").getComponent(cc.Label).string = keyNumber;
+            //填入数字正确后，单元格变为只读
+            if(keyNumber == sudoku.fullGame[this.lastClickCell._row][this.lastClickCell._col]){
+                this.lastClickCell._edit = false;
+                this.lastClickCell.getChildByName("number").color = cc.Color.BLACK;
+            }
             currentNumberArray.push(this.lastClickCell);
 
-            //填入数字正确后，更新数字出现的次数
-            if(keyNumber == sudoku.fullGame[this.lastClickCell._row][this.lastClickCell._col]){
-                var countNode = this.numberCountArray[keyNumber -1];
-                var count = parseInt(countNode.getChildByName("number").getComponent(cc.Label).string);
-                countNode.getChildByName("number").getComponent(cc.Label).string = COUNT_TYPE == 1 ? count + 1: count - 1;
-            }
-            //之前是正确的，改错误之后，之前的个数要加回去
-            if(lastValue == sudoku.fullGame[this.lastClickCell._row][this.lastClickCell._col]){
-                var countNode = this.numberCountArray[lastValue -1];
-                var count = parseInt(countNode.getChildByName("number").getComponent(cc.Label).string);
-                countNode.getChildByName("number").getComponent(cc.Label).string = COUNT_TYPE == 1 ? count -1: count + 1;
-            }
+            this.updateNumberCount(keyNumber, lastValue);
         }else{
             //先清除之前的颜色
             this.clearLastColor();
@@ -328,5 +323,19 @@ cc.Class({
         }
     },
 
+    updateNumberCount(newNumber, oldNumber){
+        //填入数字正确后，更新数字出现的次数
+        if(newNumber == sudoku.fullGame[this.lastClickCell._row][this.lastClickCell._col]){
+            var countNode = this.numberCountArray[newNumber -1];
+            var count = parseInt(countNode.getChildByName("number").getComponent(cc.Label).string);
+            countNode.getChildByName("number").getComponent(cc.Label).string = COUNT_TYPE == 1 ? count + 1: count - 1;
+        }
+        //之前是正确的，改错误之后，之前的个数要加回去
+        if(oldNumber == sudoku.fullGame[this.lastClickCell._row][this.lastClickCell._col]){
+            var countNode = this.numberCountArray[oldNumber -1];
+            var count = parseInt(countNode.getChildByName("number").getComponent(cc.Label).string);
+            countNode.getChildByName("number").getComponent(cc.Label).string = COUNT_TYPE == 1 ? count -1: count + 1;
+        }
+    },
     // update (dt) {},
 });
