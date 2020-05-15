@@ -28,7 +28,12 @@ cc.Class({
         chessboard: cc.Node,
         numberKey: cc.Node,
         numberCount: cc.Node,
+        clockNode: cc.Node,
         cellPrefab: cc.Prefab,
+        levelStar: cc.Node,
+        sceneLab: cc.Label,
+        goldLab: cc.Label,
+        errorLab: cc.Label,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -45,6 +50,48 @@ cc.Class({
 
         this.initChessboard();
         this.initNumberKey();
+
+        this.timeCount = 1;
+        this.initTopTitle();
+
+    },
+
+    initTopTitle(){
+        //初始化关卡信息
+        this.sceneLab.string = "test";
+
+        //初始化计时器
+        var second = this.timeCount * 60;
+        this.clockNode.getComponent(cc.Label).schedule(()=>{
+            if(this.timeCount > 0){
+                second--;
+            }else{
+                second++;
+            }
+            if(second == 0){
+                this.clockNode.getComponent(cc.Label).string = "00:00";
+                this.clockNode.getComponent(cc.Label).unscheduleAllCallbacks();
+                return;
+            }
+            var sec = second % 60;
+            var min = parseInt(second / 60);
+            this.clockNode.getComponent(cc.Label).string = (min < 10 ? "0" + min : "" + min) + ":" + (sec < 10 ? "0" + sec : "" + sec);
+        }, 1);
+
+        //初始化金币
+        this.goldLab.string = 100;
+
+        //初始化难度星级
+        var starNumber = 4;
+        for(var i = 0; i < starNumber; i++){
+            var x = 15*((starNumber-1)/2 - i);
+            var newNode = cc.instantiate(this.levelStar);
+            newNode.parent = this.levelStar.parent;
+            newNode.setPosition(x, -45);
+        }
+
+        //初始化错误次数
+        this.errorLab.string = "0/" + 4;
     },
 
     initChessboard(){
