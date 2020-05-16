@@ -6,6 +6,7 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 var sudoku = require("sudoku");
+var PlayerData = require("playerData");
 
 var BOARD_CELL_COLOR_INIT = cc.Color.WHITE;                             //单元格初始颜色
 var BOARD_CELL_COLOR_SAMENUMBER = cc.Color.BLACK.fromHEX("#23774B");    //单元格相同数字颜色
@@ -95,10 +96,13 @@ cc.Class({
     },
 
     initChessboard(){
-        // sudoku.randomInit();
-        // sudoku.create();
+        if(!PlayerData.param.sceneType || PlayerData.param.sceneType == 0){
+            sudoku.randomInit();
+            sudoku.create();
+        }else{
+            sudoku.fixedInit(PlayerData.param.sceneType, PlayerData.param.sceneIndex);
+        }
 
-        sudoku.fixedInit(0);
         for(var i = 0; i < sudoku.game.length; i++){
             for(var j = 0; j < sudoku.game[i].length; j++){
                 var cell = cc.instantiate(this.cellPrefab);
@@ -384,5 +388,16 @@ cc.Class({
             countNode.getChildByName("number").getComponent(cc.Label).string = COUNT_TYPE == 1 ? count -1: count + 1;
         }
     },
+
+    existGame(){
+        if(!PlayerData.param.sceneType || PlayerData.param.sceneType == 0){
+            cc.director.loadScene("home");
+        }else{
+            cc.director.preloadScene("gameinfo", function () {
+                cc.director.loadScene("gameinfo");
+            });
+        }
+    },
+
     // update (dt) {},
 });

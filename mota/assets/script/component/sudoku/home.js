@@ -37,13 +37,16 @@ cc.Class({
     },
 
     normalGame(event, customData){
-        cc.log(customData);
-        PlayerData.param.sceneType = customData;
-        cc.director.loadScene("gameinfo");
+        PlayerData.param.sceneType = parseInt(customData);
+        cc.director.preloadScene("gameinfo", function () {
+            cc.director.loadScene("gameinfo");
+        });
     },
 
     challengeGame(){
-
+        PlayerData.param.sceneType = 0;
+        PlayerData.param.sceneIndex = 0;
+        cc.director.loadScene("chessboard");
     },
 
     rankPage(){

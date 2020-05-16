@@ -1,4 +1,4 @@
-var GameLib = require("gameLib");
+var GameLib = require("./gameLib");
 
 var sudoku = new Object();
 
@@ -80,11 +80,30 @@ sudoku.randomInit = function() {
 };
 
 //从定制文件初始化数独
-sudoku.fixedInit = function(index){
+sudoku.fixedInit = function(type, index){
+    if(index < 1){
+        index = 1;
+    }
     var gameKey = "game_" + index;
     var fullKey = "full_" + index;
-    this.game = GameLib[gameKey];
-    this.fullGame = GameLib[fullKey];
+    switch(type){
+        case 1:
+            this.game = GameLib.easy[gameKey];
+            this.fullGame = GameLib.easy[fullKey];
+            break;
+        case 2:
+            this.game = GameLib.normal[gameKey];
+            this.fullGame = GameLib.normal[fullKey];
+            break;
+        case 3:
+            this.game = GameLib.hard[gameKey];
+            this.fullGame = GameLib.hard[fullKey];
+            break;
+        default:
+            this.game = GameLib.easy[gameKey];
+            this.fullGame = GameLib.easy[fullKey];
+            break;
+    }
 
     this.rowExistNumber = new Array();
     this.colExistNumber = new Array();

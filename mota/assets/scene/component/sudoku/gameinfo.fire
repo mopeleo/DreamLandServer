@@ -658,6 +658,12 @@
       "__id__": 2
     },
     "_enabled": true,
+    "level": {
+      "__id__": 8
+    },
+    "scenePrefab": {
+      "__uuid__": "bd5d870c-ac71-45b5-8392-340120e8fdfd"
+    },
     "_id": "23gZhRDgFFPojjKt6IFBGX"
   }
 ]

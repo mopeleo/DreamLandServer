@@ -1,4 +1,4 @@
-var encrypt = require("../encrypt/encryptjs");
+var encrypt = require("../../encrypt/encryptjs");
 var secretkey= 'sudoku_j9kdi2H7'; // 加密密钥
 
 module.exports = {
@@ -16,7 +16,7 @@ module.exports = {
         //关卡信息
         scene:{
             easy:{
-                easy1:{
+                info_1:{
                     star:1,
                     gold:2,
                     time:30
@@ -34,7 +34,8 @@ module.exports = {
         }
     },
     param:{
-        sceneType: 1
+        sceneType: 1,
+        sceneIndex: 1
     },
     save:function(){
         var encrypted = encrypt.encrypt(JSON.stringify(this.player), secretkey, 256);

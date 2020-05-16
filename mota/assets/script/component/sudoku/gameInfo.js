@@ -6,34 +6,62 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 var PlayerData = require("playerData");
+var GameLib = require("gameLib");
 
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        // foo: {
-        //     // ATTRIBUTES:
-        //     default: null,        // The default value will be used only when the component attaching
-        //                           // to a node for the first time
-        //     type: cc.SpriteFrame, // optional, default is typeof default
-        //     serializable: true,   // optional, default is true
-        // },
-        // bar: {
-        //     get () {
-        //         return this._bar;
-        //     },
-        //     set (value) {
-        //         this._bar = value;
-        //     }
-        // },
+        level: cc.Label,
+        scenePrefab: cc.Prefab,
     },
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
+    onLoad () {
+        this.gameInfo = null;
+        switch(PlayerData.param.sceneType){
+            case 1:
+                this.gameInfo = GameLib.easy;
+                break;
+            case 2:
+                this.gameInfo = GameLib.normal;
+                break;
+            case 3:
+                this.gameInfo = GameLib.hard;
+                break;
+            default:
+                this.gameInfo = GameLib.easy;
+                break;
+        }
+        this.level.string = this.gameInfo.name;
+
+        this.initSceneList();
+    },
+
+    initSceneList(){
+
+        var row_num = 3;
+        for(var i = 0; i < this.gameInfo.total; i++){
+            var sceneNode = cc.instantiate(this.scenePrefab);
+            sceneNode.setPosition((i%row_num -1)*240, (180 - parseInt(i/row_num)*80));
+            sceneNode.parent = this.node;
+
+            sceneNode._index = i+1;
+            sceneNode.getChildByName("scene").getComponent(cc.Label).string = "关卡 " + sceneNode._index;
+            var info = this.gameInfo["info_" + sceneNode._index];
+
+            sceneNode.on(cc.Node.EventType.TOUCH_END, this.clickScene, this);
+        }
+    },
+
+    clickScene(event){
+        var clickNode = event.target;
+        PlayerData.param.sceneIndex = clickNode._index;
+        cc.director.loadScene("chessboard");
+    },
 
     start () {
-
     },
 
     gotoHome(){
