@@ -1,8 +1,25 @@
 {
   "title": "mota",
   "packageName": "",
-  "startScene": "df7d792e-d3ec-4093-adb0-5a77a25b047c",
-  "excludeScenes": [],
+  "startScene": "62c1ee51-c2f5-470b-a122-699ce8c31517",
+  "excludeScenes": [
+    "b2fcf7dd-6da7-45dd-91c0-a74ee5405966",
+    "7c0168dd-0c12-4ca6-a151-296765c049c0",
+    "ea560151-dae2-4c44-963a-fc9229bf89cc",
+    "15951125-3e38-48d9-8d61-f0e7e7886a09",
+    "09fa80fa-f51b-443f-9e0e-43bd2c345202",
+    "2449a4cf-5598-4b31-bf65-f9eee6c1ae07",
+    "78ca1f62-78b1-48c8-9293-1a840459368b",
+    "75a26268-f735-46ce-b7d6-fb4fba0fb510",
+    "1edf7227-9640-48a0-97c2-f78a6389e078",
+    "ca1e9476-e6cc-4ec1-8cb7-de07a03a199e",
+    "81cbd142-45bb-4e79-a8e2-97bcf555d2b6",
+    "a20a2d49-41d3-4069-8a7a-4ae2d77578f3",
+    "7b70e566-f86c-453d-a0f8-66fd6d4c2e3d",
+    "c84c1735-c1ef-49ca-b933-3ec5d890b595",
+    "7755e31f-d49f-45c5-bdcc-c4f597a09b8f",
+    "df7d792e-d3ec-4093-adb0-5a77a25b047c"
+  ],
   "includeSDKBox": false,
   "orientation": {
     "landscapeLeft": false,

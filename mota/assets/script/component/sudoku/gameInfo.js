@@ -44,7 +44,7 @@ cc.Class({
         var row_num = 3;
         for(var i = 0; i < this.gameInfo.total; i++){
             var sceneNode = cc.instantiate(this.scenePrefab);
-            sceneNode.setPosition((i%row_num -1)*240, (180 - parseInt(i/row_num)*80));
+            sceneNode.setPosition((i%row_num -1)*200, (350 - parseInt(i/row_num)*80));
             sceneNode.parent = this.node;
 
             sceneNode._index = i+1;

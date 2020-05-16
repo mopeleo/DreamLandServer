@@ -19,7 +19,7 @@ var BOARD_CELL_OPACITY_INIT = 180;                                      //单元
 var KEY_COLOR_INIT = cc.Color.BLACK.fromHEX("#1B262E");
 var COUNT_TYPE = 1;         //计数器显示类型，1显示数字存在的个数，0显示数字缺失的个数
 
-var BOARD_CELL_SIZE = 30 + 1;                       //单元格大小，+1是每个格子之间的距离为1；
+var BOARD_CELL_SIZE = 65 + 2;                       //单元格大小，+1是每个格子之间的距离为1；
 var BOARD_RADIUS = Math.floor(sudoku.block/2);      //棋盘半径，即边到中心（0，0）有多少个格子
 var BLOCK_SIZE = Math.sqrt(sudoku.block);           //宫大小 ？*？
 
@@ -64,7 +64,7 @@ cc.Class({
         //初始化金币
         this.goldLab.string = sceneInfo.maxGold;
         //初始化错误次数
-        this.errorLab.string = "0/" + sceneInfo.maxError;
+        this.errorLab.string = "错误: 0/" + sceneInfo.maxError;
 
         //初始化计时器
         var second = sceneInfo.time * 60;
@@ -90,10 +90,10 @@ cc.Class({
         //初始化难度星级
         var starNumber = sceneInfo.maxStar;
         for(var i = 0; i < starNumber; i++){
-            var x = 15*((starNumber-1)/2 - i);
+            var x = 30*((starNumber-1)/2 - i);
             var newNode = cc.instantiate(this.levelStar);
             newNode.parent = this.levelStar.parent;
-            newNode.setPosition(x, -45);
+            newNode.setPosition(x, -80);
         }
     },
 
@@ -109,8 +109,8 @@ cc.Class({
             for(var j = 0; j < sudoku.game[i].length; j++){
                 var cell = null;
                 cell = cc.instantiate(this.cellPrefab);
-                var px = BOARD_CELL_SIZE*(j - BOARD_RADIUS) + Math.round((j - BOARD_RADIUS)/BLOCK_SIZE)*2;
-                var py = BOARD_CELL_SIZE*(BOARD_RADIUS - i) + Math.round((BOARD_RADIUS - i)/BLOCK_SIZE)*2;
+                var px = BOARD_CELL_SIZE*(j - BOARD_RADIUS) + Math.round((j - BOARD_RADIUS)/BLOCK_SIZE)*3;
+                var py = BOARD_CELL_SIZE*(BOARD_RADIUS - i) + Math.round((BOARD_RADIUS - i)/BLOCK_SIZE)*3;
                 cell.setPosition(cc.v2(px, py));
 
                 if(sudoku.game[i][j] == 0){
@@ -162,7 +162,6 @@ cc.Class({
             cell.color = KEY_COLOR_INIT;
             var cellLab = cell.getChildByName("number").getComponent(cc.Label);
             cellLab.string = cell._value;
-            cellLab.fontSize = 30;
             this.numberKey.addChild(cell);
             cell.on(cc.Node.EventType.TOUCH_END, this.numberKeyClick, this);
 
@@ -171,7 +170,7 @@ cc.Class({
             cellCount.color = KEY_COLOR_INIT;
             var celllCountLab = cellCount.getChildByName("number").getComponent(cc.Label);
             celllCountLab.string = COUNT_TYPE == 1 ? 0 : 9;
-            celllCountLab.fontSize = 15;
+            celllCountLab.fontSize = 30;
             this.numberCount.addChild(cellCount);
 
             this.numberCountArray[i] = cellCount;

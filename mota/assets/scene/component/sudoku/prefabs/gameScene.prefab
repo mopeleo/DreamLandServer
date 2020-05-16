@@ -52,7 +52,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 200,
+      "width": 180,
       "height": 60
     },
     "_anchorPoint": {
@@ -116,7 +116,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 50.85,
+      "width": 67.8,
       "height": 37.8
     },
     "_anchorPoint": {
@@ -169,7 +169,7 @@
     "_useOriginalSize": false,
     "_string": "关卡 99",
     "_N$string": "关卡 99",
-    "_fontSize": 15,
+    "_fontSize": 20,
     "_lineHeight": 30,
     "_enableWrapText": true,
     "_N$file": null,
@@ -191,7 +191,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "bd5d870c-ac71-45b5-8392-340120e8fdfd"
     },
     "fileId": "73UzkmkTRFHZy1OPNGOI/M",
     "sync": false
@@ -223,7 +223,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 71.7,
+      "width": 95.61,
       "height": 37.8
     },
     "_anchorPoint": {
@@ -276,7 +276,7 @@
     "_useOriginalSize": false,
     "_string": "用时 00:00",
     "_N$string": "用时 00:00",
-    "_fontSize": 15,
+    "_fontSize": 20,
     "_lineHeight": 30,
     "_enableWrapText": true,
     "_N$file": null,
@@ -298,7 +298,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "bd5d870c-ac71-45b5-8392-340120e8fdfd"
     },
     "fileId": "96cOTrSOVFwZ2Il5CyCSQW",
     "sync": false
@@ -342,7 +342,7 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        50,
+        60,
         15,
         0,
         0,
@@ -405,7 +405,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "bd5d870c-ac71-45b5-8392-340120e8fdfd"
     },
     "fileId": "e2VuMkZdJHp6oJdiYyJ1mE",
     "sync": false
@@ -449,7 +449,7 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        35,
+        45,
         15,
         0,
         0,
@@ -512,7 +512,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "bd5d870c-ac71-45b5-8392-340120e8fdfd"
     },
     "fileId": "09ptHiRVhKt62ct+/crhJC",
     "sync": false
@@ -556,7 +556,7 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        20,
+        30,
         15,
         0,
         0,
@@ -619,7 +619,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "bd5d870c-ac71-45b5-8392-340120e8fdfd"
     },
     "fileId": "d3kVGghwJMdbEyYd7nWdvl",
     "sync": false
@@ -662,7 +662,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "bd5d870c-ac71-45b5-8392-340120e8fdfd"
     },
     "fileId": "5ec41uqeJGbYld3KDnjr8c",
     "sync": false
