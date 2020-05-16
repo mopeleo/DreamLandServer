@@ -5,8 +5,8 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
-var PlayerData = require("playerData");
 var GameLib = require("gameLib");
+var PlayerData = require("playerData");
 
 cc.Class({
     extends: cc.Component,

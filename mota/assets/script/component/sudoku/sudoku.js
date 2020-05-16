@@ -22,11 +22,12 @@ sudoku.again = function(){
     sudoku.beginNumber = 1;
 };
 
-sudoku.randomInit = function() {
+sudoku.randomInit = function(level) {
     if(this.game != null){
         return;
     }
 
+    this.level = level||3;
     this.beginNumber = this.getRandomBetween(1, this.block);
 
     this.game = new Array();
@@ -67,7 +68,7 @@ sudoku.randomInit = function() {
     }
 
     while(!this.fillNumber(this.game, this.rowExistNumber, this.colExistNumber, this.blockExistNumber)){
-        console.log("init error!");
+        cc.log("init error!");
     }
 
     //备份原始的完整数字
@@ -84,26 +85,8 @@ sudoku.fixedInit = function(type, index){
     if(index < 1){
         index = 1;
     }
-    var gameKey = "game_" + index;
-    var fullKey = "full_" + index;
-    switch(type){
-        case 1:
-            this.game = GameLib.easy[gameKey];
-            this.fullGame = GameLib.easy[fullKey];
-            break;
-        case 2:
-            this.game = GameLib.normal[gameKey];
-            this.fullGame = GameLib.normal[fullKey];
-            break;
-        case 3:
-            this.game = GameLib.hard[gameKey];
-            this.fullGame = GameLib.hard[fullKey];
-            break;
-        default:
-            this.game = GameLib.easy[gameKey];
-            this.fullGame = GameLib.easy[fullKey];
-            break;
-    }
+    this.game = GameLib.getGame(type, index);
+    this.fullGame = GameLib.getFull(type, index);
 
     this.rowExistNumber = new Array();
     this.colExistNumber = new Array();
@@ -138,13 +121,20 @@ sudoku.fixedInit = function(type, index){
     }
 };
 
-sudoku.create = function() {
-    if(this.level < 1 || this.level > 4){
-        return false;
+sudoku.create = function(clearNum) {
+    if(!clearNum || clearNum < 50){
+        this.level = 1;
+    }else if(clearNum >= 50 && clearNum < 57){
+        this.level = 2;
+    }else if(clearNum >= 57 && clearNum < 60){
+        this.level = 3;
+    }else{
+        this.level = 4;
     }
+
     var blank = 0;
     if(this.level == 1){
-        blank = this.getRandomBetween(45, 50);
+        blank = clearNum || this.getRandomBetween(45, 50);
         while(blank > 0){
             var row = this.getRandomBetween(0, this.block);
             var col = this.getRandomBetween(0, this.block);
@@ -168,7 +158,7 @@ sudoku.create = function() {
             }
         }
     }else if(this.level == 2){
-        blank = this.getRandomBetween(50, 57);
+        blank =  clearNum || this.getRandomBetween(50, 57);
         var math = this.totalJumpNumber();     //奇数偶数间隔共挖个数，小于总空白
         var sub = blank - math;
         while(blank > 0){
@@ -205,7 +195,7 @@ sudoku.create = function() {
             }
         }
     }else if(this.level == 3){
-        blank = this.getRandomBetween(55, 60);
+        blank =  clearNum || this.getRandomBetween(55, 60);
         while(blank > 0){
             var row = this.getRandomBetween(0, this.block);
             var col = this.getRandomBetween(0, this.block);
@@ -230,7 +220,7 @@ sudoku.create = function() {
         }
     }else{
         // 每行数字不能多于2个，81-2*9 至少要挖63个洞
-        blank = this.getRandomBetween(58, 63);
+        blank =  clearNum || this.getRandomBetween(58, 63);
         while(blank > 0){
             var row = this.getRandomBetween(0, this.block);
             var col = this.getRandomBetween(0, this.block);

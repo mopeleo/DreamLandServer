@@ -30,10 +30,8 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
-
-    start () {
-
+    onLoad () {
+        PlayerData.load();
     },
 
     normalGame(event, customData){
@@ -45,8 +43,13 @@ cc.Class({
 
     challengeGame(){
         PlayerData.param.sceneType = 0;
-        PlayerData.param.sceneIndex = 0;
-        cc.director.loadScene("chessboard");
+        if(!PlayerData.player.scene.challenge.level){
+            PlayerData.player.scene.challenge.level = PlayerData.param.challengeBegin;
+        }
+        PlayerData.param.sceneIndex = PlayerData.player.scene.challenge.level;
+        cc.director.preloadScene("chessboard", function () {
+            cc.director.loadScene("chessboard");
+        });
     },
 
     rankPage(){

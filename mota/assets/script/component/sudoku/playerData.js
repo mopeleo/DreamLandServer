@@ -29,13 +29,15 @@ module.exports = {
 
             },
             challenge:{
-                level:7
+                level:0
             }
         }
     },
     param:{
         sceneType: 1,
-        sceneIndex: 1
+        sceneIndex: 1,
+        challengeBegin: 55,
+        cellPool:null,
     },
     save:function(){
         var encrypted = encrypt.encrypt(JSON.stringify(this.player), secretkey, 256);

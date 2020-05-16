@@ -6,6 +6,7 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 var sudoku = require("sudoku");
+var GameLib = require("gameLib");
 var PlayerData = require("playerData");
 
 var BOARD_CELL_COLOR_INIT = cc.Color.WHITE;                             //单元格初始颜色
@@ -52,63 +53,66 @@ cc.Class({
         this.initChessboard();
         this.initNumberKey();
 
-        this.timeCount = 1;
         this.initTopTitle();
 
     },
 
     initTopTitle(){
+        var sceneInfo = GameLib.getInfo(PlayerData.param.sceneType, PlayerData.param.sceneIndex);
         //初始化关卡信息
-        this.sceneLab.string = "test";
+        this.sceneLab.string = GameLib.getInfo(PlayerData.param.sceneType).name + " " + PlayerData.param.sceneIndex;
+        //初始化金币
+        this.goldLab.string = sceneInfo.maxGold;
+        //初始化错误次数
+        this.errorLab.string = "0/" + sceneInfo.maxError;
 
         //初始化计时器
-        var second = this.timeCount * 60;
+        var second = sceneInfo.time * 60;
+        var sec = second % 60;
+        var min = parseInt(second / 60);
+        this.clockNode.getComponent(cc.Label).string = (min < 10 ? "0" + min : "" + min) + ":" + (sec < 10 ? "0" + sec : "" + sec);
         this.clockNode.getComponent(cc.Label).schedule(()=>{
-            if(this.timeCount > 0){
+            if(sceneInfo.time > 0){
                 second--;
             }else{
                 second++;
             }
-            if(second == 0){
-                this.clockNode.getComponent(cc.Label).string = "00:00";
-                this.clockNode.getComponent(cc.Label).unscheduleAllCallbacks();
-                return;
-            }
-            var sec = second % 60;
-            var min = parseInt(second / 60);
+            sec = second % 60;
+            min = parseInt(second / 60);
             this.clockNode.getComponent(cc.Label).string = (min < 10 ? "0" + min : "" + min) + ":" + (sec < 10 ? "0" + sec : "" + sec);
+
+            if(second == 0){
+                this.clockNode.getComponent(cc.Label).unscheduleAllCallbacks();
+            }
         }, 1);
 
-        //初始化金币
-        this.goldLab.string = 100;
 
         //初始化难度星级
-        var starNumber = 4;
+        var starNumber = sceneInfo.maxStar;
         for(var i = 0; i < starNumber; i++){
             var x = 15*((starNumber-1)/2 - i);
             var newNode = cc.instantiate(this.levelStar);
             newNode.parent = this.levelStar.parent;
             newNode.setPosition(x, -45);
         }
-
-        //初始化错误次数
-        this.errorLab.string = "0/" + 4;
     },
 
     initChessboard(){
         if(!PlayerData.param.sceneType || PlayerData.param.sceneType == 0){
             sudoku.randomInit();
-            sudoku.create();
+            sudoku.create(PlayerData.player.scene.challenge.level);
         }else{
             sudoku.fixedInit(PlayerData.param.sceneType, PlayerData.param.sceneIndex);
         }
 
         for(var i = 0; i < sudoku.game.length; i++){
             for(var j = 0; j < sudoku.game[i].length; j++){
-                var cell = cc.instantiate(this.cellPrefab);
+                var cell = null;
+                cell = cc.instantiate(this.cellPrefab);
                 var px = BOARD_CELL_SIZE*(j - BOARD_RADIUS) + Math.round((j - BOARD_RADIUS)/BLOCK_SIZE)*2;
                 var py = BOARD_CELL_SIZE*(BOARD_RADIUS - i) + Math.round((BOARD_RADIUS - i)/BLOCK_SIZE)*2;
                 cell.setPosition(cc.v2(px, py));
+
                 if(sudoku.game[i][j] == 0){
                     cell._edit = true;
                 }else{
@@ -390,6 +394,8 @@ cc.Class({
     },
 
     existGame(){
+        sudoku.again();
+        PlayerData.save();
         if(!PlayerData.param.sceneType || PlayerData.param.sceneType == 0){
             cc.director.loadScene("home");
         }else{
