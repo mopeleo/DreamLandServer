@@ -45,12 +45,15 @@ cc.Class({
     onLoad () {
         this.lastClickKey = 0;
         this.lastClickCell = null;
-        this.blockArray = new Array(sudoku.block);
         this.rowArray = new Array(sudoku.block);
         this.colArray = new Array(sudoku.block);
+        this.blockArray = new Array(sudoku.block);
         this.numberArray = new Array(sudoku.block + 1);
         this.numberCountArray = new Array(sudoku.block);
         this.dialogType = 1;        // 1:点击弹出，暂停，2：失败弹出，3：成功弹出
+        this.errorCount = 0;        // 错误次数
+        this.usedSecond = 0;        // 已用秒
+        this.sceneInfo = GameLib.getInfo(PlayerData.param.sceneType, PlayerData.param.sceneIndex);      // 关卡信息
 
         this.initChessboard();
         this.initNumberKey();
@@ -68,21 +71,33 @@ cc.Class({
     },
 
     initTopTitle(){
-        var sceneInfo = GameLib.getInfo(PlayerData.param.sceneType, PlayerData.param.sceneIndex);
         //初始化关卡信息
         this.sceneLab.string = GameLib.getInfo(PlayerData.param.sceneType).name + " " + PlayerData.param.sceneIndex;
         //初始化金币
-        this.goldLab.string = sceneInfo.maxGold;
+        this.goldLab.string = this.sceneInfo.maxGold;
         //初始化错误次数
-        this.errorLab.string = "错误: 0/" + sceneInfo.maxError;
-
+        this.updateErrorCount();
         //初始化计时器
-        var second = sceneInfo.time * 60;
+        this.initClock();
+
+        //初始化难度星级
+        var starNumber = this.sceneInfo.maxStar;
+        for(var i = 0; i < starNumber; i++){
+            var x = 30*((starNumber-1)/2 - i);
+            var newNode = cc.instantiate(this.levelStar);
+            newNode.parent = this.levelStar.parent;
+            newNode.setPosition(x, -80);
+        }
+    },
+
+    initClock(){
+        var second = this.sceneInfo.time * 60;
         var sec = second % 60;
         var min = parseInt(second / 60);
         this.clockNode.getComponent(cc.Label).string = (min < 10 ? "0" + min : "" + min) + ":" + (sec < 10 ? "0" + sec : "" + sec);
         this.clockNode.getComponent(cc.Label).schedule(()=>{
-            if(sceneInfo.time > 0){
+            this.usedSecond++;
+            if(this.sceneInfo.time > 0){
                 second--;
             }else{
                 second++;
@@ -93,18 +108,9 @@ cc.Class({
 
             if(second == 0){
                 this.clockNode.getComponent(cc.Label).unscheduleAllCallbacks();
+                this.showDialog(2);     //时间到了失败
             }
         }, 1);
-
-
-        //初始化难度星级
-        var starNumber = sceneInfo.maxStar;
-        for(var i = 0; i < starNumber; i++){
-            var x = 30*((starNumber-1)/2 - i);
-            var newNode = cc.instantiate(this.levelStar);
-            newNode.parent = this.levelStar.parent;
-            newNode.setPosition(x, -80);
-        }
     },
 
     initChessboard(){
@@ -273,6 +279,13 @@ cc.Class({
 
                 //检查是否完成
                 this.checkFinish();
+            }else{
+                //错误增加错误次数
+                this.errorCount++;
+                this.updateErrorCount();
+                if(this.errorCount >= this.sceneInfo.maxError){
+                    this.showDialog(2);
+                }
             }
             currentNumberArray.push(this.lastClickCell);
 
@@ -405,6 +418,10 @@ cc.Class({
         }
     },
 
+    updateErrorCount(){
+        this.errorLab.string = "错误: " + this.errorCount + "/" + this.sceneInfo.maxError;
+    },
+
     checkFinish(){
         for(var i = 0; i < this.blockArray.length; i++){
             for(var j = 0; j < this.blockArray[i].length; j++){
@@ -414,10 +431,17 @@ cc.Class({
             }
         }
 
+        this.showDialog(3);
+        PlayerData.save();  //成功过关自动保存
         return true;
     },
 
     returnClick(){
+        this.showDialog(1);
+    },
+
+    showDialog(type){
+        this.dialogType = type;
         this.dialog.x = 0;
         this.updateDialog();
     },
@@ -425,21 +449,30 @@ cc.Class({
     updateDialog(){
         var dialogSceneInfo = this.dialog.getChildByName("title").getComponent(cc.Label);
         var dialogErrorCount = this.dialog.getChildByName("error").getComponent(cc.Label);
-        var dialogTime = this.dialog.getChildByName("useTime").getComponent(cc.Label);
+        var dialogUsedTime = this.dialog.getChildByName("useTime").getComponent(cc.Label);
         var dialogGold = this.dialog.getChildByName("gold").getComponent(cc.Label);
         var dialogDynamic = this.dialogDynamicBtn.getChildByName("dynamic").getComponent(cc.Label);
         switch(this.dialogType){
             case 1:
                 dialogSceneInfo.string = this.sceneLab.string + "  暂停";
                 dialogDynamic.string = "返回游戏";
+                dialogErrorCount.node.color = BOARD_CELL_COLOR_INIT;
+                dialogUsedTime.node.color = BOARD_CELL_COLOR_INIT;
                 break;
             case 2:
                 dialogSceneInfo.string = this.sceneLab.string + "  挑战失败";
                 dialogDynamic.string = "复    活";
+                if(this.errorCount >= this.sceneInfo.maxError){
+                    dialogErrorCount.node.color = BOARD_CELL_COLOR_ERROR;
+                }else{
+                    dialogUsedTime.node.color = BOARD_CELL_COLOR_ERROR;
+                }
                 break;
             case 3:
                 dialogSceneInfo.string = this.sceneLab.string + "  挑战成功";
                 dialogDynamic.string = "下个关卡";
+                dialogErrorCount.node.color = BOARD_CELL_COLOR_INIT;
+                dialogUsedTime.node.color = BOARD_CELL_COLOR_INIT;
                 break;
             default:
                 break;
@@ -447,19 +480,38 @@ cc.Class({
         // this.dialogDynamicBtn.on(cc.Node.EventType.TOUCH_END, this.dialogDynamicClick, this);
 
         dialogErrorCount.string = this.errorLab.string;
-        dialogTime.string = "用时 " + this.clockNode.getComponent(cc.Label).string;
         dialogGold.string = "x" + this.goldLab.string;
+
+        var sec = this.usedSecond % 60;
+        var min = parseInt(this.usedSecond / 60);
+        dialogUsedTime.string = "用时 " + (min < 10 ? "0" + min : "" + min) + ":" + (sec < 10 ? "0" + sec : "" + sec);
     },
 
     dialogDynamicClick(){
         cc.log("dialogType = " + this.dialogType);
         switch(this.dialogType){
+            //返回游戏
             case 1:
                 this.dialog.x = -1000;
                 break;
+            //复活
             case 2:
+                this.dialog.x = -1000;
+                //达到错误次数恢复次数
+                if(this.errorCount >= this.sceneInfo.maxError){
+                    this.errorCount = 0;
+                    this.updateErrorCount();
+                }
+                //倒计时到了恢复时间
+                if(this.sceneInfo.time > 0 && this.usedSecond >=this.sceneInfo.time*60){
+                    this.usedSecond = 0;
+                    this.initClock();
+                }
                 break;
+            //下个关卡
             case 3:
+                this.dialog.x = -1000;
+                PlayerData.param.sceneIndex++;
                 break;
             default:
                 break;
