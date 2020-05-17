@@ -36,6 +36,7 @@ cc.Class({
         sceneLab: cc.Label,
         goldLab: cc.Label,
         errorLab: cc.Label,
+        dialog: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -48,7 +49,6 @@ cc.Class({
         this.colArray = new Array(sudoku.block);
         this.numberArray = new Array(sudoku.block + 1);
         this.numberCountArray = new Array(sudoku.block);
-        this.errorArray = new Array(sudoku.block);
 
         this.initChessboard();
         this.initNumberKey();
@@ -260,6 +260,9 @@ cc.Class({
             if(keyNumber == sudoku.fullGame[this.lastClickCell._row][this.lastClickCell._col]){
                 this.lastClickCell._edit = false;
                 this.lastClickCell.getChildByName("number").color = cc.Color.BLACK;
+
+                //检查是否完成
+                this.checkFinish();
             }
             currentNumberArray.push(this.lastClickCell);
 
@@ -390,6 +393,18 @@ cc.Class({
             var count = parseInt(countNode.getChildByName("number").getComponent(cc.Label).string);
             countNode.getChildByName("number").getComponent(cc.Label).string = COUNT_TYPE == 1 ? count -1: count + 1;
         }
+    },
+
+    checkFinish(){
+        for(var i = 0; i < this.blockArray.length; i++){
+            for(var j = 0; j < this.blockArray[i].length; j++){
+                if(this.blockArray[i][j]._edit == true){
+                    return false;
+                }
+            }
+        }
+
+        return true;
     },
 
     existGame(){
