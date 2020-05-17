@@ -485,6 +485,17 @@ cc.Class({
         var sec = this.usedSecond % 60;
         var min = parseInt(this.usedSecond / 60);
         dialogUsedTime.string = "用时 " + (min < 10 ? "0" + min : "" + min) + ":" + (sec < 10 ? "0" + sec : "" + sec);
+
+        //star
+        var greyStar = 2;
+        for(var i = 0; i < this.sceneInfo.maxStar; i++){
+            var name = "star" + i;
+            if(i < greyStar){
+                this.dialog.getChildByName(name).getComponent(cc.Sprite).setMaterial(0, cc.Material.getBuiltinMaterial('2d-gray-sprite'));    // 变灰
+            }else{
+                this.dialog.getChildByName(name).getComponent(cc.Sprite).setMaterial(0, cc.Material.getBuiltinMaterial('2d-sprite'));    // 恢复
+            }
+        }
     },
 
     dialogDynamicClick(){

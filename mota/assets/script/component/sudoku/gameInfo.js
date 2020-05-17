@@ -14,6 +14,7 @@ cc.Class({
     properties: {
         level: cc.Label,
         scenePrefab: cc.Prefab,
+        scrollContent: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -44,8 +45,11 @@ cc.Class({
         var row_num = 3;
         for(var i = 0; i < this.gameInfo.total; i++){
             var sceneNode = cc.instantiate(this.scenePrefab);
-            sceneNode.setPosition((i%row_num -1)*200, (350 - parseInt(i/row_num)*80));
-            sceneNode.parent = this.node;
+            // sceneNode.setPosition((i%row_num -1)*200, (350 - parseInt(i/row_num)*80));
+            // sceneNode.parent = this.node;
+
+            // sceneNode.setPosition((i%row_num -1)*200, (0 - parseInt(i/row_num)*80));
+            this.scrollContent.addChild(sceneNode);
 
             sceneNode._index = i+1;
             sceneNode.getChildByName("scene").getComponent(cc.Label).string = "关卡 " + sceneNode._index;
