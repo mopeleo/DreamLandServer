@@ -37,6 +37,7 @@ cc.Class({
         goldLab: cc.Label,
         errorLab: cc.Label,
         dialog: cc.Node,
+        dialogDynamicBtn: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -49,11 +50,20 @@ cc.Class({
         this.colArray = new Array(sudoku.block);
         this.numberArray = new Array(sudoku.block + 1);
         this.numberCountArray = new Array(sudoku.block);
+        this.dialogType = 1;        // 1:点击弹出，暂停，2：失败弹出，3：成功弹出
 
         this.initChessboard();
         this.initNumberKey();
 
         this.initTopTitle();
+
+        //初始话对话框
+        this.dialog.on(cc.Node.EventType.TOUCH_START,function(event){
+            event.stopPropagation();
+        });
+        this.dialog.on(cc.Node.EventType.TOUCH_END, function (event) {
+            event.stopPropagation();
+        });
 
     },
 
@@ -407,7 +417,56 @@ cc.Class({
         return true;
     },
 
-    existGame(){
+    returnClick(){
+        this.dialog.x = 0;
+        this.updateDialog();
+    },
+
+    updateDialog(){
+        var dialogSceneInfo = this.dialog.getChildByName("title").getComponent(cc.Label);
+        var dialogErrorCount = this.dialog.getChildByName("error").getComponent(cc.Label);
+        var dialogTime = this.dialog.getChildByName("useTime").getComponent(cc.Label);
+        var dialogGold = this.dialog.getChildByName("gold").getComponent(cc.Label);
+        var dialogDynamic = this.dialogDynamicBtn.getChildByName("dynamic").getComponent(cc.Label);
+        switch(this.dialogType){
+            case 1:
+                dialogSceneInfo.string = this.sceneLab.string + "  暂停";
+                dialogDynamic.string = "返回游戏";
+                break;
+            case 2:
+                dialogSceneInfo.string = this.sceneLab.string + "  挑战失败";
+                dialogDynamic.string = "复    活";
+                break;
+            case 3:
+                dialogSceneInfo.string = this.sceneLab.string + "  挑战成功";
+                dialogDynamic.string = "下个关卡";
+                break;
+            default:
+                break;
+        }
+        // this.dialogDynamicBtn.on(cc.Node.EventType.TOUCH_END, this.dialogDynamicClick, this);
+
+        dialogErrorCount.string = this.errorLab.string;
+        dialogTime.string = "用时 " + this.clockNode.getComponent(cc.Label).string;
+        dialogGold.string = "x" + this.goldLab.string;
+    },
+
+    dialogDynamicClick(){
+        cc.log("dialogType = " + this.dialogType);
+        switch(this.dialogType){
+            case 1:
+                this.dialog.x = -1000;
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            default:
+                break;
+        }
+    },
+
+    dialogExistClick(){
         sudoku.again();
         PlayerData.save();
         if(!PlayerData.param.sceneType || PlayerData.param.sceneType == 0){
@@ -417,6 +476,11 @@ cc.Class({
                 cc.director.loadScene("gameinfo");
             });
         }
+    },
+
+    dialogResetClick(){
+        cc.log("reset = " + PlayerData.param.sceneType);
+
     },
 
     // update (dt) {},
