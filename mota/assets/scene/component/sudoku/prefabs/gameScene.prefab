@@ -305,7 +305,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "star3",
+    "_name": "star0",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1
@@ -412,7 +412,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "star2",
+    "_name": "star1",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1
@@ -519,7 +519,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "star1",
+    "_name": "star2",
     "_objFlags": 0,
     "_parent": {
       "__id__": 1

@@ -30,12 +30,12 @@
     "_prefab": {
       "__id__": 6
     },
-    "_opacity": 200,
+    "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
-      "r": 255,
-      "g": 255,
-      "b": 255,
+      "r": 74,
+      "g": 107,
+      "b": 134,
       "a": 255
     },
     "_contentSize": {
@@ -104,7 +104,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 22.25,
+      "width": 0,
       "height": 50.4
     },
     "_anchorPoint": {

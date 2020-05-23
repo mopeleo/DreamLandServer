@@ -1,22 +1,21 @@
-// Learn cc.Class:
-//  - https://docs.cocos.com/creator/manual/en/scripting/class.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
-
 var sudoku = require("sudoku");
 var GameLib = require("gameLib");
 var PlayerData = require("playerData");
 
-var BOARD_CELL_COLOR_INIT = cc.Color.WHITE;                             //单元格初始颜色
-var BOARD_CELL_COLOR_SAMENUMBER = cc.Color.BLACK.fromHEX("#23774B");    //单元格相同数字颜色
-var BOARD_CELL_COLOR_BLOCK = cc.Color.BLACK.fromHEX("#8BBBA2");         //单元格同宫同列同行颜色
+var BOARD_CELL_COLOR_INIT = cc.Color.BLACK.fromHEX("#4a6b86");          //单元格初始颜色
+var BOARD_CELL_COLOR_SAMENUMBER = cc.Color.BLACK.fromHEX("#8198ab");    //单元格相同数字颜色
+var BOARD_CELL_COLOR_BLOCK = cc.Color.BLACK.fromHEX("#5d7a93");         //单元格同宫同列同行颜色
 var BOARD_CELL_COLOR_EDIT = cc.Color.BLACK.fromHEX("#F09559");          //单元格编辑颜色
-var BOARD_CELL_COLOR_ERROR = cc.Color.RED;                              //单元格错误颜色
-var BOARD_CELL_OPACITY_INIT = 180;                                      //单元格初始透明度
+var BOARD_CELL_COLOR_ERROR = cc.Color.RED;                              //单元格冲突错误颜色
+var BOARD_CELL_OPACITY_INIT = 255;                                      //单元格初始透明度
 
-var KEY_COLOR_INIT = cc.Color.BLACK.fromHEX("#1B262E");
+var BOARD_CELL_TEXT_COLOR_READONLY = cc.Color.BLACK;            //单元格文字只读
+var BOARD_CELL_TEXT_COLOR_CANEDIT = cc.Color.WHITE;             //单元格文字可编辑
+var KEY_COLOR_INIT = cc.Color.BLACK.fromHEX("#1B262E");         //数字键盘初始颜色
+
+var DIALOG_TEXT_NORMAL = cc.Color.WHITE;        //对话框正常文字
+var DIALOG_TEXT_ERROR = cc.Color.RED;           //对话框错误信息
+
 var COUNT_TYPE = 1;         //计数器显示类型，1显示数字存在的个数，0显示数字缺失的个数
 
 var BOARD_CELL_SIZE = 65 + 2;                       //单元格大小，+1是每个格子之间的距离为1；
@@ -27,46 +26,80 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        chessboard: cc.Node,
-        numberKey: cc.Node,
-        numberCount: cc.Node,
+        chessboardNode: cc.Node,
+        numberKeyNode: cc.Node,
+        numberCountNode: cc.Node,
         clockNode: cc.Node,
         cellPrefab: cc.Prefab,
-        levelStar: cc.Node,
+        // levelStarNode: cc.Node,
         sceneLab: cc.Label,
         goldLab: cc.Label,
         errorLab: cc.Label,
-        dialog: cc.Node,
+        dialogNode: cc.Node,
         dialogDynamicBtn: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-        this.lastClickKey = 0;
-        this.lastClickCell = null;
+        //初始话对话框
+        this.dialogNode.on(cc.Node.EventType.TOUCH_START,function(event){
+            event.stopPropagation();
+        });
+        this.dialogNode.on(cc.Node.EventType.TOUCH_END, function (event) {
+            event.stopPropagation();
+        });
+
         this.rowArray = new Array(sudoku.block);
         this.colArray = new Array(sudoku.block);
         this.blockArray = new Array(sudoku.block);
         this.numberArray = new Array(sudoku.block + 1);
-        this.numberCountArray = new Array(sudoku.block);
+
+        //缓存单元格，不刷新场景时使用
+        this.cellCache = new Array(sudoku.block);
+        for(var i = 0; i < sudoku.block; i++){
+            this.cellCache[i] = new Array(sudoku.block);
+
+            this.rowArray[i] = new Array(sudoku.block);
+            this.colArray[i] = new Array(sudoku.block);
+            this.blockArray[i] = new Array(sudoku.block);
+            for(var j = 0; j < sudoku.block; j++){
+                this.cellCache[i][j] = null;
+
+                this.rowArray[i][j] = null;
+                this.colArray[i][j] = null;
+                this.blockArray[i][j] = null;
+            }
+        }
+
+        this.numberCountArray = new Array(sudoku.block);    //出现的数字计数器，一维数组
+        this.initNumberKey();   //固定的，可以先初始化
+        this.initGame();
+    },
+
+    initGame(){
+        this.lastClickKey = 0;
+        this.lastClickCell = null;
         this.dialogType = 1;        // 1:点击弹出，暂停，2：失败弹出，3：成功弹出
         this.errorCount = 0;        // 错误次数
         this.usedSecond = 0;        // 已用秒
         this.sceneInfo = GameLib.getInfo(PlayerData.param.sceneType, PlayerData.param.sceneIndex);      // 关卡信息
+        if(!this.sceneInfo){
+            cc.log("场景信息不存在：" + PlayerData.param.sceneType + " - " + PlayerData.param.sceneIndex);
+            return;
+        }
+        this.obtainGold = this.sceneInfo.maxGold;   //获得的金币
 
-        this.initChessboard();
-        this.initNumberKey();
+        for(var i = 0; i < this.numberArray.length; i++){
+            this.numberArray[i] = null;
+        }
 
         this.initTopTitle();
+        this.initChessboard();
+        this.initNumberCount();
 
-        //初始话对话框
-        this.dialog.on(cc.Node.EventType.TOUCH_START,function(event){
-            event.stopPropagation();
-        });
-        this.dialog.on(cc.Node.EventType.TOUCH_END, function (event) {
-            event.stopPropagation();
-        });
+        cc.log("game_ : " + JSON.stringify(sudoku.game) + ",");
+        cc.log("full_ : " + JSON.stringify(sudoku.fullGame) + ",");
 
     },
 
@@ -74,20 +107,21 @@ cc.Class({
         //初始化关卡信息
         this.sceneLab.string = GameLib.getInfo(PlayerData.param.sceneType).name + " " + PlayerData.param.sceneIndex;
         //初始化金币
-        this.goldLab.string = this.sceneInfo.maxGold;
+        this.goldLab.string = this.obtainGold;
         //初始化错误次数
         this.updateErrorCount();
         //初始化计时器
+        this.clockNode.getComponent(cc.Label).unscheduleAllCallbacks();
         this.initClock();
 
         //初始化难度星级
-        var starNumber = this.sceneInfo.maxStar;
-        for(var i = 0; i < starNumber; i++){
-            var x = 30*((starNumber-1)/2 - i);
-            var newNode = cc.instantiate(this.levelStar);
-            newNode.parent = this.levelStar.parent;
-            newNode.setPosition(x, -80);
-        }
+        // var starNumber = this.sceneInfo.maxStar;
+        // for(var i = 0; i < starNumber; i++){
+        //     var x = 30*((starNumber-1)/2 - i);
+        //     var newNode = cc.instantiate(this.levelStarNode);
+        //     newNode.parent = this.levelStarNode.parent;
+        //     newNode.setPosition(x, -80);
+        // }
     },
 
     initClock(){
@@ -116,49 +150,46 @@ cc.Class({
     initChessboard(){
         if(!PlayerData.param.sceneType || PlayerData.param.sceneType == 0){
             sudoku.randomInit();
-            sudoku.create(PlayerData.player.scene.challenge.level);
+            // sudoku.create(PlayerData.player.scene.challenge.level);
+            sudoku.create(43);
         }else{
             sudoku.fixedInit(PlayerData.param.sceneType, PlayerData.param.sceneIndex);
         }
 
         for(var i = 0; i < sudoku.game.length; i++){
             for(var j = 0; j < sudoku.game[i].length; j++){
-                var cell = null;
-                cell = cc.instantiate(this.cellPrefab);
-                var px = BOARD_CELL_SIZE*(j - BOARD_RADIUS) + Math.round((j - BOARD_RADIUS)/BLOCK_SIZE)*3;
-                var py = BOARD_CELL_SIZE*(BOARD_RADIUS - i) + Math.round((BOARD_RADIUS - i)/BLOCK_SIZE)*3;
-                cell.setPosition(cc.v2(px, py));
+                var cell = this.cellCache[i][j];
+                if(cell == null){
+                    cell = cc.instantiate(this.cellPrefab);
+                    var px = BOARD_CELL_SIZE*(j - BOARD_RADIUS) + Math.round((j - BOARD_RADIUS)/BLOCK_SIZE)*3;
+                    var py = BOARD_CELL_SIZE*(BOARD_RADIUS - i) + Math.round((BOARD_RADIUS - i)/BLOCK_SIZE)*3;
+                    cell.setPosition(cc.v2(px, py));
+                    cell.on(cc.Node.EventType.TOUCH_END, this.boardCellClick, this);
 
+                    //额外添加属性
+                    cell._row = i;
+                    cell._col = j;
+                    cell._block = sudoku.getBlock(i, j);
+                    this.chessboardNode.addChild(cell);
+
+                    this.cellCache[i][j] = cell;
+                    this.rowArray[cell._row][j] = cell;
+                    this.colArray[cell._col][i] = cell;
+                    var blockIndex = (i % BLOCK_SIZE) * BLOCK_SIZE + j % BLOCK_SIZE;
+                    this.blockArray[cell._block][blockIndex] = cell;
+                }
+
+                cell._value = sudoku.game[i][j];
                 if(sudoku.game[i][j] == 0){
+                    cell.getChildByName("number").color = BOARD_CELL_TEXT_COLOR_CANEDIT;
+                    cell.getChildByName("number").getComponent(cc.Label).string = '';
                     cell._edit = true;
                 }else{
-                    cell.getChildByName("number").color = cc.Color.BLACK;
+                    cell.getChildByName("number").color = BOARD_CELL_TEXT_COLOR_READONLY;
                     cell.getChildByName("number").getComponent(cc.Label).string = sudoku.game[i][j];
                     cell._edit = false;
                 }
-                cell.on(cc.Node.EventType.TOUCH_END, this.boardCellClick, this);
-
-                //额外添加属性
-                cell._row = i;
-                cell._col = j;
-                cell._block = sudoku.getBlock(i, j);
-                cell._value = sudoku.game[i][j];
-                this.chessboard.addChild(cell);
-
-                if(!this.blockArray[cell._block]){
-                    this.blockArray[cell._block] = [];
-                }
-                this.blockArray[cell._block].push(cell);
-
-                if(!this.rowArray[cell._row]){
-                    this.rowArray[cell._row] = [];
-                }
-                this.rowArray[cell._row].push(cell);
-
-                if(!this.colArray[cell._col]){
-                    this.colArray[cell._col] = [];
-                }
-                this.colArray[cell._col].push(cell);
+                cell.color = BOARD_CELL_COLOR_INIT;
 
                 if(!this.numberArray[cell._value]){
                     this.numberArray[cell._value] = [];
@@ -178,18 +209,25 @@ cc.Class({
             cell.color = KEY_COLOR_INIT;
             var cellLab = cell.getChildByName("number").getComponent(cc.Label);
             cellLab.string = cell._value;
-            this.numberKey.addChild(cell);
+
             cell.on(cc.Node.EventType.TOUCH_END, this.numberKeyClick, this);
+            this.numberKeyNode.addChild(cell);
 
             var cellCount = cc.instantiate(this.cellPrefab);
             cellCount.setPosition(cc.v2(px, py));
             cellCount.color = KEY_COLOR_INIT;
             var celllCountLab = cellCount.getChildByName("number").getComponent(cc.Label);
-            celllCountLab.string = COUNT_TYPE == 1 ? 0 : 9;
-            celllCountLab.fontSize = 30;
-            this.numberCount.addChild(cellCount);
+            celllCountLab.fontSize = 20;
+            this.numberCountNode.addChild(cellCount);
 
             this.numberCountArray[i] = cellCount;
+        }
+    },
+
+    initNumberCount(){
+        for(var i = 0; i < sudoku.block; i++){
+            var cellCount = this.numberCountArray[i];
+            cellCount.getChildByName("number").getComponent(cc.Label).string = COUNT_TYPE == 1 ? 0 : 9;
         }
 
         for(var i = 0; i < sudoku.block; i++){
@@ -275,7 +313,7 @@ cc.Class({
             //填入数字正确后，单元格变为只读
             if(keyNumber == sudoku.fullGame[this.lastClickCell._row][this.lastClickCell._col]){
                 this.lastClickCell._edit = false;
-                this.lastClickCell.getChildByName("number").color = cc.Color.BLACK;
+                this.lastClickCell.getChildByName("number").color = BOARD_CELL_TEXT_COLOR_READONLY;
 
                 //检查是否完成
                 this.checkFinish();
@@ -431,8 +469,50 @@ cc.Class({
             }
         }
 
-        this.showDialog(3);
+        //更新玩家数据
+        var infoValue = {};
+        infoValue.time = this.usedSecond;
+        infoValue.star = GameLib.obtainStar(this.sceneInfo, this.usedSecond, this.errorCount);
+        var playerScene = null;
+        switch(PlayerData.param.sceneType){
+            case 1:
+                playerScene = PlayerData.player.scene.easy;
+                break;
+            case 2:
+                playerScene = PlayerData.player.scene.normal;
+                break;
+            case 3:
+                playerScene = PlayerData.player.scene.hard;
+                break;
+            default:
+                playerScene = PlayerData.player.scene.challenge;
+                break;
+        }
+        //只有固定模式才统计获得的星星
+        if(PlayerData.param.sceneType == 1 || PlayerData.param.sceneType == 2 || PlayerData.param.sceneType == 3){
+            var infoKey = PlayerData.param.sceneIndex;
+            if(playerScene[infoKey]){
+                //之前的星 小于 现在得到的 星
+                if(playerScene[infoKey].star < infoValue.star){
+                    playerScene[infoKey] = infoValue;
+                }
+                //两次星相等，但之前的用时大于 现在的用时
+                if(playerScene[infoKey].star == infoValue.star && playerScene[infoKey].time > infoValue.time){
+                    playerScene[infoKey] = infoValue;
+                }
+            }else{
+                playerScene[infoKey] = infoValue;
+            }
+
+            var total = PlayerData.getTotalStar();
+            PlayerData.player.star = total;
+        }else{
+            playerScene.level++;
+        }
+
+        PlayerData.player.gold += this.obtainGold;
         PlayerData.save();  //成功过关自动保存
+        this.showDialog(3);
         return true;
     },
 
@@ -442,72 +522,70 @@ cc.Class({
 
     showDialog(type){
         this.dialogType = type;
-        this.dialog.x = 0;
+        this.dialogNode.x = 0;
         this.updateDialog();
     },
 
     updateDialog(){
-        var dialogSceneInfo = this.dialog.getChildByName("title").getComponent(cc.Label);
-        var dialogErrorCount = this.dialog.getChildByName("error").getComponent(cc.Label);
-        var dialogUsedTime = this.dialog.getChildByName("useTime").getComponent(cc.Label);
-        var dialogGold = this.dialog.getChildByName("gold").getComponent(cc.Label);
+        var dialogSceneInfo = this.dialogNode.getChildByName("title").getComponent(cc.Label);
+        var dialogErrorCount = this.dialogNode.getChildByName("error").getComponent(cc.Label);
+        var dialogUsedTime = this.dialogNode.getChildByName("useTime").getComponent(cc.Label);
+        var dialogGold = this.dialogNode.getChildByName("gold").getComponent(cc.Label);
         var dialogDynamic = this.dialogDynamicBtn.getChildByName("dynamic").getComponent(cc.Label);
         switch(this.dialogType){
             case 1:
                 dialogSceneInfo.string = this.sceneLab.string + "  暂停";
                 dialogDynamic.string = "返回游戏";
-                dialogErrorCount.node.color = BOARD_CELL_COLOR_INIT;
-                dialogUsedTime.node.color = BOARD_CELL_COLOR_INIT;
+                dialogErrorCount.node.color = DIALOG_TEXT_NORMAL;
+                dialogUsedTime.node.color = DIALOG_TEXT_NORMAL;
                 break;
             case 2:
                 dialogSceneInfo.string = this.sceneLab.string + "  挑战失败";
                 dialogDynamic.string = "复    活";
                 if(this.errorCount >= this.sceneInfo.maxError){
-                    dialogErrorCount.node.color = BOARD_CELL_COLOR_ERROR;
+                    dialogErrorCount.node.color = DIALOG_TEXT_ERROR;
                 }else{
-                    dialogUsedTime.node.color = BOARD_CELL_COLOR_ERROR;
+                    dialogUsedTime.node.color = DIALOG_TEXT_ERROR;
                 }
                 break;
             case 3:
                 dialogSceneInfo.string = this.sceneLab.string + "  挑战成功";
                 dialogDynamic.string = "下个关卡";
-                dialogErrorCount.node.color = BOARD_CELL_COLOR_INIT;
-                dialogUsedTime.node.color = BOARD_CELL_COLOR_INIT;
+                dialogErrorCount.node.color = DIALOG_TEXT_NORMAL;
+                dialogUsedTime.node.color = DIALOG_TEXT_NORMAL;
                 break;
             default:
                 break;
         }
-        // this.dialogDynamicBtn.on(cc.Node.EventType.TOUCH_END, this.dialogDynamicClick, this);
 
         dialogErrorCount.string = this.errorLab.string;
-        dialogGold.string = "x" + this.goldLab.string;
+        dialogGold.string = "x" + this.obtainGold;
 
         var sec = this.usedSecond % 60;
         var min = parseInt(this.usedSecond / 60);
         dialogUsedTime.string = "用时 " + (min < 10 ? "0" + min : "" + min) + ":" + (sec < 10 ? "0" + sec : "" + sec);
 
         //star
-        var greyStar = 2;
+        var getStar = GameLib.obtainStar(this.sceneInfo, this.usedSecond, this.errorCount);
         for(var i = 0; i < this.sceneInfo.maxStar; i++){
             var name = "star" + i;
-            if(i < greyStar){
-                this.dialog.getChildByName(name).getComponent(cc.Sprite).setMaterial(0, cc.Material.getBuiltinMaterial('2d-gray-sprite'));    // 变灰
+            if(i < this.sceneInfo.maxStar - getStar){
+                this.dialogNode.getChildByName(name).getComponent(cc.Sprite).setMaterial(0, cc.Material.getBuiltinMaterial('2d-gray-sprite'));    // 变灰
             }else{
-                this.dialog.getChildByName(name).getComponent(cc.Sprite).setMaterial(0, cc.Material.getBuiltinMaterial('2d-sprite'));    // 恢复
+                this.dialogNode.getChildByName(name).getComponent(cc.Sprite).setMaterial(0, cc.Material.getBuiltinMaterial('2d-sprite'));    // 恢复
             }
         }
     },
 
     dialogDynamicClick(){
-        cc.log("dialogType = " + this.dialogType);
         switch(this.dialogType){
             //返回游戏
             case 1:
-                this.dialog.x = -1000;
+                this.dialogNode.x = -1000;
                 break;
             //复活
             case 2:
-                this.dialog.x = -1000;
+                this.dialogNode.x = -1000;
                 //达到错误次数恢复次数
                 if(this.errorCount >= this.sceneInfo.maxError){
                     this.errorCount = 0;
@@ -521,16 +599,28 @@ cc.Class({
                 break;
             //下个关卡
             case 3:
-                this.dialog.x = -1000;
+                this.dialogNode.x = -1000;
+                //更新关卡序号
                 PlayerData.param.sceneIndex++;
+                if(PlayerData.param.sceneType == 1 || PlayerData.param.sceneType == 2){
+                    if(GameLib.getInfo(PlayerData.param.sceneType).total < PlayerData.param.sceneIndex){
+                        PlayerData.param.sceneType++;
+                        PlayerData.param.sceneIndex = 1;
+                    }
+                }else if(PlayerData.param.sceneType == 3){
+                    if(GameLib.getInfo(PlayerData.param.sceneType).total < PlayerData.param.sceneIndex){
+                        PlayerData.param.sceneIndex--;
+                    }
+                }
+
+                this.initGame();
                 break;
             default:
                 break;
         }
     },
 
-    dialogExistClick(){
-        sudoku.again();
+    dialogExitClick(){
         PlayerData.save();
         if(!PlayerData.param.sceneType || PlayerData.param.sceneType == 0){
             cc.director.loadScene("home");
@@ -543,7 +633,8 @@ cc.Class({
 
     dialogResetClick(){
         cc.log("reset = " + PlayerData.param.sceneType);
-
+        this.initGame();
+        this.dialogNode.x = -1000;
     },
 
     // update (dt) {},

@@ -1,10 +1,3 @@
-// Learn cc.Class:
-//  - https://docs.cocos.com/creator/manual/en/scripting/class.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
-
 var GameLib = require("gameLib");
 var PlayerData = require("playerData");
 
@@ -16,8 +9,6 @@ cc.Class({
         scenePrefab: cc.Prefab,
         scrollContent: cc.Node,
     },
-
-    // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
         this.gameInfo = null;
@@ -42,7 +33,8 @@ cc.Class({
 
     initSceneList(){
 
-        var row_num = 3;
+        // cc.log(JSON.stringify(PlayerData.player));
+        // var row_num = 3;
         for(var i = 0; i < this.gameInfo.total; i++){
             var sceneNode = cc.instantiate(this.scenePrefab);
             // sceneNode.setPosition((i%row_num -1)*200, (350 - parseInt(i/row_num)*80));
@@ -50,12 +42,27 @@ cc.Class({
 
             // sceneNode.setPosition((i%row_num -1)*200, (0 - parseInt(i/row_num)*80));
             this.scrollContent.addChild(sceneNode);
+            sceneNode.on(cc.Node.EventType.TOUCH_END, this.clickScene, this);
 
             sceneNode._index = i+1;
             sceneNode.getChildByName("scene").getComponent(cc.Label).string = "关卡 " + sceneNode._index;
-            var info = this.gameInfo["info_" + sceneNode._index];
 
-            sceneNode.on(cc.Node.EventType.TOUCH_END, this.clickScene, this);
+            var sceneData = PlayerData.getPlayerSceneData(PlayerData.param.sceneType, i+1);
+            // cc.log("type = " + PlayerData.param.sceneType + ", info " + JSON.stringify(sceneData));
+            if(sceneData){
+                var second = sceneData.time;
+                var sec = second % 60;
+                var min = parseInt(second / 60);
+                sceneNode.getChildByName("time").getComponent(cc.Label).string = "用时 " + (min < 10 ? "0" + min : "" + min) + ":" + (sec < 10 ? "0" + sec : "" + sec);
+
+                //star
+                var getStar = sceneData.star;
+                var greyStar = this.gameInfo["info_" + (i+1)].maxStar - getStar;
+                for(var i = 0; i < greyStar; i++){
+                    var name = "star" + i;
+                    sceneNode.getChildByName(name).getComponent(cc.Sprite).setMaterial(0, cc.Material.getBuiltinMaterial('2d-gray-sprite'));    // 变灰
+                }
+            }
         }
     },
 

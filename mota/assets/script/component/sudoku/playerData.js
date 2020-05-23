@@ -13,31 +13,50 @@ module.exports = {
         item:{
             tip:3
         },
-        //关卡信息
+        //关卡信息{star:1, time:30}
         scene:{
-            easy:{
-                info_1:{
-                    star:1,
-                    gold:2,
-                    time:30
-                }
-            },
-            normal:{
-
-            },
-            hard:{
-
-            },
-            challenge:{
-                level:0
-            }
+            easy:{},
+            normal:{},
+            hard:{},
+            challenge:{level:0}
         }
     },
     param:{
         sceneType: 1,
         sceneIndex: 1,
         challengeBegin: 55,
-        cellPool:null,
+    },
+    getPlayerSceneData:function(sceneType, sceneIndex){
+        var data = null;
+        switch(sceneType){
+            case 1:
+                data = this.player.scene.easy[sceneIndex];
+                break;
+            case 2:
+                data = this.player.scene.normal[sceneIndex];
+                break;
+            case 3:
+                data = this.player.scene.hard[sceneIndex];
+                break;
+            default:
+                data = this.player.scene.easy[sceneIndex];
+                break;
+        }
+        return data;
+    },
+    getTotalStar:function(){
+        var total = 0;
+        for(var key in this.player.scene.easy){
+            total += this.player.scene.easy[key].star;
+        }
+        for(var key in this.player.scene.normal){
+            total += this.player.scene.normal[key].star;
+        }
+        for(var key in this.player.scene.hard){
+            total += this.player.scene.hard[key].star;
+        }
+
+        return total;
     },
     save:function(){
         var encrypted = encrypt.encrypt(JSON.stringify(this.player), secretkey, 256);

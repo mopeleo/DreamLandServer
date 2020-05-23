@@ -22,12 +22,48 @@ sudoku.again = function(){
     sudoku.beginNumber = 1;
 };
 
-sudoku.randomInit = function(level) {
-    if(this.game != null){
-        return;
+//从定制文件初始化数独
+sudoku.fixedInit = function(type, index){
+    if(index < 1){
+        index = 1;
+    }
+    this.game = GameLib.getGame(type, index);
+    this.fullGame = GameLib.getFull(type, index);
+
+    this.rowExistNumber = new Array();
+    this.colExistNumber = new Array();
+    this.blockExistNumber = new Array();
+    this.fixedNumber = new Array();
+    for(var i = 0; i < this.block; i++){
+        this.rowExistNumber[i] = new Array();
+        this.colExistNumber[i] = new Array();
+        this.blockExistNumber[i] = new Array();
+        this.fixedNumber[i] = new Array();
+        for(var j = 0; j < this.block; j++){
+            this.rowExistNumber[i][j] = false;
+            this.colExistNumber[i][j] = false;
+            this.blockExistNumber[i][j] = false;
+            this.fixedNumber[i][j] = false;
+        }
     }
 
-    this.level = level||3;
+    for(var i = 0; i < this.game.length; i++){
+        for(var j = 0; j < this.game[i].length; j++){
+            if(this.game[i][j] == 0){
+                continue;
+            }
+
+            this.rowExistNumber[i][j] = true;
+            this.colExistNumber[i][j] = true;
+            var _block = this.getBlock(i, j);
+            var num = this.game[i][j] - 1;
+            this.blockExistNumber[_block][num] = true;
+            this.fixedNumber[i][j] = true;
+        }
+    }
+};
+
+sudoku.randomInit = function() {
     this.beginNumber = this.getRandomBetween(1, this.block);
 
     this.game = new Array();
@@ -80,46 +116,6 @@ sudoku.randomInit = function(level) {
 
 };
 
-//从定制文件初始化数独
-sudoku.fixedInit = function(type, index){
-    if(index < 1){
-        index = 1;
-    }
-    this.game = GameLib.getGame(type, index);
-    this.fullGame = GameLib.getFull(type, index);
-
-    this.rowExistNumber = new Array();
-    this.colExistNumber = new Array();
-    this.blockExistNumber = new Array();
-    this.fixedNumber = new Array();
-    for(var i = 0; i < this.block; i++){
-        this.rowExistNumber[i] = new Array();
-        this.colExistNumber[i] = new Array();
-        this.blockExistNumber[i] = new Array();
-        this.fixedNumber[i] = new Array();
-        for(var j = 0; j < this.block; j++){
-            this.rowExistNumber[i][j] = false;
-            this.colExistNumber[i][j] = false;
-            this.blockExistNumber[i][j] = false;
-            this.fixedNumber[i][j] = false;
-        }
-    }
-
-    for(var i = 0; i < this.game.length; i++){
-        for(var j = 0; j < this.game[i].length; j++){
-            if(this.game[i][j] == 0){
-                continue;
-            }
-
-            this.rowExistNumber[i][j] = true;
-            this.colExistNumber[i][j] = true;
-            var _block = this.getBlock(i, j);
-            var num = this.game[i][j] - 1;
-            this.blockExistNumber[_block][num] = true;
-            this.fixedNumber[i][j] = true;
-        }
-    }
-};
 
 sudoku.create = function(clearNum) {
     if(!clearNum || clearNum < 50){
@@ -131,7 +127,7 @@ sudoku.create = function(clearNum) {
     }else{
         this.level = 4;
     }
-
+    cc.log("clearNum = " + clearNum + ", level = " + this.level);
     var blank = 0;
     if(this.level == 1){
         blank = clearNum || this.getRandomBetween(45, 50);
