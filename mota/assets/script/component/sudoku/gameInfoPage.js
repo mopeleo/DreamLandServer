@@ -79,6 +79,13 @@ cc.Class({
                     var name = "star" + j;
                     sceneNode.getChildByName(name).getComponent(cc.Sprite).setMaterial(0, cc.Material.getBuiltinMaterial('2d-sprite'));    //恢复
                 }
+            }else{
+                sceneNode.getChildByName("time").getComponent(cc.Label).string = "00:00";
+                for(var j = 0; j < 3; j++){
+                    var name = "star" + j;
+                    sceneNode.getChildByName(name).getComponent(cc.Sprite).setMaterial(0, cc.Material.getBuiltinMaterial('2d-gray-sprite'));    //恢复
+                }
+
             }
         }
     },
