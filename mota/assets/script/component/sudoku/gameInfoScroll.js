@@ -32,15 +32,8 @@ cc.Class({
     },
 
     initSceneList(){
-
-        // cc.log(JSON.stringify(PlayerData.player));
-        // var row_num = 3;
         for(var i = 0; i < this.gameInfo.total; i++){
             var sceneNode = cc.instantiate(this.scenePrefab);
-            // sceneNode.setPosition((i%row_num -1)*200, (350 - parseInt(i/row_num)*80));
-            // sceneNode.parent = this.node;
-
-            // sceneNode.setPosition((i%row_num -1)*200, (0 - parseInt(i/row_num)*80));
             this.scrollContent.addChild(sceneNode);
             sceneNode.on(cc.Node.EventType.TOUCH_END, this.clickScene, this);
 
@@ -48,7 +41,6 @@ cc.Class({
             sceneNode.getChildByName("scene").getComponent(cc.Label).string = "关卡 " + sceneNode._index;
 
             var sceneData = PlayerData.getPlayerSceneData(PlayerData.param.sceneType, i+1);
-            // cc.log("type = " + PlayerData.param.sceneType + ", info " + JSON.stringify(sceneData));
             if(sceneData){
                 var second = sceneData.time;
                 var sec = second % 60;

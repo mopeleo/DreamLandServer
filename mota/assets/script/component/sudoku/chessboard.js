@@ -625,8 +625,8 @@ cc.Class({
         if(!PlayerData.param.sceneType || PlayerData.param.sceneType == 0){
             cc.director.loadScene("home");
         }else{
-            cc.director.preloadScene("gameinfo", function () {
-                cc.director.loadScene("gameinfo");
+            cc.director.preloadScene("gameinfopage", function () {
+                cc.director.loadScene("gameinfopage");
             });
         }
     },

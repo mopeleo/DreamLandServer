@@ -44,19 +44,30 @@ module.exports = {
         }
         return data;
     },
-    getTotalStar:function(){
-        var total = 0;
+    getTotalStar:function(sceneType){
+        var easyTotal = 0;
         for(var key in this.player.scene.easy){
-            total += this.player.scene.easy[key].star;
+            easyTotal += this.player.scene.easy[key].star;
         }
+        if(sceneType && sceneType == 1){
+            return easyTotal;
+        }
+        var normalTotal = 0;
         for(var key in this.player.scene.normal){
-            total += this.player.scene.normal[key].star;
+            normalTotal += this.player.scene.normal[key].star;
         }
+        if(sceneType && sceneType == 2){
+            return normalTotal;
+        }
+        var hardTotal = 0;
         for(var key in this.player.scene.hard){
-            total += this.player.scene.hard[key].star;
+            hardTotal += this.player.scene.hard[key].star;
+        }
+        if(sceneType && sceneType == 3){
+            return hardTotal;
         }
 
-        return total;
+        return easyTotal + normalTotal + hardTotal;
     },
     save:function(){
         var encrypted = encrypt.encrypt(JSON.stringify(this.player), secretkey, 256);
