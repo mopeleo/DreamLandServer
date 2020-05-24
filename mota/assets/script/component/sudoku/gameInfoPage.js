@@ -23,6 +23,9 @@ cc.Class({
 
         this.totalPage = parseInt(this.gameInfo.total/PAGE_SIZE) + (this.gameInfo.total%PAGE_SIZE == 0 ? 0: 1);
         this.currentPage = parseInt(PlayerData.param.sceneIndex/PAGE_SIZE) + (PlayerData.param.sceneIndex%PAGE_SIZE == 0 ? 0: 1);
+        if(this.currentPage == 0){
+            this.currentPage = 1;
+        }
         this.pageLab.string = this.currentPage + "/" + this.totalPage;
 
         this.preBtn.on(cc.Node.EventType.TOUCH_END, this.prePage, this);
@@ -68,14 +71,13 @@ cc.Class({
                 var second = sceneData.time;
                 var sec = second % 60;
                 var min = parseInt(second / 60);
-                sceneNode.getChildByName("time").getComponent(cc.Label).string = "用时 " + (min < 10 ? "0" + min : "" + min) + ":" + (sec < 10 ? "0" + sec : "" + sec);
+                sceneNode.getChildByName("time").getComponent(cc.Label).string = (min < 10 ? "0" + min : "" + min) + ":" + (sec < 10 ? "0" + sec : "" + sec);
 
                 //star
-                var getStar = sceneData.star;
-                var greyStar = this.gameInfo["info_" + sceneIndex].maxStar - getStar;
-                for(var i = 0; i < greyStar; i++){
-                    var name = "star" + i;
-                    sceneNode.getChildByName(name).getComponent(cc.Sprite).setMaterial(0, cc.Material.getBuiltinMaterial('2d-gray-sprite'));    // 变灰
+                var getStar = sceneData.star || 0;
+                for(var j = 0; j < getStar; j++){
+                    var name = "star" + j;
+                    sceneNode.getChildByName(name).getComponent(cc.Sprite).setMaterial(0, cc.Material.getBuiltinMaterial('2d-sprite'));    //恢复
                 }
             }
         }
