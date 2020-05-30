@@ -1,6 +1,6 @@
-var sudoku = require("sudoku");
-var GameLib = require("gameLib");
-var PlayerData = require("playerData");
+var sudoku = require("../common/sudoku");
+var GameLib = require("../common/gameLib");
+var PlayerData = require("../common/playerData");
 
 var BOARD_CELL_COLOR_INIT = cc.Color.BLACK.fromHEX("#4a6b86");          //单元格初始颜色
 var BOARD_CELL_COLOR_SAMENUMBER = cc.Color.BLACK.fromHEX("#8198ab");    //单元格相同数字颜色
@@ -18,10 +18,11 @@ var DIALOG_TEXT_ERROR = cc.Color.RED;           //对话框错误信息
 
 var COUNT_TYPE = 1;         //计数器显示类型，1显示数字存在的个数，0显示数字缺失的个数
 
-var BOARD_CELL_SIZE = 65 + 2;                       //单元格大小，+1是每个格子之间的距离为1；
+var BOARD_CELL_SIZE = 70 + 3;                       //单元格大小，+1是每个格子之间的距离为1；
 var BOARD_RADIUS = Math.floor(sudoku.block/2);      //棋盘半径，即边到中心（0，0）有多少个格子
 var BLOCK_SIZE = Math.sqrt(sudoku.block);           //宫大小 ？*？
 
+var OUT_SCREEN = 2000;              //屏幕外坐标
 cc.Class({
     extends: cc.Component,
 
@@ -353,14 +354,14 @@ cc.Class({
 
     randomEvent(cell, flag){
         cc.loader.loadRes("texture/atlas", cc.SpriteAtlas, (err, atlas)=>{
-            this.tipsNode.active = true;
+            // this.tipsNode.active = true;
             this.tipsNode.setPosition(cell.getPosition());
             this.tipsNode.getChildByName("pic").getComponent(cc.Sprite).spriteFrame = atlas.getSpriteFrame("stars_01");
             this.tipsNode.getChildByName("txt").getComponent(cc.Label).string = "+" + 100;
             cc.tween(this.tipsNode)
+                .to(0.5, {opacity: 255})
                 .to(1, {opacity: 0})
-                .call(()=>{this.tipsNode.active = false;})
-                .to(0, {opacity: 255})
+                // .call(()=>{this.tipsNode.active = false;})
                 .start();
         });
     },
@@ -599,11 +600,11 @@ cc.Class({
         switch(this.dialogType){
             //返回游戏
             case 1:
-                this.dialogNode.x = -1000;
+                this.dialogNode.x = OUT_SCREEN;
                 break;
             //复活
             case 2:
-                this.dialogNode.x = -1000;
+                this.dialogNode.x = OUT_SCREEN;
                 //达到错误次数恢复次数
                 if(this.errorCount >= this.sceneInfo.maxError){
                     this.errorCount = 0;
@@ -617,7 +618,7 @@ cc.Class({
                 break;
             //下个关卡
             case 3:
-                this.dialogNode.x = -1000;
+                this.dialogNode.x = OUT_SCREEN;
                 //更新关卡序号
                 PlayerData.param.sceneIndex++;
                 if(PlayerData.param.sceneType == 1 || PlayerData.param.sceneType == 2){
@@ -652,7 +653,7 @@ cc.Class({
     dialogResetClick(){
         cc.log("reset = " + PlayerData.param.sceneType);
         this.initGame();
-        this.dialogNode.x = -1000;
+        this.dialogNode.x = OUT_SCREEN;
     },
 
     // update (dt) {},

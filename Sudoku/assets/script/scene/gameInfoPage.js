@@ -1,5 +1,5 @@
-var GameLib = require("gameLib");
-var PlayerData = require("playerData");
+var GameLib = require("../common/gameLib");
+var PlayerData = require("../common/playerData");
 
 const PAGE_SIZE = 25;
 const ROW_NUM = 5;
@@ -8,9 +8,9 @@ cc.Class({
 
     properties: {
         sceneTypeLab: cc.Label,
+        starLab: cc.Label,
         scenePrefab: cc.Prefab,
         pageNode: cc.Node,
-        starLab: cc.Label,
         pageLab: cc.Label,
         nextBtn: cc.Node,
         preBtn: cc.Node,
@@ -57,7 +57,7 @@ cc.loader.loadRes("texture/atlas", cc.SpriteAtlas, (err, atlas)=>{
             if(!sceneNode){
                 sceneNode = cc.instantiate(this.scenePrefab);
                 // sceneNode.setPosition((i%ROW_NUM -1)*140 - 70, (240 - parseInt(i/ROW_NUM)*80));         //ovalScene
-                sceneNode.setPosition((i%ROW_NUM -1)*115 - 115, (230 - parseInt(i/ROW_NUM)*115));         //cycleLockScene
+                sceneNode.setPosition((i%ROW_NUM -1)*130 - 130, (260 - parseInt(i/ROW_NUM)*130));         //cycleLockScene
 
                 sceneNode.on(cc.Node.EventType.TOUCH_END, this.clickScene, this);
 

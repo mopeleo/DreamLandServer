@@ -1,32 +1,20 @@
-var GameLib = require("gameLib");
-var PlayerData = require("playerData");
+var GameLib = require("../common/gameLib");
+var PlayerData = require("../common/playerData");
 
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        level: cc.Label,
+        sceneTypeLab: cc.Label,
+        starLab: cc.Label,
         scenePrefab: cc.Prefab,
         scrollContent: cc.Node,
     },
 
     onLoad () {
-        this.gameInfo = null;
-        switch(PlayerData.param.sceneType){
-            case 1:
-                this.gameInfo = GameLib.easy;
-                break;
-            case 2:
-                this.gameInfo = GameLib.normal;
-                break;
-            case 3:
-                this.gameInfo = GameLib.hard;
-                break;
-            default:
-                this.gameInfo = GameLib.easy;
-                break;
-        }
-        this.level.string = this.gameInfo.name;
+        this.gameInfo = GameLib.getInfo(PlayerData.param.sceneType);
+        this.sceneTypeLab.string = this.gameInfo.name;
+        this.starLab.string =  PlayerData.getTotalStar(PlayerData.param.sceneType) + "/" + this.gameInfo.total*3;
 
         this.initSceneList();
     },

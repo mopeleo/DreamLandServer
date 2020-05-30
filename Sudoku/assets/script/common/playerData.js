@@ -1,8 +1,10 @@
-var encrypt = require("../../encrypt/encryptjs");
+var encrypt = require("../libs/encrypt/encryptjs");
 var secretkey= 'sudoku_j9kdi2H7'; // 加密密钥
 
 module.exports = {
     player:{
+        userName:'',
+        avatarUrl:'',
         gold: 0,
         star: 0,
         level: 'rank1',

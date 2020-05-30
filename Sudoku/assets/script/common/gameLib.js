@@ -61,14 +61,20 @@ module.exports = {
         }
     },
     gameEvent:[
-        {type: 1, val: 200},    // 金币
-        {type: 2, val: 30},     // 时间
-        {type: 3, val: 1},      // 错误次数
-        {type: 4, val: 1},      // 生命
+        {type: 1, val: 200, desc: "金币"},
+        {type: 2, val: 30, desc: "时间"},
+        {type: 3, val: 1, desc: "错误次数"},
+        {type: 4, val: 1, desc: "生命"},
+        {type: 5, val: 1, desc: "翻开或关闭一个单元格"},
     ],
     actorSkill:[
-        {type: 1, desc: "游戏结束额外获得10%金币"},
-        {type: 2, desc: ""}
+        {type: 1, desc: "游戏过关额外获得10%金币"},
+        {type: 2, desc: "满星过关额外获得20%金币"},
+        {type: 3, desc: "零次错误过关额外获得15%金币"},
+        {type: 4, desc: "游戏过关消耗时间减少20%"},
+        {type: 5, desc: "游戏中免费提示一次"},
+        {type: 6, desc: "游戏中错误上限加一"},
+        {type: 7, desc: "游戏中抵消一次生命扣划"},
     ],
     //关卡信息
     easy:{
