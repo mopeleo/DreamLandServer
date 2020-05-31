@@ -656,5 +656,16 @@ cc.Class({
         this.dialogNode.x = OUT_SCREEN;
     },
 
+    dialogShareClick(){
+        var wx = window['wx'];
+        if (typeof wx === 'undefined') {
+            return;
+        }
+        wx.shareAppMessage({
+            title: '我玩了' + PlayerData.player.star + '星，你呢？',
+            imageUrl: cc.url.raw('resources/texture/sudoku_icon.jpg')
+        });
+    },
+
     // update (dt) {},
 });

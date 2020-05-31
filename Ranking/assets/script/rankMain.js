@@ -1,4 +1,3 @@
-
 let wx = window['wx'];
 
 cc.Class({
@@ -25,8 +24,8 @@ cc.Class({
                     this.score = data.message;
                     this.compareScore();
                     this.rankList= [];
-                    this.getPlayerInfo();
-                    // this.scheduleOnce(function () { this.getFriendInfo() }, 0.25);
+//                    this.getPlayerInfo();
+                    this.scheduleOnce(function () { this.getFriendInfo() }, 0.25);
                 }
                 else {
                     this.content.removeAllChildren();

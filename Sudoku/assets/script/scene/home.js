@@ -1,4 +1,5 @@
-var PlayerData = require("../common/playerData");
+let PlayerData = require("../common/playerData");
+let wx = window['wx'];
 
 cc.Class({
     extends: cc.Component,
@@ -13,9 +14,8 @@ cc.Class({
 
     onLoad () {
         PlayerData.load();
-        if(PlayerData.player.userName == '' || PlayerData.player.avatarUrl == ''){
+        if (cc.sys.platform === cc.sys.WECHAT_GAME_SUB) {
             this.wxOnClickAuth();
-        }else{
             this.initUserInfo();
         }
 
@@ -29,6 +29,7 @@ cc.Class({
 
     normalGame(event, customData){
         PlayerData.param.sceneType = parseInt(customData);
+        PlayerData.param.sceneIndex = PlayerData.getPlayerCurrentIndex(PlayerData.param.sceneType);
         cc.director.preloadScene("gameinfopage", function () {
             cc.director.loadScene("gameinfopage");
         });
@@ -46,44 +47,29 @@ cc.Class({
     },
 
     rankPage(){
-        this.setScore(100);
-        // this.getRank();
+        if (typeof wx === 'undefined') {
+            return;
+        }
+        //每次查询前先把最新成绩送上
+        wx.getOpenDataContext().postMessage({
+            message: PlayerData.player.star
+        });
         this.rankingNode.active = true;
     },
 
     backHome(){
-        this.rankingNode.active = false;
-    },
-
-    getRank() {
-        let wx = window['wx'];
         if (typeof wx === 'undefined') {
             return;
         }
-        wx.postMessage({
-            event: 'getRank'
-        });
-    },
-
-    setScore(value) {
-        let wx = window['wx'];
-        if (typeof wx === 'undefined') {
-            return;
-        }
-        console.log("set score");
-        let score = Math.round(Math.random() * 100);
+        //如果不删除，下次打开排行榜时会有重复内容出现
         wx.getOpenDataContext().postMessage({
-            message: score
+            message: 'clear'
         });
-        // wx.postMessage({
-        //     event: 'setScore',
-        //     score: value
-        // });
+        this.rankingNode.active = false;
     },
 
     wxOnClickAuth(){
         let self = this;
-        let wx = window['wx'];
         if (typeof wx === 'undefined') {
             return;
         }
