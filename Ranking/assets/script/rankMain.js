@@ -1,20 +1,19 @@
 
+let wx = window['wx'];
+
 cc.Class({
     extends: cc.Component,
 
     properties: {
-
 		content: cc.Node,
 		itemPrefab: cc.Prefab,
-//		loading: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
-//        if (cc.sys.platform !== cc.sys.WECHAT_GAME_SUB) return;
+//      if (cc.sys.platform !== cc.sys.WECHAT_GAME_SUB) return;
 
-        let wx = window['wx'];
         if (typeof wx === 'undefined') {
             return;
         }
@@ -37,7 +36,6 @@ cc.Class({
 	},
 
 	compareScore() {
-        let wx = window['wx'];
         wx.getUserCloudStorage({
             keyList: ['score'],
             success: (res) => {
@@ -61,7 +59,6 @@ cc.Class({
     },
 
     setNewCloudScore(newKVData) {
-        let wx = window['wx'];
         wx.setUserCloudStorage({
             KVDataList: [newKVData],
             success: (res) => {
@@ -75,7 +72,6 @@ cc.Class({
 
 	
     getPlayerInfo() {
-        let wx = window['wx'];
         wx.getUserInfo({
             openIdList: ['selfOpenId'],
             lang: 'zh_CN',
@@ -97,7 +93,6 @@ cc.Class({
     },
 
     getFriendInfo() {
-        let wx = window['wx'];
         wx.getFriendCloudStorage({
             keyList: ['score'],
             success: (res) => {
