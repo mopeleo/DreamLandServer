@@ -8,6 +8,7 @@ cc.Class({
         nameLab: cc.Label,
         goldLab: cc.Label,
         userNode: cc.Node,
+        rankingNode: cc.Node,
     },
 
     onLoad () {
@@ -17,6 +18,13 @@ cc.Class({
         }else{
             this.initUserInfo();
         }
+
+        this.rankingNode.on(cc.Node.EventType.TOUCH_START,function(event){
+            event.stopPropagation();
+        });
+        this.rankingNode.on(cc.Node.EventType.TOUCH_END, function (event) {
+            event.stopPropagation();
+        });
     },
 
     normalGame(event, customData){
@@ -38,14 +46,47 @@ cc.Class({
     },
 
     rankPage(){
-        cc.director.preloadScene("gameinfoscroll", function () {
-            cc.director.loadScene("gameinfoscroll");
+        this.setScore(100);
+        // this.getRank();
+        this.rankingNode.active = true;
+    },
+
+    backHome(){
+        this.rankingNode.active = false;
+    },
+
+    getRank() {
+        let wx = window['wx'];
+        if (typeof wx === 'undefined') {
+            return;
+        }
+        wx.postMessage({
+            event: 'getRank'
         });
+    },
+
+    setScore(value) {
+        let wx = window['wx'];
+        if (typeof wx === 'undefined') {
+            return;
+        }
+        console.log("set score");
+        let score = Math.round(Math.random() * 100);
+        wx.getOpenDataContext().postMessage({
+            message: score
+        });
+        // wx.postMessage({
+        //     event: 'setScore',
+        //     score: value
+        // });
     },
 
     wxOnClickAuth(){
         let self = this;
         let wx = window['wx'];
+        if (typeof wx === 'undefined') {
+            return;
+        }
         let sysInfo = wx.getSystemInfoSync();
         //获取微信界面大小
         let width = sysInfo.screenWidth;
