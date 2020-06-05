@@ -1,3 +1,4 @@
+let GameLib = require("../common/gameLib");
 let PlayerData = require("../common/playerData");
 let wx = window['wx'];
 
@@ -6,10 +7,16 @@ cc.Class({
 
     properties: {
         avatar: cc.Sprite,
+        fighter: cc.Sprite,
         nameLab: cc.Label,
         goldLab: cc.Label,
         userNode: cc.Node,
         rankingNode: cc.Node,
+        actorNode: cc.Node,
+        shopNode: cc.Node,
+        achievementNode: cc.Node,
+        achieveContentNode: cc.Node,
+        achievePrefab: cc.Prefab,
     },
 
     onLoad () {
@@ -19,12 +26,18 @@ cc.Class({
             this.initUserInfo();
         }
 
-        this.rankingNode.on(cc.Node.EventType.TOUCH_START,function(event){
+        this.updateFighter(PlayerData.player.actor);
+
+        this.rankingNode.on(cc.Node.EventType.TOUCH_START, function(event){
             event.stopPropagation();
         });
-        this.rankingNode.on(cc.Node.EventType.TOUCH_END, function (event) {
+        this.rankingNode.on(cc.Node.EventType.TOUCH_END, function (event){
             event.stopPropagation();
         });
+
+        this.initActorPage();
+        this.initShopPage();
+        this.initAchievementPage();
     },
 
     normalGame(event, customData){
@@ -57,7 +70,7 @@ cc.Class({
         this.rankingNode.active = true;
     },
 
-    backHome(){
+    rankBackHome(){
         if (typeof wx === 'undefined') {
             return;
         }
@@ -66,6 +79,147 @@ cc.Class({
             message: 'clear'
         });
         this.rankingNode.active = false;
+    },
+
+    initActorPage(){
+        this.actorNode.on(cc.Node.EventType.TOUCH_START, function(event){
+            event.stopPropagation();
+        });
+        this.actorNode.on(cc.Node.EventType.TOUCH_END, function (event){
+            event.stopPropagation();
+        });
+
+        var contentNode = this.actorNode.getChildByName("content");
+        contentNode.getChildByName("unlockBtn").on(cc.Node.EventType.TOUCH_END, ()=>{
+            var actorKey = "actor_" + this.actorCurrentPage;
+            if(PlayerData.player.haveActors.indexOf(actorKey) != -1){
+                return;
+            }
+            PlayerData.player.haveActors.push(actorKey);
+            // PlayerData.save();
+            contentNode.getChildByName("unlockBtn").getComponent(cc.Sprite).setMaterial(0, cc.Material.getBuiltinMaterial('2d-gray-sprite'));
+            contentNode.getChildByName("actorPic").getComponent(cc.Sprite).setMaterial(0, cc.Material.getBuiltinMaterial('2d-sprite'));
+            cc.tween(contentNode.getChildByName("actorPic")).by(0.1, {position: cc.v2(15,15)}).by(0.1, {position: cc.v2(-15,-15)}).start();
+        });
+
+        contentNode.getChildByName("fightBtn").on(cc.Node.EventType.TOUCH_END, ()=>{
+            var actorKey = "actor_" + this.actorCurrentPage;
+            if(PlayerData.player.actor == actorKey){
+                return;
+            }
+            this.updateFighter(actorKey);
+            contentNode.getChildByName("fightBtn").getComponent(cc.Sprite).setMaterial(0, cc.Material.getBuiltinMaterial('2d-gray-sprite'));
+            cc.tween(contentNode.getChildByName("actorPic")).by(0.1, {position: cc.v2(15,15)}).by(0.1, {position: cc.v2(-15,-15)}).start();
+        });
+
+        this.actorNode.getChildByName("preBtn").on(cc.Node.EventType.TOUCH_END, ()=>{
+            if(this.actorCurrentPage <= 1){
+                return;
+            }
+            this.actorCurrentPage--;
+            this.updateActorPage(this.actorCurrentPage);
+        });
+        this.actorNode.getChildByName("nextBtn").on(cc.Node.EventType.TOUCH_END, ()=>{
+            if(this.actorCurrentPage >= Object.keys(GameLib.actor).length){
+                return;
+            }
+            this.actorCurrentPage++;
+            this.updateActorPage(this.actorCurrentPage);
+        });
+    },
+
+    updateActorPage(index){
+        this.actorNode.getChildByName("pageLab").getComponent(cc.Label).string = index + "/" + Object.keys(GameLib.actor).length;
+
+        var actorKey = "actor_" + index;
+        var currentActor = GameLib.actor[actorKey];
+        var contentNode = this.actorNode.getChildByName("content");
+        // cc.loader.loadResDir('texture', cc.SpriteFrame, function(err, texture, urls){    //只用加载一次，前面updateFighter已加载过
+            var actorSprite = contentNode.getChildByName("actorPic").getComponent(cc.Sprite);
+            actorSprite.spriteFrame = cc.loader.getRes("texture/" + actorKey, cc.SpriteFrame);
+            if(PlayerData.player.haveActors.indexOf(actorKey) == -1){
+                actorSprite.setMaterial(0, cc.Material.getBuiltinMaterial('2d-gray-sprite'));    //变灰
+                contentNode.getChildByName("unlockBtn").getComponent(cc.Sprite).setMaterial(0, cc.Material.getBuiltinMaterial('2d-sprite'));
+            }else{
+                actorSprite.setMaterial(0, cc.Material.getBuiltinMaterial('2d-sprite'));
+                contentNode.getChildByName("unlockBtn").getComponent(cc.Sprite).setMaterial(0, cc.Material.getBuiltinMaterial('2d-gray-sprite'));
+            }
+            if(PlayerData.player.actor === actorKey){
+                contentNode.getChildByName("fightBtn").getComponent(cc.Sprite).setMaterial(0, cc.Material.getBuiltinMaterial('2d-gray-sprite'));
+            }else{
+                contentNode.getChildByName("fightBtn").getComponent(cc.Sprite).setMaterial(0, cc.Material.getBuiltinMaterial('2d-sprite'));
+            }
+
+            contentNode.getChildByName("actorName").getComponent(cc.Label).string = currentActor.name;
+            contentNode.getChildByName("actorLife").getComponent(cc.Label).string = currentActor.life;
+            var actorSkill = GameLib.getActorSkill(currentActor.skill);
+            contentNode.getChildByName("actorSkill").getComponent(cc.Label).string = actorSkill.desc;
+            contentNode.getChildByName("unlock").getComponent(cc.Label).string = currentActor.unlockRemark;
+
+        // });
+    },
+
+    actorPage(){
+        this.actorCurrentPage = PlayerData.player.actor.split("_")[1];
+        this.updateActorPage(this.actorCurrentPage);
+        // this.scheduleOnce(()=>{this.actorNode.active = true;}, 0.2);
+        this.actorNode.active = true;
+    },
+
+    actorBackHome(){
+        this.actorNode.active = false;
+    },
+
+    initShopPage(){
+        this.shopNode.on(cc.Node.EventType.TOUCH_START, function(event){
+            event.stopPropagation();
+        });
+        this.shopNode.on(cc.Node.EventType.TOUCH_END, function (event){
+            event.stopPropagation();
+        });
+    },
+
+    shopPage(){
+        this.shopNode.active = true;
+    },
+
+    shopBackHome(){
+        this.shopNode.active = false;
+    },
+
+    initAchievementPage(){
+        this.achievementNode.on(cc.Node.EventType.TOUCH_START, function(event){
+            event.stopPropagation();
+        });
+        this.achievementNode.on(cc.Node.EventType.TOUCH_END, function (event){
+            event.stopPropagation();
+        });
+
+        this.achieveArray = [];
+        var achieveLen = Object.keys(GameLib.achieve).length;
+        for(var i = 0; i < achieveLen; i++){
+            var achieveKey = "achieve_" + (i + 1);
+            var achieveNode = cc.instantiate(this.achievePrefab);
+            if(PlayerData.player.haveAchieves.indexOf(achieveKey) != -1){
+                achieveNode.getChildByName("desc").getComponent(cc.Label).string = GameLib.achieve[achieveKey].name;
+            }
+            this.achieveArray.push(achieveNode);
+            this.achieveContentNode.addChild(achieveNode);
+        }
+    },
+
+    achievementPage(){
+        for(var i = 0; i < this.achieveArray.length; i++){
+            var achieveKey = "achieve_" + (i + 1);
+            if(PlayerData.player.haveAchieves.indexOf(achieveKey) != -1){
+                this.achieveArray[i].getChildByName("desc").getComponent(cc.Label).string = GameLib.achieve[achieveKey].name;
+            }
+        }
+        this.achievementNode.active = true;
+    },
+
+    achievementBackHome(){
+        this.achievementNode.active = false;
     },
 
     wxOnClickAuth(){
@@ -114,14 +268,14 @@ cc.Class({
                             //此时可进行登录操作
                             button.destroy();
                         }else {
-                            console.log("用户拒绝授权:");
+                            console.log("用户拒绝授权");
                         }
                     });
                 }
             }
         });
     },
-    
+
     initUserInfo(userInfo){
         //用户头像设置
         let self = this;
@@ -132,5 +286,13 @@ cc.Class({
             self.goldLab.string = PlayerData.player.gold;
             self.userNode.active = true;
         });
-    }
+    },
+
+    updateFighter(actorKey){
+        let self = this;
+        PlayerData.player.actor = actorKey;
+        cc.loader.loadResDir('texture', cc.SpriteFrame, function(err, texture, urls){
+            self.fighter.spriteFrame = cc.loader.getRes("texture/" + actorKey, cc.SpriteFrame);
+        });
+    },
 });

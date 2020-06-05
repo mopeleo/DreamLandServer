@@ -8,9 +8,10 @@ module.exports = {
         gold: 0,
         star: 0,
         level: 'rank1',
-        fighter: 'actor01', //出战角色ID
+        actor: 'actor_1', //出战角色ID
         //拥有角色
-        actor:['actor01','actor02','actor03'],
+        haveActors:['actor_1'],
+        haveAchieves:['achieve_1'],
         //持有道具
         item:{
             tip:3
