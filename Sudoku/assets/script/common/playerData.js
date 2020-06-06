@@ -11,11 +11,10 @@ module.exports = {
         actor: 'actor_1', //出战角色ID
         //拥有角色
         haveActors:['actor_1'],
+        //解锁成就
         haveAchieves:['achieve_1'],
-        //持有道具
-        item:{
-            tip:3
-        },
+        //持有道具{id:number}
+        haveItems:[{'item_1':1}],
         //关卡信息{star:1, time:30}
         scene:{
             easy:{},

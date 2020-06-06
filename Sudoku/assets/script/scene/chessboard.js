@@ -38,6 +38,7 @@ cc.Class({
         errorLab: cc.Label,
         dialogNode: cc.Node,
         dialogDynamicBtn: cc.Node,
+        heartNode: cc.Node,
         tipsNode:cc.Node,
     },
 
@@ -74,6 +75,21 @@ cc.Class({
             }
         }
 
+        //生命值
+        this.actor = GameLib.getActor(PlayerData.player.actor);
+        this.lifeArray = new Array();
+        this.lifeArray.push(this.heartNode);
+        for(var i = 0; i < (this.actor.life - 1); i++){
+            var newNode = cc.instantiate(this.heartNode);
+            newNode.parent = this.heartNode.parent;
+            this.lifeArray.push(newNode);
+        }
+        var middle = Math.floor(this.actor.life/2);
+        var offx = this.actor.life%2 == 0 ? 25 : 0;
+        for(var i = 0; i < this.lifeArray.length; i++){
+            this.lifeArray[i].x = (i - middle)*50 + offx;
+        }
+
         this.numberCountArray = new Array(sudoku.block);    //出现的数字计数器，一维数组
         this.initNumberKey();   //固定的，可以先初始化
         this.initGame();
@@ -103,6 +119,15 @@ cc.Class({
         cc.log("game_ : " + JSON.stringify(sudoku.game) + ",");
         cc.log("full_ : " + JSON.stringify(sudoku.fullGame) + ",");
 
+        this.canEditCell = 0;       // 可编辑单元格个数
+        for(var i = 0; i < sudoku.game.length; i++){
+            for(var j = 0; j < sudoku.game[i].length; j++){
+                if(sudoku.game[i][j] == 0){
+                    this.canEditCell++;
+                }
+            }
+        }
+
     },
 
     initTopTitle(){
@@ -116,14 +141,10 @@ cc.Class({
         this.clockNode.getComponent(cc.Label).unscheduleAllCallbacks();
         this.initClock();
 
-        //初始化难度星级
-        // var starNumber = this.sceneInfo.maxStar;
-        // for(var i = 0; i < starNumber; i++){
-        //     var x = 30*((starNumber-1)/2 - i);
-        //     var newNode = cc.instantiate(this.levelStarNode);
-        //     newNode.parent = this.levelStarNode.parent;
-        //     newNode.setPosition(x, -80);
-        // }
+        //初始化生命值
+        for(var i = 0; i < this.lifeArray.length; i++){
+            this.lifeArray[i].getComponent(cc.Sprite).setMaterial(0, cc.Material.getBuiltinMaterial('2d-sprite'));
+        }
     },
 
     initClock(){
@@ -318,7 +339,7 @@ cc.Class({
             if(fillCorrect){
                 this.lastClickCell._edit = false;
                 this.lastClickCell.getChildByName("number").color = BOARD_CELL_TEXT_COLOR_READONLY;
-
+                this.canEditCell--;
                 //检查是否完成
                 this.checkFinish();
             }else{
@@ -353,6 +374,9 @@ cc.Class({
     },
 
     randomEvent(cell, flag){
+        if(this.canEditCell == 0){
+            return;
+        }
         cc.loader.loadRes("texture/atlas", cc.SpriteAtlas, (err, atlas)=>{
             // this.tipsNode.active = true;
             this.tipsNode.setPosition(cell.getPosition());
@@ -480,12 +504,8 @@ cc.Class({
     },
 
     checkFinish(){
-        for(var i = 0; i < this.blockArray.length; i++){
-            for(var j = 0; j < this.blockArray[i].length; j++){
-                if(this.blockArray[i][j]._edit == true){
-                    return false;
-                }
-            }
+        if(this.canEditCell > 0){
+            return false;
         }
 
         //更新玩家数据

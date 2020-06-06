@@ -21,7 +21,7 @@ cc.Class({
 
     onLoad () {
         PlayerData.load();
-        if (cc.sys.platform === cc.sys.WECHAT_GAME_SUB) {
+        if (typeof wx !== 'undefined') {
             this.wxOnClickAuth();
             this.initUserInfo();
         }
@@ -136,7 +136,7 @@ cc.Class({
         var contentNode = this.actorNode.getChildByName("content");
         // cc.loader.loadResDir('texture', cc.SpriteFrame, function(err, texture, urls){    //只用加载一次，前面updateFighter已加载过
             var actorSprite = contentNode.getChildByName("actorPic").getComponent(cc.Sprite);
-            actorSprite.spriteFrame = cc.loader.getRes("texture/" + actorKey, cc.SpriteFrame);
+            actorSprite.spriteFrame = cc.loader.getRes(GameLib.actorDir + actorKey, cc.SpriteFrame);
             if(PlayerData.player.haveActors.indexOf(actorKey) == -1){
                 actorSprite.setMaterial(0, cc.Material.getBuiltinMaterial('2d-gray-sprite'));    //变灰
                 contentNode.getChildByName("unlockBtn").getComponent(cc.Sprite).setMaterial(0, cc.Material.getBuiltinMaterial('2d-sprite'));
@@ -152,7 +152,7 @@ cc.Class({
 
             contentNode.getChildByName("actorName").getComponent(cc.Label).string = currentActor.name;
             contentNode.getChildByName("actorLife").getComponent(cc.Label).string = currentActor.life;
-            var actorSkill = GameLib.getActorSkill(currentActor.skill);
+            var actorSkill = GameLib.getActorSkill(actorKey);
             contentNode.getChildByName("actorSkill").getComponent(cc.Label).string = actorSkill.desc;
             contentNode.getChildByName("unlock").getComponent(cc.Label).string = currentActor.unlockRemark;
 
@@ -291,8 +291,8 @@ cc.Class({
     updateFighter(actorKey){
         let self = this;
         PlayerData.player.actor = actorKey;
-        cc.loader.loadResDir('texture', cc.SpriteFrame, function(err, texture, urls){
-            self.fighter.spriteFrame = cc.loader.getRes("texture/" + actorKey, cc.SpriteFrame);
+        cc.loader.loadResDir(GameLib.actorDir, cc.SpriteFrame, function(err, texture, urls){
+            self.fighter.spriteFrame = cc.loader.getRes(GameLib.actorDir + actorKey, cc.SpriteFrame);
         });
     },
 });

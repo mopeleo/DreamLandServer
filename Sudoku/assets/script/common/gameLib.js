@@ -60,9 +60,13 @@ module.exports = {
             return 2;
         }
     },
-    getActorSkill: function(type){
+    getActor: function(actorKey){
+        return this.actor[actorKey];
+    },
+    getActorSkill: function(actorKey){
+        var skillType = this.actor[actorKey].skill;
         for(var i = 0; i < this.actorSkill.length; i++){
-            if(this.actorSkill[i].type === type){
+            if(this.actorSkill[i].type === skillType){
                 return this.actorSkill[i];
             }
         }
@@ -113,6 +117,7 @@ module.exports = {
         },
     },
     //角色信息
+    actorDir: "texture/actors/",
     actor:{
         actor_1:{
             name: 'actor01',
@@ -152,8 +157,24 @@ module.exports = {
         },
     },
     //道具信息
+    itemDir: "texture/items/",
     item:{
-
+        item_1:{
+            name:'item01',
+            price:1000,
+            desc:'11'
+        },
+        item_2:{
+            name:'item02',
+            price:2000,
+            desc:'22'
+        },
+        item_3:{
+            name:'item03',
+            price:3000,
+            desc:'33',
+            total:10
+        },
     },
     //关卡信息
     easy:{
@@ -194,7 +215,7 @@ module.exports = {
             maxError: 4,
             time:0,
             group:{
-                time:[3,6],
+                time:[5,7],
             }
         },
         game_2: [[8,0,2,0,0,0,5,0,7],[0,0,6,8,5,7,0,2,3],[0,0,7,0,0,0,1,0,8],[0,8,1,0,2,5,4,0,6],[3,0,0,7,8,0,0,9,5],[7,0,0,0,0,0,8,0,1],[2,0,0,5,0,3,6,0,9],[0,5,0,9,0,0,0,8,0],[0,0,9,6,7,0,0,0,0]],
@@ -206,7 +227,7 @@ module.exports = {
             maxError: 4,
             time:0,
             group:{
-                time:[3,6],
+                time:[5,8],
             }
         },
         game_3 : [[7,8,0,0,0,0,4,0,0],[0,0,0,8,0,0,7,1,0],[0,6,0,0,0,7,8,0,0],[0,7,6,9,8,2,0,4,5],[2,9,3,4,0,0,1,7,0],[5,0,8,0,3,0,0,0,0],[0,5,7,3,0,9,0,2,0],[0,1,9,6,0,0,0,0,7],[6,0,0,5,0,8,0,0,1]],
