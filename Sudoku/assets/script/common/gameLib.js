@@ -71,23 +71,29 @@ module.exports = {
             }
         }
     },
+    getGameEvent: function(type){
+        for(var i = 0; i < this.gameEvent.length; i++){
+            if(this.gameEvent[i].type === type){
+                return this.gameEvent[i];
+            }
+        }
+    },
     gameEvent:[
         {type: 1, val: 200, desc: "金币"},
         {type: 2, val: 30, desc: "时间"},
         {type: 3, val: 1, desc: "错误次数"},
         {type: 4, val: 1, desc: "生命"},
         {type: 5, val: 1, desc: "翻开或关闭一个单元格"},
-        {type: 6, val: 1, desc: "观看一个广告"},
-        {type: 7, val: 1, desc: "分享一次"},
     ],
     actorSkill:[
-        {type: 1, desc: "游戏过关额外获得10%金币游戏过关额外获得10%金币游戏过关额外获得10%金币"},
+        {type: 1, desc: "游戏过关额外获得10%金币"},
         {type: 2, desc: "满星过关额外获得20%金币"},
         {type: 3, desc: "零次错误过关额外获得15%金币"},
         {type: 4, desc: "游戏过关消耗时间减少20%"},
         {type: 5, desc: "游戏中免费提示一次"},
         {type: 6, desc: "游戏中错误上限加一"},
         {type: 7, desc: "游戏中抵消一次生命扣划"},
+        {type: 8, desc: "错误次数用完后，生命值可以当错误次数"},
     ],
     //成就信息
     achieve: {
@@ -99,13 +105,13 @@ module.exports = {
         },
         achieve_2: {
             name: "神速",
-            desc: "3分钟内完成一局",
+            desc: "观看一个广告",
             unlockType: 1,
             unlockValue: 100,
         },
         achieve_3: {
             name: "神速",
-            desc: "3分钟内完成一局",
+            desc: "分享一次",
             unlockType: 1,
             unlockValue: 100,
         },
@@ -120,17 +126,17 @@ module.exports = {
     actorDir: "texture/actors/",
     actor:{
         actor_1:{
-            name: 'actor01',
+            name: '毒液士兵',
             life: 3,
             skill: 1,
             unlockType: '1',
             unlockValue: 1000,
-            unlockRemark: '1000金币解锁',
+            unlockRemark: '初始获得',
             story: ''
         },
         actor_2:{
-            name: 'actor02',
-            life: 4,
+            name: '土行孙',
+            life: 5,
             skill: 2,
             unlockType: '2',
             unlockValue: 100,
@@ -138,8 +144,8 @@ module.exports = {
             story: ''
         },
         actor_3:{
-            name: 'actor03',
-            life: 3,
+            name: '牛魔王',
+            life: 6,
             skill: 3,
             unlockType: '3',
             unlockValue: 100,
@@ -147,8 +153,8 @@ module.exports = {
             story: ''
         },
         actor_4:{
-            name: 'actor04',
-            life: 4,
+            name: '冰雪战士',
+            life: 5,
             skill: 4,
             unlockType: '1',
             unlockValue: 10000,
@@ -161,16 +167,19 @@ module.exports = {
     item:{
         item_1:{
             name:'item01',
+            priceType:1,
             price:1000,
-            desc:'11'
+            desc:'提示道具,在选中的位置填入正确的数字'
         },
         item_2:{
             name:'item02',
+            priceType:1,
             price:2000,
-            desc:'22'
+            desc:'时间道具,已用时间减少30秒'
         },
         item_3:{
             name:'item03',
+            priceType:1,
             price:3000,
             desc:'33',
             total:10
